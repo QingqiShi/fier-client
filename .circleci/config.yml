@@ -38,7 +38,7 @@ jobs:
                 npm install --prefix=./firebase-deploy firebase-tools
             fi
       - run:
-          name: Peploy
+          name: Deploy
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
                 ./firebase-deploy/node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN"
