@@ -5,14 +5,30 @@ jobs:
   build:
     docker:
       - image: circleci/node:latest
+    working_directory: ~/repo
     steps:
       - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
       - run: npm install
-      - run: npm test -- --coverage
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: test
+          command: npm test -- --coverage
       - store_artifacts:
           path: coverage
+          prefix: coverage
       - codecov/upload:
           file: coverage/lcov.info
-      - run: npm run build
-      - run: npm install --prefix=./firebase-deploy firebase-tools
-      - run: ./firebase-deploy/node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN"
+      - run:
+          name: build
+          command: npm run build
+      - run:
+          name: prepare deploy
+          command: npm install --prefix=./firebase-deploy firebase-tools
+      - run:
+          name: deploy
+          command: ./firebase-deploy/node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN"
