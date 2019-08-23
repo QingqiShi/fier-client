@@ -4,31 +4,42 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/node:lts
+      - image: circleci/node:latest
     working_directory: ~/repo
     steps:
       - checkout
+      - run:
+          name: Update npm
+          command: 'sudo npm install -g npm@latest'
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
-      - run: npm install
+      - run: Install dependencies
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
       - run:
-          name: test
+          name: Unit tests
           command: npm test -- --coverage
       - store_artifacts:
           path: coverage
           prefix: coverage
       - codecov/upload:
           file: coverage/lcov.info
+      - store_test_results:
+          path: test-results
       - run:
-          name: build
+          name: Build
           command: npm run build
       - run:
-          name: prepare deploy
-          command: npm install --prefix=./firebase-deploy firebase-tools
+          name: Prepare deploy
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                npm install --prefix=./firebase-deploy firebase-tools
+            fi
       - run:
-          name: deploy
-          command: ./firebase-deploy/node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN"
+          name: Peploy
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                ./firebase-deploy/node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN"
+            fi
