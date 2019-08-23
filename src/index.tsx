@@ -8,13 +8,13 @@ import 'firebase/auth';
 import 'firebase/firestore';
 
 firebase.initializeApp({
-  apiKey: 'AIzaSyAQ3J3pivlY_L1qZ9yysqrprq62XuuBGHE',
-  authDomain: 'shiqingqi-27cab.firebaseapp.com',
-  databaseURL: 'https://shiqingqi-27cab.firebaseio.com',
-  projectId: 'shiqingqi-27cab',
-  storageBucket: 'shiqingqi-27cab.appspot.com',
-  messagingSenderId: '207610618557',
-  appId: '1:207610618557:web:5abaa249cf9fb826'
+  apiKey: 'AIzaSyA9BuwuC9WcEGgCB60wVrph_AEM0oPsBO4',
+  authDomain: 'fier-app.firebaseapp.com',
+  databaseURL: 'https://fier-app.firebaseio.com',
+  projectId: 'fier-app',
+  storageBucket: 'fier-app.appspot.com',
+  messagingSenderId: '136802262330',
+  appId: '1:136802262330:web:178fefc9383280c6'
 });
 
 const db = firebase.firestore();
