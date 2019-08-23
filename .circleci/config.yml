@@ -1,0 +1,18 @@
+version: 2.1
+orbs:
+  codecov: codecov/codecov@1.0.4
+jobs:
+  build:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm test -- --coverage
+      - store_artifacts:
+          path: coverage
+      - codecov/upload:
+          file: coverage/lcov.info
+      - run: npm run build
+      - run: npm i -g firebase-tools
+      - run: firebase deploy --token "$FIREBASE_TOKEN"
