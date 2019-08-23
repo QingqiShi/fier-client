@@ -14,5 +14,5 @@ jobs:
       - codecov/upload:
           file: coverage/lcov.info
       - run: npm run build
-      - run: npm i -g firebase-tools
-      - run: firebase deploy --token "$FIREBASE_TOKEN"
+      - run: npm install --prefix=./firebase-deploy firebase-tools
+      - run: ./firebase-deploy/node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN"
