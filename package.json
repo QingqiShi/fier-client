@@ -1,0 +1,86 @@
+{
+  "name": "fier-client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "commit": "npx git-cz",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.3.2",
+    "@material-ui/icons": "^4.2.1",
+    "firebase": "^6.4.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-helmet-async": "^1.0.2",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "3.1.1",
+    "react-spring": "^8.0.27"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^8.1.0",
+    "@testing-library/jest-dom": "^4.0.0",
+    "@testing-library/react": "^9.1.3",
+    "@testing-library/react-hooks": "^2.0.1",
+    "@types/classnames": "^2.2.9",
+    "@types/jest": "^24.0.17",
+    "@types/node": "^12.7.2",
+    "@types/react": "^16.9.2",
+    "@types/react-dom": "^16.8.5",
+    "@types/react-helmet": "^5.0.9",
+    "@types/react-router-dom": "^4.3.4",
+    "cz-conventional-changelog": "^3.0.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "husky": "^3.0.4",
+    "lint-staged": "^9.2.3",
+    "prettier": "^1.18.2",
+    "react-test-renderer": "^16.9.0",
+    "typescript": "^3.5.3"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --single-quote --write",
+      "git add"
+    ]
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!<rootDir>/node_modules/",
+      "!<rootDir>/src/testUtils.tsx",
+      "!<rootDir>/src/index.tsx",
+      "!<rootDir>/src/*.d.ts",
+      "!<rootDir>/src/serviceWorker.js"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}

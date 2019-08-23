@@ -1,0 +1,28 @@
+/* Font */
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,400,500');
+$mdc-typography-font-family: unquote('Raleway, sans-serif');
+
+/* Shape */
+$mdc-shape-small-component-radius: 13px;
+$mdc-shape-medium-component-radius: 20px;
+$mdc-shape-large-component-radius: 16px;
+
+/* Color */
+$mdc-theme-primary: #6a1b9a;
+$mdc-theme-secondary: #fff59d;
+$mdc-theme-surface: #f2fbff;
+$mdc-theme-background: #f1f1f1;
+
+@import '@material/theme/mixins';
+@import '@material/layout-grid/variables';
+@import '@material/layout-grid/mixins';
+
+@mixin media($size) {
+  @if not map-has-key($mdc-layout-grid-columns, $size) {
+    @error "Invalid style specified! Choose one of #{map-keys($mdc-layout-grid-columns)}";
+  }
+
+  @include mdc-layout-grid-media-query_($size) {
+    @content;
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "ERROR_NETWORK_FAILED": "Did your cat pull the internet cable? It's down!",
+  "ERROR_USER_EXPIRED": "It's been too long, is that still you? Please loging in again",
+  "ERROR_INVALID_EMAIL": "That doesn't look like a valid email",
+  "ERROR_USER_DISABLED": "Your account has been disabled, go ask the admin why",
+  "ERROR_USER_NOT_FOUND": "Haven't seen this account before, try register instead?",
+  "ERROR_WRONG_PASSWORD": "Oops, that's a wrong password. Try again",
+  "ERROR_EMAIL_IN_USE": "Looks like you're registered already, try login instead?",
+  "ERROR_WEEK_PASSWORD": "That password is too simple, try a more complex one!",
+  "ERROR_UNKNOWN": "Encountered unknown error",
+  "EMAIL_LABEL": "Email",
+  "PASSWORD_LABEL": "Password",
+  "DISPLAY_NAME_LABEL": "Display Name",
+  "LOGIN": "Login",
+  "REGISTER": "Register",
+  "NO_ACCOUNT_PROMPT": "Don't have an account? Sign up",
+  "ALREADY_REGISTERED_PROMPT": "Already have an account? Sign in",
+  "DASHBOARD": "Dashboard",
+  "ACTIVITY": "Activity",
+  "CHARTS": "Charts",
+  "WALLETS": "Wallets"
+}
