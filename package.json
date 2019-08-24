@@ -6,6 +6,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "lint": "eslint --ext js,ts,tsx src",
     "commit": "npx git-cz",
     "eject": "react-scripts eject"
   },
@@ -49,6 +50,7 @@
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "eslint --ext js,ts,tsx src",
       "prettier --single-quote --write",
       "git add"
     ]
