@@ -4,6 +4,9 @@ import user from 'stores/user';
 import Login from './Login';
 import Register from './Register';
 import Dashboard from './Dashboard';
+import Activity from './Activity';
+import Charts from './Charts';
+import Wallets from './Wallets';
 
 function Routes() {
   const [{ isLoggedIn }] = user.useStore();
@@ -12,6 +15,9 @@ function Routes() {
       {isLoggedIn ? (
         <>
           <LocaleRoute path="/dashboard" component={Dashboard} />
+          <LocaleRoute path="/activity" component={Activity} />
+          <LocaleRoute path="/charts" component={Charts} />
+          <LocaleRoute path="/wallets" component={Wallets} />
           <LocaleRoute render={() => <LocaleRedirect to="/dashboard" />} />
         </>
       ) : (

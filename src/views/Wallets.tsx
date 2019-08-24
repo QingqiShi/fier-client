@@ -4,15 +4,15 @@ import TopNav from 'components/TopNav';
 import useAuth from 'hooks/useAuth';
 import useTexts from 'hooks/useTexts';
 
-function Dash() {
+function Charts() {
   const [t] = useTexts();
   const { signOut } = useAuth();
   return (
     <div style={{ padding: '5em 0' }}>
-      <TopNav title={t['DASHBOARD']} />
+      <TopNav title={t['WALLETS']} />
       <Button onClick={() => signOut()}>log out</Button>
     </div>
   );
 }
 
-export default Dash;
+export default Charts;
