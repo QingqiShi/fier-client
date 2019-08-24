@@ -1,6 +1,7 @@
 import { createStore } from 'libs/lit-store';
 
 export type State = {
+  receivedInitialState: boolean;
   isLoggedIn: boolean;
   name: string;
   email: string;
@@ -8,6 +9,9 @@ export type State = {
 };
 
 const mutations = {
+  setInitialState: () => ({
+    receivedInitialState: true
+  }),
   setUser: (
     _: State,
     {
@@ -30,7 +34,13 @@ const mutations = {
 };
 
 const store = createStore(
-  { isLoggedIn: false, name: '', email: '', emailVerified: false },
+  {
+    receivedInitialState: false,
+    isLoggedIn: false,
+    name: '',
+    email: '',
+    emailVerified: false
+  },
   mutations
 );
 

@@ -53,6 +53,7 @@ function useAuth() {
       } else {
         userActions.signOut();
       }
+      userActions.setInitialState();
     });
     authListening = true;
   }, [userActions]);
