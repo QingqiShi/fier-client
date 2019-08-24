@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: theme.spacing(9),
       paddingLeft: 'env(safe-area-inset-left)',
       paddingRight: 'env(safe-area-inset-right)',
-      transition: 'background 0.2s, box-shadow 0.2s'
+      transition: 'background 0.5s, box-shadow 0.5s'
     },
     appBarExpand: {
       backgroundColor: theme.palette.background.default
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
     toolBar: {
       minHeight: '100%'
     },
-    icon: {
+    largeIcon: {
       fontSize: theme.typography.h4.fontSize
     },
     typography: {
@@ -36,7 +36,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function TopNav({ title }: { title: string }) {
-  // const { user } = useAuth();
   const classes = useStyles();
   const scrolled = useScrollTrigger({
     disableHysteresis: true,
@@ -49,8 +48,8 @@ function TopNav({ title }: { title: string }) {
       className={`${classes.appBar} ${!scrolled ? classes.appBarExpand : ''}`}
     >
       <Toolbar className={classes.toolBar}>
-        <IconButton edge="start">
-          <AccountCircle className={classes.icon} />
+        <IconButton edge="start" data-testid="account-icon-button">
+          <AccountCircle className={classes.largeIcon} />
         </IconButton>
         <Typography
           className={classes.typography}
@@ -58,10 +57,9 @@ function TopNav({ title }: { title: string }) {
           color="textPrimary"
         >
           {title}
-          {/* {user.name || user.email.split('@')[0]} */}
         </Typography>
         <div className={classes.grow} />
-        <IconButton edge="end" color="primary">
+        <IconButton edge="end" color="primary" data-testid="add-icon-button">
           <AddBox />
         </IconButton>
       </Toolbar>
