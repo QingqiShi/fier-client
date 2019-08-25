@@ -1,15 +1,18 @@
 import React from 'react';
 import { LocaleSwitch, LocaleRoute, LocaleRedirect } from 'libs/locale-router';
-import user from 'stores/user';
 import Login from './Login';
 import Register from './Register';
 import Dashboard from './Dashboard';
 import Activity from './Activity';
 import Charts from './Charts';
 import Wallets from './Wallets';
+import useAuth from 'hooks/useAuth';
 
 function Routes() {
-  const [{ isLoggedIn }] = user.useStore();
+  const { user } = useAuth();
+  const { receivedInitialState, isLoggedIn } = user;
+  if (!receivedInitialState) return null;
+
   return (
     <LocaleSwitch>
       {isLoggedIn ? (
