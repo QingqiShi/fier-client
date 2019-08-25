@@ -7,15 +7,13 @@ import useText from 'hooks/useTexts';
 
 let authListening = false;
 
-type SignUpProps = {
-  email: string;
-  password: string;
-  name: string;
-};
-
 type SignInProps = {
   email: string;
   password: string;
+};
+
+type SignUpProps = SignInProps & {
+  name: string;
 };
 
 const errorMap: { [key: string]: string } = {
@@ -42,8 +40,10 @@ function useAuth() {
   useEffect(() => {
     // Singleton
     if (authListening) return;
+    authListening = true;
 
     firebaseAuth().onAuthStateChanged(user => {
+      userActions.setInitialState();
       if (user && user.email) {
         userActions.setUser({
           email: user.email,
@@ -53,9 +53,7 @@ function useAuth() {
       } else {
         userActions.signOut();
       }
-      userActions.setInitialState();
     });
-    authListening = true;
   }, [userActions]);
 
   const handleError = (error: any) => {

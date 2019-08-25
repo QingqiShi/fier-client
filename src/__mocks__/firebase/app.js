@@ -1,11 +1,11 @@
 let error = false;
 let authStateChangeCallback = user => {};
 
-export const setError = e => {
+export const mockError = e => {
   error = e;
 };
 
-export const setAuthState = user => {
+export const mockAuthState = user => {
   authStateChangeCallback(user);
 };
 
@@ -19,7 +19,8 @@ export const authFunctions = {
   signOut: jest.fn(() => (error ? Promise.reject(error) : Promise.resolve())),
   onAuthStateChanged: jest.fn(callback => {
     authStateChangeCallback = callback;
-  })
+  }),
+  languageCode: ''
 };
 
 export const auth = jest.fn(() => authFunctions);
