@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import ProgressButton from 'components/ProgressButton';
-import EndOfFormLink from 'components/EndOfFormLink';
+import { TextField, InputAdornment, IconButton } from '@material-ui/core';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
+import ProgressButton from 'components/base/ProgressButton';
+import EndOfFormLink from 'components/base/EndOfFormLink';
 import useTexts from 'hooks/useTexts';
 
 const useStyles = makeStyles((theme: Theme) =>

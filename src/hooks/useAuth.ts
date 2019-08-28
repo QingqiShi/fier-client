@@ -43,7 +43,6 @@ function useAuth() {
     authListening = true;
 
     firebaseAuth().onAuthStateChanged(user => {
-      userActions.setInitialState();
       if (user && user.email) {
         userActions.setUser({
           email: user.email,
@@ -53,6 +52,7 @@ function useAuth() {
       } else {
         userActions.signOut();
       }
+      userActions.setInitialState();
     });
   }, [userActions]);
 

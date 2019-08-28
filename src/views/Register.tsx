@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import Typography from '@material-ui/core/Typography';
-import { LocaleRedirect } from 'libs/locale-router';
-import OverlayContainer from 'components/OverlayContainer';
-import SignUpFields from 'components/SignUpFields';
+import { Redirect } from 'react-router-dom';
+import { Typography } from '@material-ui/core';
+import OverlayContainer from 'components/base/OverlayContainer';
+import SignUpFields from 'components/app/SignUpFields';
+import LanguageSelector from 'components/app/LanguageSelector';
 import useTexts from 'hooks/useTexts';
 import useFormInput from 'hooks/useFormInput';
 import useAuth from 'hooks/useAuth';
@@ -32,7 +33,7 @@ function Login() {
   }
 
   if (user.isLoggedIn) {
-    return <LocaleRedirect to="/dashboard" />;
+    return <Redirect to="/dashboard" />;
   }
 
   return (
@@ -48,6 +49,7 @@ function Login() {
           loading={loading}
         />
       </form>
+      <LanguageSelector position="bottom" />
     </OverlayContainer>
   );
 }

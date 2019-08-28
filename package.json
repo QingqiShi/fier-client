@@ -6,12 +6,12 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "lint": "eslint --ext js,ts,tsx src",
+    "lint": "eslint --ext js,ts,tsx --ignore-pattern json src",
     "commit": "npx git-cz",
     "eject": "react-scripts eject"
   },
   "dependencies": {
-    "@material-ui/core": "^4.3.2",
+    "@material-ui/core": "^4.3.3",
     "@material-ui/icons": "^4.2.1",
     "firebase": "^6.4.0",
     "react": "^16.9.0",
@@ -37,6 +37,7 @@
     "cz-conventional-changelog": "^3.0.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "husky": "^3.0.4",
+    "jest-junit": "^8.0.0",
     "lint-staged": "^9.2.3",
     "prettier": "^1.18.2",
     "react-test-renderer": "^16.9.0",
@@ -49,8 +50,12 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+    "src/**/*.{js,ts,tsx}": [
       "eslint --ext js,ts,tsx src",
+      "prettier --single-quote --write",
+      "git add"
+    ],
+    "src/**/*.{json,css,scss,md}": [
       "prettier --single-quote --write",
       "git add"
     ]
@@ -63,7 +68,19 @@
       "!<rootDir>/src/index.tsx",
       "!<rootDir>/src/*.d.ts",
       "!<rootDir>/src/serviceWorker.js"
+    ],
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "clover",
+      "jest-junit"
     ]
+  },
+  "jest-junit": {
+    "suiteName": "unit tests",
+    "outputDirectory": "./coverage/unit/",
+    "outputName": "result.xml"
   },
   "eslintConfig": {
     "extends": "react-app"

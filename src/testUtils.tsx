@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
+import { Router } from 'react-router-dom';
 import { render as rtlRender, RenderOptions } from '@testing-library/react';
 import {
   renderHook as rhtlRenderHook,
   RenderHookOptions
 } from '@testing-library/react-hooks';
-import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { useStoreProvider, Store } from 'libs/lit-store';
 import i18n from 'stores/i18n';
@@ -28,19 +28,27 @@ function App({ children }: React.PropsWithChildren<{}>) {
 export function render(
   ui: React.ReactElement<any>,
   stores: Store<any, any>[] = [],
-  options?: RenderOptions & { fetchTranslation: boolean }
+  options?: RenderOptions & { translations?: boolean; url?: string }
 ) {
   function Wrapper({ children }: React.PropsWithChildren<{}>) {
     const Provider = useStoreProvider(i18n, ...stores);
-    return (
+    const inner = (
       <Provider>
-        {options && !options.fetchTranslation ? (
-          children
-        ) : (
-          <App>{children}</App>
-        )}
+        {options && !options.translations ? children : <App>{children}</App>}
       </Provider>
     );
+
+    if (options && options.url) {
+      return (
+        <Router
+          history={createMemoryHistory({ initialEntries: [options.url] })}
+        >
+          {inner}
+        </Router>
+      );
+    } else {
+      return inner;
+    }
   }
 
   return rtlRender(ui, {
@@ -55,38 +63,32 @@ export function render(
 export function renderHook<P, R>(
   callback: (props: P) => R,
   stores: Store<any, any>[] = [],
-  options?: RenderHookOptions<P> & { fetchTranslation: boolean }
+  options?: RenderHookOptions<P> & { translations?: boolean; url?: string }
 ) {
   function Wrapper({ children }: { children: React.ReactElement }) {
     const Provider = useStoreProvider(i18n, ...stores);
-    return (
+    const inner = (
       <Provider>
-        {options && !options.fetchTranslation ? (
-          children
-        ) : (
-          <App>{children}</App>
-        )}
+        {options && !options.translations ? children : <App>{children}</App>}
       </Provider>
     );
+    if (options && options.url) {
+      return (
+        <Router
+          history={createMemoryHistory({ initialEntries: [options.url] })}
+        >
+          {inner}
+        </Router>
+      );
+    } else {
+      return inner;
+    }
   }
 
   return rhtlRenderHook(callback, {
     wrapper: Wrapper as React.FunctionComponent,
     ...options
   });
-}
-
-/**
- * Render elements wrapped with React router.
- */
-export function renderRouter(ui: React.ReactElement<any>, url = '/') {
-  const history = createMemoryHistory({ initialEntries: [url] });
-  return {
-    ...render(<Router history={history}>{ui}</Router>, [i18n], {
-      fetchTranslation: false
-    }),
-    history
-  };
 }
 
 /**

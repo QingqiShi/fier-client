@@ -14,10 +14,6 @@ export type State = {
   translations: Translations;
 };
 
-// type Action =
-//   | { type: 'ADD_TRANSLATIONS'; payload: State['translations'] }
-//   | { type: 'SET_LOCALE'; payload: Locale };
-
 const mutations = {
   addTranslations: (prevState: State, translations: Translations) => {
     const result = { translations: { ...prevState.translations } };
@@ -32,8 +28,10 @@ const mutations = {
   },
   setLocale: (prevState: State, locale: Locale) => {
     if (!prevState.translations[locale]) {
-      prevState.translations[locale] = {};
-      return { locale, translations: prevState.translations };
+      return {
+        locale,
+        translations: { ...prevState.translations, [locale]: {} }
+      };
     }
     return { locale };
   }

@@ -1,11 +1,12 @@
 import React from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import Snackbar from '@material-ui/core/Snackbar';
-import SnackbarContent from '@material-ui/core/SnackbarContent';
-import Slide from '@material-ui/core/Slide';
-import IconButton from '@material-ui/core/IconButton';
-import ErrorIcon from '@material-ui/icons/Error';
-import CloseIcon from '@material-ui/icons/Close';
+import {
+  IconButton,
+  Slide,
+  Snackbar,
+  SnackbarContent
+} from '@material-ui/core';
+import { Error as ErrorIcon, Close as CloseIcon } from '@material-ui/icons';
 import error from 'stores/error';
 import { TransitionProps } from '@material-ui/core/transitions/transition';
 

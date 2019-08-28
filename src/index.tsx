@@ -6,6 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import { RouteProvider } from 'libs/route-provider';
 
 firebase.initializeApp({
   apiKey: 'AIzaSyA9BuwuC9WcEGgCB60wVrph_AEM0oPsBO4',
@@ -22,7 +23,9 @@ console.log(db);
 
 ReactDOM.render(
   <Router>
-    <App />
+    <RouteProvider>
+      <App />
+    </RouteProvider>
   </Router>,
   document.getElementById('root')
 );

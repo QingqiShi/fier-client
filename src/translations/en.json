@@ -13,10 +13,17 @@
   "DISPLAY_NAME_LABEL": "Display Name",
   "LOGIN": "Login",
   "REGISTER": "Register",
+  "SIGN_OUT": "Log out",
   "NO_ACCOUNT_PROMPT": "Don't have an account? Sign up",
   "ALREADY_REGISTERED_PROMPT": "Already have an account? Sign in",
   "DASHBOARD": "Dashboard",
   "ACTIVITY": "Activity",
   "CHARTS": "Charts",
-  "WALLETS": "Wallets"
+  "WALLETS": "Wallets",
+  "SETTINGS": "Settings",
+  "SETTINGS_LANGUAGE": "Language",
+  "LANGUAGE_EN": "English",
+  "LANGUAGE_ZH": "中文",
+  "FLAG_EN": "🇺🇸",
+  "FLAG_ZH": "🇨🇳"
 }

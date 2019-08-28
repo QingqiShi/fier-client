@@ -1,8 +1,7 @@
 import React from 'react';
-import { Location } from 'history';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import Link from '@material-ui/core/Link';
-import { LocaleLink } from 'libs/locale-router';
+import { Link } from '@material-ui/core';
+import useLocale from 'hooks/useLocale';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -18,16 +17,12 @@ function EndOfFormLink({
   children,
   to
 }: React.PropsWithChildren<{
-  to: string | Location<any>;
+  to: string;
 }>) {
   const classes = useStyles();
+  const { goto } = useLocale();
   return (
-    <Link
-      className={classes.link}
-      component={LocaleLink}
-      variant="body2"
-      to={to}
-    >
+    <Link className={classes.link} variant="body2" onClick={() => goto(to)}>
       {children}
     </Link>
   );
