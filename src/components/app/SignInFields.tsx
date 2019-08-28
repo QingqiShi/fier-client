@@ -1,8 +1,8 @@
 import React from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import ProgressButton from 'components/ProgressButton';
-import EndOfFormLink from 'components/EndOfFormLink';
+import { TextField } from '@material-ui/core';
+import ProgressButton from 'components/base/ProgressButton';
+import EndOfFormLink from 'components/base/EndOfFormLink';
 import useTexts from 'hooks/useTexts';
 
 const useStyles = makeStyles((theme: Theme) =>

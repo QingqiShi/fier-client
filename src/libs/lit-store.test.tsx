@@ -5,7 +5,7 @@ import { createStore, useStoreProvider } from './lit-store';
 
 jest.mock('translations/en.json', () => ({}));
 
-describe('lit-store', () => {
+describe('libs/lit-store', () => {
   describe('createStore', () => {
     it('returns Provider and useStore', () => {
       const store = createStore({ counter: 0 }, {});
@@ -23,7 +23,7 @@ describe('lit-store', () => {
   });
 
   describe('useStore', () => {
-    it('makes state available', () => {
+    it('returns state', () => {
       const store = createStore({ message: 'Hi' }, {});
       const Component = () => {
         const [state] = store.useStore();
@@ -34,7 +34,7 @@ describe('lit-store', () => {
       expect(container.firstChild).toContainHTML('<div>Hi</div>');
     });
 
-    it('mutates state with dispatch', () => {
+    it('returns actions', () => {
       const store = createStore(
         { count: 0 },
         { increment: state => ({ count: state.count + 1 }) }
@@ -53,7 +53,7 @@ describe('lit-store', () => {
       expect(button).toContainHTML('1');
     });
 
-    it('access initial state without Provider', () => {
+    it('returns initial state without Provider', () => {
       const store = createStore({ message: 'Hi' }, {});
       const Component = () => {
         const [state] = store.useStore();
@@ -61,6 +61,21 @@ describe('lit-store', () => {
       };
       const { container } = render(<Component />);
       expect(container.firstChild).toContainHTML('<div>Hi</div>');
+    });
+
+    it('returns empty actions without Provider', () => {
+      const mockAction = jest.fn();
+      const store = createStore({}, { testAction: mockAction });
+      const Component = () => {
+        const [, actions] = store.useStore();
+        return <button onClick={() => actions.testAction()}>action</button>;
+      };
+
+      const { getByText } = render(<Component />, []);
+      fireEvent.click(getByText('action'));
+
+      // Empty actions should not do anything
+      expect(mockAction).not.toHaveBeenCalled();
     });
   });
 

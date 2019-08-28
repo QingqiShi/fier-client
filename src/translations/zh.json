@@ -13,10 +13,17 @@
   "DISPLAY_NAME_LABEL": "显示名",
   "LOGIN": "登陆",
   "REGISTER": "注册",
+  "SIGN_OUT": "退出账号",
   "NO_ACCOUNT_PROMPT": "没有账户？注册",
   "ALREADY_REGISTERED_PROMPT": "已经有账户了？登陆",
   "DASHBOARD": "概览",
   "ACTIVITY": "流水",
   "CHARTS": "统计",
-  "WALLETS": "账户"
+  "WALLETS": "账户",
+  "SETTINGS": "设置",
+  "SETTINGS_LANGUAGE": "语言",
+  "LANGUAGE_EN": "English",
+  "LANGUAGE_ZH": "中文",
+  "FLAG_EN": "🇺🇸",
+  "FLAG_ZH": "🇨🇳"
 }

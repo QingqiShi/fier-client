@@ -25,9 +25,11 @@ jobs:
           command: npm run lint
       - run:
           name: Unit tests
-          command: npm test -- --coverage
+          command: npm test -- --coverage --reporters=jest-junit
       - codecov/upload:
           file: coverage/lcov.info
+      - store_test_results:
+          path: coverage
       - run:
           name: Build
           command: npm run build
