@@ -1,4 +1,4 @@
-import { createStore } from 'libs/lit-store';
+import { createStore } from 'react-lit-store';
 
 export type Locale = 'en' | 'zh';
 export const locales = ['en', 'zh'] as const;
@@ -9,10 +9,11 @@ export type Translations = {
   };
 };
 
-export type State = {
+type State = {
   locale: Locale;
   translations: Translations;
 };
+const initialState: State = { locale: 'en', translations: { en: {} } };
 
 const mutations = {
   addTranslations: (prevState: State, translations: Translations) => {
@@ -37,9 +38,6 @@ const mutations = {
   }
 };
 
-const store = createStore<State, typeof mutations>(
-  { locale: 'en', translations: { en: {} } },
-  mutations
-);
+const store = createStore<State, typeof mutations>(initialState, mutations);
 
 export default store;

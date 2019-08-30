@@ -1,12 +1,13 @@
-import { createStore } from 'libs/lit-store';
+import { createStore } from 'react-lit-store';
 
-export type State = {
-  receivedInitialState: boolean;
-  isLoggedIn: boolean;
-  name: string;
-  email: string;
-  emailVerified: boolean;
+const initialState = {
+  receivedInitialState: false,
+  isLoggedIn: false,
+  name: '',
+  email: '',
+  emailVerified: false
 };
+type State = typeof initialState;
 
 const mutations = {
   setInitialState: () => ({
@@ -33,15 +34,6 @@ const mutations = {
   })
 };
 
-const store = createStore(
-  {
-    receivedInitialState: false,
-    isLoggedIn: false,
-    name: '',
-    email: '',
-    emailVerified: false
-  },
-  mutations
-);
+const store = createStore(initialState, mutations);
 
 export default store;
