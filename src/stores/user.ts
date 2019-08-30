@@ -1,4 +1,4 @@
-import { createStore } from 'libs/lit-store';
+import { createStore } from 'react-lit-store';
 
 export type State = {
   receivedInitialState: boolean;

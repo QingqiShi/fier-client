@@ -6,7 +6,7 @@ import {
   RenderHookOptions
 } from '@testing-library/react-hooks';
 import { createMemoryHistory } from 'history';
-import { useStoreProvider, Store } from 'libs/lit-store';
+import { useStoreProvider, Store } from 'react-lit-store';
 import i18n from 'stores/i18n';
 import en from 'translations/en.json';
 

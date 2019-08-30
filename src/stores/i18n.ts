@@ -1,4 +1,4 @@
-import { createStore } from 'libs/lit-store';
+import { createStore } from 'react-lit-store';
 
 export type Locale = 'en' | 'zh';
 export const locales = ['en', 'zh'] as const;
