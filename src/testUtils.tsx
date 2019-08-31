@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { Router } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { RenderOptions, render as rtlRender } from '@testing-library/react';
+import { Store, useStoreProvider } from 'react-lit-store';
 import {
   RenderHookOptions,
   renderHook as rhtlRenderHook
 } from '@testing-library/react-hooks';
-import { createMemoryHistory } from 'history';
-import { Store, useStoreProvider } from 'react-lit-store';
+import { RouteProvider } from 'libs/route-provider';
 import i18n from 'stores/i18n';
 import en from 'translations/en.json';
 
@@ -32,23 +32,19 @@ export function render(
 ) {
   function Wrapper({ children }: React.PropsWithChildren<{}>) {
     const Provider = useStoreProvider(i18n, ...stores);
-    const inner = (
-      <Provider>
-        {options && !options.translations ? children : <App>{children}</App>}
-      </Provider>
+    return (
+      <MemoryRouter initialEntries={[(options && options.url) || '/']}>
+        <RouteProvider>
+          <Provider>
+            {options && !options.translations ? (
+              children
+            ) : (
+              <App>{children}</App>
+            )}
+          </Provider>
+        </RouteProvider>
+      </MemoryRouter>
     );
-
-    if (options && options.url) {
-      return (
-        <Router
-          history={createMemoryHistory({ initialEntries: [options.url] })}
-        >
-          {inner}
-        </Router>
-      );
-    } else {
-      return inner;
-    }
   }
 
   return rtlRender(ui, {
@@ -67,22 +63,19 @@ export function renderHook<P, R>(
 ) {
   function Wrapper({ children }: { children: React.ReactElement }) {
     const Provider = useStoreProvider(i18n, ...stores);
-    const inner = (
-      <Provider>
-        {options && !options.translations ? children : <App>{children}</App>}
-      </Provider>
+    return (
+      <MemoryRouter initialEntries={[(options && options.url) || '/']}>
+        <RouteProvider>
+          <Provider>
+            {options && !options.translations ? (
+              children
+            ) : (
+              <App>{children}</App>
+            )}
+          </Provider>
+        </RouteProvider>
+      </MemoryRouter>
     );
-    if (options && options.url) {
-      return (
-        <Router
-          history={createMemoryHistory({ initialEntries: [options.url] })}
-        >
-          {inner}
-        </Router>
-      );
-    } else {
-      return inner;
-    }
   }
 
   return rhtlRenderHook(callback, {

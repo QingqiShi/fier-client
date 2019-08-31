@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { render } from 'testUtils';
+import { MemoryRouter } from 'react-router-dom';
+import { render } from '@testing-library/react';
 import { RouteContext, RouteProvider } from './route-provider';
 
 describe('libs/route-provider', () => {
@@ -13,9 +14,10 @@ describe('libs/route-provider', () => {
         <RouteProvider>
           <Component />
         </RouteProvider>,
-        [],
         {
-          url: '/test'
+          wrapper: ({ children }: React.PropsWithChildren<{}>) => (
+            <MemoryRouter initialEntries={['/test']}>{children}</MemoryRouter>
+          )
         }
       );
 
