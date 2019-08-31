@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import { Avatar, IconButton } from '@material-ui/core';
 import { AddBox, Person } from '@material-ui/icons';
 import TitleBar from 'components/base/TitleBar';
@@ -32,11 +32,10 @@ function TopNav({ title }: { title: string }) {
   return (
     <>
       <TitleBar
-        title={title}
         leftAction={
           <IconButton
-            edge="start"
             data-testid="account-icon-button"
+            edge="start"
             onClick={openProfile}
           >
             <Avatar className={classes.avatar}>
@@ -45,10 +44,11 @@ function TopNav({ title }: { title: string }) {
           </IconButton>
         }
         rightAction={
-          <IconButton edge="end" color="primary" data-testid="add-icon-button">
+          <IconButton color="primary" data-testid="add-icon-button" edge="end">
             <AddBox />
           </IconButton>
         }
+        title={title}
       />
       <NavMenu open={location.hash === PROFILE_HASH} onClose={closeProfile} />
     </>

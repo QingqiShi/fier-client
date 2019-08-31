@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { Theme, makeStyles } from '@material-ui/core/styles';
 import { Container, Paper } from '@material-ui/core';
 import { ContainerProps } from '@material-ui/core/Container';
 

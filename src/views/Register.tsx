@@ -38,15 +38,15 @@ function Login() {
 
   return (
     <OverlayContainer maxWidth="xs">
-      <Typography variant="h3" component="h1" gutterBottom>
+      <Typography component="h1" variant="h3" gutterBottom>
         {t['REGISTER']}
       </Typography>
       <form onSubmit={handleSubmit}>
         <SignUpFields
           emailControl={emailControl}
-          passwordControl={passwordControl}
-          nameControl={nameControl}
           loading={loading}
+          nameControl={nameControl}
+          passwordControl={passwordControl}
         />
       </form>
       <LanguageSelector position="bottom" />

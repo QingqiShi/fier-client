@@ -84,7 +84,24 @@
     "outputName": "result.xml"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "rules": {
+      "sort-imports": [
+        "error",
+        {
+          "ignoreDeclarationSort": true
+        }
+      ],
+      "react/jsx-sort-props": [
+        "error",
+        {
+          "callbacksLast": true,
+          "shorthandLast": true,
+          "reservedFirst": true,
+          "ignoreCase": true
+        }
+      ]
+    }
   },
   "browserslist": {
     "production": [

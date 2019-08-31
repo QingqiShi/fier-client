@@ -38,14 +38,14 @@ function Login() {
 
   return (
     <OverlayContainer maxWidth="xs">
-      <Typography variant="h3" component="h1" gutterBottom>
+      <Typography component="h1" variant="h3" gutterBottom>
         {t['LOGIN']}
       </Typography>
       <form autoComplete="on" onSubmit={handleSubmit}>
         <SignInFields
           emailControl={emailControl}
-          passwordControl={passwordControl}
           loading={loading}
+          passwordControl={passwordControl}
         />
       </form>
       <LanguageSelector position="bottom" />

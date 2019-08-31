@@ -1,5 +1,5 @@
 import { renderHook } from 'testUtils';
-import { mockAuthState, auth as mockAuth } from 'firebase/app';
+import { auth as mockAuth, mockAuthState } from 'firebase/app';
 import useAuth from './useAuth';
 
 const mockUserStore = [

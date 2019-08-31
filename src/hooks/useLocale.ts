@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useRoute from 'hooks/useRoute';
 import i18n, { Locale, locales } from 'stores/i18n';
 

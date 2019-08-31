@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { Router } from 'react-router-dom';
-import { render as rtlRender, RenderOptions } from '@testing-library/react';
+import { RenderOptions, render as rtlRender } from '@testing-library/react';
 import {
-  renderHook as rhtlRenderHook,
-  RenderHookOptions
+  RenderHookOptions,
+  renderHook as rhtlRenderHook
 } from '@testing-library/react-hooks';
 import { createMemoryHistory } from 'history';
-import { useStoreProvider, Store } from 'react-lit-store';
+import { Store, useStoreProvider } from 'react-lit-store';
 import i18n from 'stores/i18n';
 import en from 'translations/en.json';
 
