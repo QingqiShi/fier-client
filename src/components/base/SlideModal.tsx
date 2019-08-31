@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { Dialog, DialogContent, IconButton, Slide } from '@material-ui/core';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Slide
+} from '@material-ui/core';
 import { TransitionProps } from '@material-ui/core/transitions';
 import { Close } from '@material-ui/icons';
 import TitleBar from 'components/base/TitleBar';
@@ -14,7 +20,7 @@ const useStyles = makeStyles(
 );
 
 const Transition = React.forwardRef<any, TransitionProps>((props: any, ref) => {
-  return <Slide direction="up" ref={ref} {...props} />;
+  return <Slide ref={ref} direction="up" {...props} />;
 });
 
 function SlideModal({
@@ -28,28 +34,33 @@ function SlideModal({
   title?: string;
 }>) {
   const classes = useStyles();
+  const [dialogRef, setDialogRef] = useState<Node | null>(null);
   return (
     <Dialog
-      fullScreen
       open={open}
-      onClose={onClose}
+      scroll="paper"
       TransitionComponent={Transition}
+      fullScreen
+      onClose={onClose}
     >
-      <DialogContent>
+      <DialogTitle>
         <TitleBar
           color="paper"
-          title={title}
           rightAction={
             <IconButton
-              onClick={onClose}
-              edge="end"
-              color="inherit"
               aria-label="close"
+              color="inherit"
+              edge="end"
+              onClick={onClose}
             >
               <Close />
             </IconButton>
           }
+          scrollTarget={dialogRef}
+          title={title}
         />
+      </DialogTitle>
+      <DialogContent ref={el => setDialogRef(el as Node)}>
         <div className={classes.content}>{children}</div>
       </DialogContent>
     </Dialog>

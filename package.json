@@ -52,7 +52,7 @@
   },
   "lint-staged": {
     "src/**/*.{js,ts,tsx}": [
-      "eslint --ext js,ts,tsx src",
+      "eslint --ext js,ts,tsx src --fix",
       "prettier --single-quote --write",
       "git add"
     ],

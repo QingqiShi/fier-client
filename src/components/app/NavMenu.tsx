@@ -1,19 +1,10 @@
 import React from 'react';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import {
-  Avatar,
-  Button,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemSecondaryAction,
-  ListItemText,
-  ListSubheader,
-  Typography
-} from '@material-ui/core';
-import { Language, Person } from '@material-ui/icons';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import { Avatar, Button, Typography } from '@material-ui/core';
+import { Person } from '@material-ui/icons';
 import SlideModal from 'components/base/SlideModal';
-import LanguageSelector from 'components/app/LanguageSelector';
+import ProfileSettings from 'components/app/ProfileSettings';
+import AppSettings from 'components/app/AppSettings';
 import useTexts from 'hooks/useTexts';
 import useAuth from 'hooks/useAuth';
 
@@ -39,13 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function ProfileMenu({
-  open,
-  onClose
-}: {
-  open: boolean;
-  onClose: () => void;
-}) {
+function NavMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
   const classes = useStyles();
   const [t] = useTexts();
   const { user, signOut } = useAuth();
@@ -55,27 +40,12 @@ function ProfileMenu({
       <Avatar className={classes.avatar}>
         <Person className={classes.avatarIcon} />
       </Avatar>
-      <Typography variant="h5" align="center" paragraph>
+      <Typography align="center" variant="h5" paragraph>
         {user.name}
       </Typography>
 
-      <List
-        subheader={<ListSubheader>{t['SETTINGS']}</ListSubheader>}
-        className={classes.list}
-      >
-        <ListItem>
-          <ListItemIcon>
-            <Language />
-          </ListItemIcon>
-          <ListItemText
-            id="settings-language"
-            primary={t['SETTINGS_LANGUAGE']}
-          />
-          <ListItemSecondaryAction>
-            <LanguageSelector />
-          </ListItemSecondaryAction>
-        </ListItem>
-      </List>
+      <ProfileSettings className={classes.list} />
+      <AppSettings className={classes.list} />
 
       <div className={classes.center}>
         <Button color="secondary" onClick={() => signOut()}>
@@ -86,4 +56,4 @@ function ProfileMenu({
   );
 }
 
-export default ProfileMenu;
+export default NavMenu;
