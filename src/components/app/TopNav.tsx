@@ -3,7 +3,7 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import { Avatar, IconButton } from '@material-ui/core';
 import { AddBox, Person } from '@material-ui/icons';
 import TitleBar from 'components/base/TitleBar';
-import ProfileMenu from 'components/app/ProfileMenu';
+import NavMenu from 'components/app/NavMenu';
 import useRoute from 'hooks/useRoute';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -50,10 +50,7 @@ function TopNav({ title }: { title: string }) {
           </IconButton>
         }
       />
-      <ProfileMenu
-        open={location.hash === PROFILE_HASH}
-        onClose={closeProfile}
-      />
+      <NavMenu open={location.hash === PROFILE_HASH} onClose={closeProfile} />
     </>
   );
 }

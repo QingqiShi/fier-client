@@ -8,6 +8,7 @@
   "ERROR_EMAIL_IN_USE": "你好像已经注册过了，试试登陆吧",
   "ERROR_WEEK_PASSWORD": "密码太简单了，换个复杂点的吧！",
   "ERROR_UNKNOWN": "遇到未知错误了",
+
   "EMAIL_LABEL": "电子邮件",
   "PASSWORD_LABEL": "密码",
   "DISPLAY_NAME_LABEL": "显示名",
@@ -16,12 +17,21 @@
   "SIGN_OUT": "退出账号",
   "NO_ACCOUNT_PROMPT": "没有账户？注册",
   "ALREADY_REGISTERED_PROMPT": "已经有账户了？登陆",
+
   "DASHBOARD": "概览",
   "ACTIVITY": "流水",
   "CHARTS": "统计",
   "WALLETS": "账户",
+
+  "PROFILE": "用户",
+  "PROFILE_NAME": "显示名",
+  "PROFILE_PICTURE": "头像",
+  "PROFILE_EMAIL": "电子邮箱",
+  "PROFILE_PASSWORD": "密码",
+
   "SETTINGS": "设置",
   "SETTINGS_LANGUAGE": "语言",
+
   "LANGUAGE_EN": "English",
   "LANGUAGE_ZH": "中文",
   "FLAG_EN": "🇺🇸",

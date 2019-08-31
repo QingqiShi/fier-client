@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import {
   AppBar,
   Toolbar,
@@ -41,27 +41,30 @@ function TitleBar({
   title,
   color,
   leftAction,
-  rightAction
+  rightAction,
+  scrollTarget
 }: {
   title?: string;
   color?: 'paper' | 'default';
   leftAction?: React.ReactNode;
   rightAction?: React.ReactNode;
+  scrollTarget?: Node | null;
 }) {
   const scrolled = useScrollTrigger({
     disableHysteresis: true,
-    threshold: 0
+    threshold: 0,
+    target: scrollTarget || window
   });
   const classes = useStyles({ scrolled, color: color || 'default' });
   return (
-    <AppBar elevation={scrolled ? 2 : 0} className={classes.appBar}>
+    <AppBar className={classes.appBar} elevation={scrolled ? 2 : 0}>
       <Toolbar className={classes.toolBar}>
         {leftAction}
         {title && (
           <Typography
             className={classes.typography}
-            variant="h5"
             color="textPrimary"
+            variant="h5"
           >
             {title}
           </Typography>

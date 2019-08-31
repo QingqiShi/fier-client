@@ -8,8 +8,11 @@ type InjectParam = (text: string, params: { [key: string]: string }) => string;
 
 function getProxy(texts?: Texts) {
   return new Proxy(texts || {}, {
-    get(target, name: string) {
-      return name in target ? target[name] : `?${name}?`;
+    get(target, name) {
+      if (typeof name === 'string' && !target[name]) {
+        return `?${name}?`;
+      }
+      return Reflect.get(target, name);
     }
   });
 }

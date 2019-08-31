@@ -8,6 +8,7 @@
   "ERROR_EMAIL_IN_USE": "Looks like you're registered already, try login instead?",
   "ERROR_WEEK_PASSWORD": "That password is too simple, try a more complex one!",
   "ERROR_UNKNOWN": "Encountered unknown error",
+
   "EMAIL_LABEL": "Email",
   "PASSWORD_LABEL": "Password",
   "DISPLAY_NAME_LABEL": "Display Name",
@@ -16,12 +17,21 @@
   "SIGN_OUT": "Log out",
   "NO_ACCOUNT_PROMPT": "Don't have an account? Sign up",
   "ALREADY_REGISTERED_PROMPT": "Already have an account? Sign in",
+
   "DASHBOARD": "Dashboard",
   "ACTIVITY": "Activity",
   "CHARTS": "Charts",
   "WALLETS": "Wallets",
+
+  "PROFILE": "Profile",
+  "PROFILE_NAME": "Display Name",
+  "PROFILE_PICTURE": "Avatar",
+  "PROFILE_EMAIL": "Email",
+  "PROFILE_PASSWORD": "Password",
+
   "SETTINGS": "Settings",
   "SETTINGS_LANGUAGE": "Language",
+
   "LANGUAGE_EN": "English",
   "LANGUAGE_ZH": "中文",
   "FLAG_EN": "🇺🇸",
