@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Login from 'views/Login';
 import Register from 'views/Register';
@@ -22,21 +22,21 @@ function Routes() {
     <>
       {isLoggedIn ? (
         <Switch>
-          <Route path={createPath('/dashboard')} component={Dashboard} />
-          <Route path={createPath('/activity')} component={Activity} />
-          <Route path={createPath('/charts')} component={Charts} />
-          <Route path={createPath('/wallets')} component={Wallets} />
+          <Route component={Dashboard} path={createPath('/dashboard')} />
+          <Route component={Activity} path={createPath('/activity')} />
+          <Route component={Charts} path={createPath('/charts')} />
+          <Route component={Wallets} path={createPath('/wallets')} />
           <Route render={() => <Redirect to={createPath('/dashboard')} />} />
         </Switch>
       ) : (
         <Switch>
-          <Route path={createPath('/login')} component={Login} />
-          <Route path={createPath('/register')} component={Register} />
+          <Route component={Login} path={createPath('/login')} />
+          <Route component={Register} path={createPath('/register')} />
           <Route render={() => <Redirect to={createPath('/login')} />} />
         </Switch>
       )}
       <Helmet>
-        <link rel="manifest" href={createPath('/manifest.json')} />
+        <link href={createPath('/manifest.json')} rel="manifest" />
       </Helmet>
     </>
   );

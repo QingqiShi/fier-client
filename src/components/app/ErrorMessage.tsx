@@ -1,12 +1,12 @@
 import React from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import {
   IconButton,
   Slide,
   Snackbar,
   SnackbarContent
 } from '@material-ui/core';
-import { Error as ErrorIcon, Close as CloseIcon } from '@material-ui/icons';
+import { Close as CloseIcon, Error as ErrorIcon } from '@material-ui/icons';
 import error from 'stores/error';
 import { TransitionProps } from '@material-ui/core/transitions/transition';
 
@@ -50,19 +50,12 @@ function ErrorMessage() {
         vertical: 'top',
         horizontal: 'center'
       }}
-      open={errorState.hasError}
-      onClose={handleClose}
       autoHideDuration={6000}
+      open={errorState.hasError}
       TransitionComponent={SlideTransition}
+      onClose={handleClose}
     >
       <SnackbarContent
-        className={classes.error}
-        message={
-          <span id="client-snackbar" className={classes.messageWrapper}>
-            <ErrorIcon />
-            <span className={classes.message}>{errorState.errorMessage}</span>
-          </span>
-        }
         action={
           <IconButton
             key="close"
@@ -72,6 +65,13 @@ function ErrorMessage() {
           >
             <CloseIcon />
           </IconButton>
+        }
+        className={classes.error}
+        message={
+          <span className={classes.messageWrapper} id="client-snackbar">
+            <ErrorIcon />
+            <span className={classes.message}>{errorState.errorMessage}</span>
+          </span>
         }
       />
     </Snackbar>

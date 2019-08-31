@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import { TextField } from '@material-ui/core';
 import ProgressButton from 'components/base/ProgressButton';
 import EndOfFormLink from 'components/base/EndOfFormLink';
@@ -31,33 +31,33 @@ function SignUpFields({
   return (
     <>
       <TextField
-        label={t['EMAIL_LABEL']}
-        value={email}
-        onChange={handleEmailChange}
-        type="email"
-        name="email"
         autoComplete="email"
+        label={t['EMAIL_LABEL']}
         margin="normal"
+        name="email"
+        type="email"
+        value={email}
         fullWidth
         required
+        onChange={handleEmailChange}
       />
       <TextField
-        label={t['PASSWORD_LABEL']}
-        value={password}
-        onChange={handlePasswordChange}
-        type="password"
         autoComplete="new-password"
+        label={t['PASSWORD_LABEL']}
         margin="normal"
+        type="password"
+        value={password}
         fullWidth
         required
+        onChange={handlePasswordChange}
       />
       <ProgressButton
-        loading={loading}
         className={classes.loginButton}
+        color="primary"
+        loading={loading}
+        size="large"
         type="submit"
         variant="contained"
-        color="primary"
-        size="large"
         fullWidth
       >
         {t['LOGIN']}

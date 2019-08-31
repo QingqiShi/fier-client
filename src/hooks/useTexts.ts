@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import i18n from 'stores/i18n';
 
 type Texts = {

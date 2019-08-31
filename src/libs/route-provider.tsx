@@ -1,8 +1,8 @@
 import React, { createContext } from 'react';
 import { Route } from 'react-router-dom';
 import {
-  Location,
   History,
+  Location,
   createLocation,
   createMemoryHistory
 } from 'history';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { TextField, InputAdornment, IconButton } from '@material-ui/core';
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+import { IconButton, InputAdornment, TextField } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import ProgressButton from 'components/base/ProgressButton';
 import EndOfFormLink from 'components/base/EndOfFormLink';
@@ -37,36 +37,29 @@ function SignUpFields({
   return (
     <>
       <TextField
-        label={t['DISPLAY_NAME_LABEL']}
-        value={name}
-        onChange={handleNameChange}
-        type="text"
-        name="name"
         autoComplete="name"
+        label={t['DISPLAY_NAME_LABEL']}
         margin="normal"
+        name="name"
+        type="text"
+        value={name}
         fullWidth
         required
+        onChange={handleNameChange}
       />
       <TextField
-        label={t['EMAIL_LABEL']}
-        value={email}
-        onChange={handleEmailChange}
-        type="email"
-        name="email"
         autoComplete="email"
+        label={t['EMAIL_LABEL']}
         margin="normal"
+        name="email"
+        type="email"
+        value={email}
         fullWidth
         required
+        onChange={handleEmailChange}
       />
       <TextField
-        label={t['PASSWORD_LABEL']}
-        value={password}
-        onChange={handlePasswordChange}
-        type={showPassword ? 'text' : 'password'}
         autoComplete="new-password"
-        margin="normal"
-        fullWidth
-        required
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -79,14 +72,21 @@ function SignUpFields({
             </InputAdornment>
           )
         }}
+        label={t['PASSWORD_LABEL']}
+        margin="normal"
+        type={showPassword ? 'text' : 'password'}
+        value={password}
+        fullWidth
+        required
+        onChange={handlePasswordChange}
       />
       <ProgressButton
-        loading={loading}
         className={classes.button}
-        variant="contained"
         color="primary"
-        type="submit"
+        loading={loading}
         size="large"
+        type="submit"
+        variant="contained"
         fullWidth
       >
         {t['REGISTER']}

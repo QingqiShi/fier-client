@@ -6,10 +6,10 @@ import {
   Paper
 } from '@material-ui/core';
 import {
-  Home,
-  Timeline,
   AccountBalanceWallet,
-  PieChart
+  Home,
+  PieChart,
+  Timeline
 } from '@material-ui/icons';
 import useTexts from 'hooks/useTexts';
 import useRoute from 'hooks/useRoute';
@@ -51,8 +51,8 @@ function BottomNav() {
         {navigationConfig.map(nav => (
           <BottomNavigationAction
             key={`bottom-nav-${nav.value}`}
-            label={t[nav.label]}
             icon={<nav.icon />}
+            label={t[nav.label]}
             value={nav.value}
           />
         ))}

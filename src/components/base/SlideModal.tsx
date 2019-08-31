@@ -13,8 +13,8 @@ import TitleBar from 'components/base/TitleBar';
 
 const useStyles = makeStyles(
   createStyles({
-    content: {
-      paddingTop: 72
+    header: {
+      height: 72
     }
   })
 );
@@ -43,7 +43,7 @@ function SlideModal({
       fullScreen
       onClose={onClose}
     >
-      <DialogTitle>
+      <DialogTitle className={classes.header}>
         <TitleBar
           color="paper"
           rightAction={
@@ -61,7 +61,7 @@ function SlideModal({
         />
       </DialogTitle>
       <DialogContent ref={el => setDialogRef(el as Node)}>
-        <div className={classes.content}>{children}</div>
+        {children}
       </DialogContent>
     </Dialog>
   );
