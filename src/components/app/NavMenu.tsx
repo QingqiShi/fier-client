@@ -36,7 +36,7 @@ function NavMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { user, signOut } = useAuth();
 
   return (
-    <SlideModal open={open} onClose={onClose}>
+    <SlideModal open={open} title={t['APP_NAME']} onClose={onClose}>
       <Avatar className={classes.avatar}>
         <Person className={classes.avatarIcon} />
       </Avatar>
