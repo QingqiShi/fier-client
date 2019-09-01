@@ -1,4 +1,6 @@
 {
+  "APP_NAME": "fier",
+
   "ERROR_NETWORK_FAILED": "Did your cat pull the internet cable? It's down!",
   "ERROR_USER_EXPIRED": "It's been too long, is that still you? Please loging in again",
   "ERROR_INVALID_EMAIL": "That doesn't look like a valid email",
