@@ -16,11 +16,12 @@ const useStyles = makeStyles(
 function ProgressButton({
   children,
   loading,
+  disabled,
   ...props
 }: { loading: boolean } & Parameters<typeof Button>[0]) {
   const classes = useStyles();
   return (
-    <Button {...props} disabled={loading}>
+    <Button {...props} disabled={loading || disabled}>
       {children}
       {loading && <LinearProgress className={classes.progress} />}
     </Button>

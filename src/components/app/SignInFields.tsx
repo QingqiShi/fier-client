@@ -18,8 +18,8 @@ function SignUpFields({
   passwordControl,
   loading
 }: {
-  emailControl: [string, React.FormEventHandler];
-  passwordControl: [string, React.FormEventHandler];
+  emailControl: [string, React.FormEventHandler, any];
+  passwordControl: [string, React.FormEventHandler, any];
   loading: boolean;
 }) {
   const [t] = useTexts();

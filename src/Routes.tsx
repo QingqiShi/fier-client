@@ -15,7 +15,7 @@ function Routes() {
 
   const {
     user: { receivedInitialState, isLoggedIn }
-  } = useAuth();
+  } = useAuth(true);
   if (!receivedInitialState) return null;
 
   return (

@@ -5,8 +5,6 @@ import i18n from 'stores/i18n';
 import error from 'stores/error';
 import useText from 'hooks/useTexts';
 
-let authListening = false;
-
 type SignInProps = {
   email: string;
   password: string;
@@ -27,7 +25,7 @@ const errorMap: { [key: string]: string } = {
   'auth/weak-password': 'ERROR_WEEK_PASSWORD'
 };
 
-function useAuth() {
+function useAuth(listenForStateChange = false) {
   const [userState, userActions] = user.useStore();
   const [, errorActions] = error.useStore();
   const [{ locale }] = i18n.useStore();
@@ -39,8 +37,7 @@ function useAuth() {
 
   useEffect(() => {
     // Singleton
-    if (authListening) return;
-    authListening = true;
+    if (!listenForStateChange) return;
 
     firebaseAuth().onAuthStateChanged(user => {
       if (user && user.email) {
@@ -54,7 +51,7 @@ function useAuth() {
       }
       userActions.setInitialState();
     });
-  }, [userActions]);
+  }, [listenForStateChange, userActions]);
 
   const handleError = (error: any) => {
     if (error && error.code && errorMap[error.code]) {
@@ -72,7 +69,7 @@ function useAuth() {
       );
 
       if (userCred.user) {
-        userCred.user.updateProfile({
+        await userCred.user.updateProfile({
           displayName: name
         });
         userActions.updateUser(name);
@@ -98,13 +95,68 @@ function useAuth() {
 
   async function signOut() {
     try {
-      return await firebaseAuth().signOut();
+      return firebaseAuth().signOut();
     } catch (error) {
       handleError(error);
     }
   }
 
-  return { user: userState, signIn, signUp, signOut };
+  async function updateName(name: string) {
+    const user = firebaseAuth().currentUser;
+    if (!user) return;
+
+    try {
+      userActions.updateUser(name);
+      await user.updateProfile({ displayName: name });
+    } catch (error) {
+      handleError(error);
+      if (user.displayName) {
+        userActions.updateUser(user.displayName);
+      }
+    }
+  }
+
+  async function updateEmail(email: string, currentPassword: string) {
+    const user = firebaseAuth().currentUser;
+    if (!user || !user.email) return;
+
+    try {
+      const cred = firebaseAuth.EmailAuthProvider.credential(
+        user.email,
+        currentPassword
+      );
+      await user.reauthenticateWithCredential(cred);
+      await user.updateEmail(email);
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async function updatePassword(password: string, currentPassword: string) {
+    const user = firebaseAuth().currentUser;
+    if (!user || !user.email) return;
+
+    try {
+      const cred = firebaseAuth.EmailAuthProvider.credential(
+        user.email,
+        currentPassword
+      );
+      await user.reauthenticateWithCredential(cred);
+      await user.updatePassword(password);
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  return {
+    user: userState,
+    signIn,
+    signUp,
+    signOut,
+    updateName,
+    updateEmail,
+    updatePassword
+  };
 }
 
 export default useAuth;

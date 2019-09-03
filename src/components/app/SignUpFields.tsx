@@ -20,9 +20,9 @@ function SignUpFields({
   nameControl,
   loading
 }: {
-  emailControl: [string, React.FormEventHandler];
-  passwordControl: [string, React.FormEventHandler];
-  nameControl: [string, React.FormEventHandler];
+  emailControl: [string, React.FormEventHandler, any];
+  passwordControl: [string, React.FormEventHandler, any];
+  nameControl: [string, React.FormEventHandler, any];
   loading: boolean;
 }) {
   const [t] = useTexts();
