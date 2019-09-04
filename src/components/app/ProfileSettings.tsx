@@ -70,16 +70,18 @@ function ProfileSettings({ className }: { className?: string }) {
           />
         </ProfileSettingsItem>
 
-        <ProfileSettingsItem
-          expanded={expanded === 'avatar'}
-          icon={<Face />}
-          label={t['AVATAR_LABEL']}
-          saveLabel={t['CHANGE_AVATAR']}
-          onChange={handleExpandChange('avatar')}
-          onSave={() => setExpanded(false)}
-        >
-          test
-        </ProfileSettingsItem>
+        {false && (
+          <ProfileSettingsItem
+            expanded={expanded === 'avatar'}
+            icon={<Face />}
+            label={t['AVATAR_LABEL']}
+            saveLabel={t['CHANGE_AVATAR']}
+            onChange={handleExpandChange('avatar')}
+            onSave={() => setExpanded(false)}
+          >
+            test
+          </ProfileSettingsItem>
+        )}
 
         <ProfileSettingsItem
           disabled={!email || email === user.email || !currentPassword}
