@@ -10,8 +10,9 @@ import useAuth from 'hooks/useAuth';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    center: {
-      textAlign: 'center'
+    logOutContainer: {
+      textAlign: 'center',
+      paddingBottom: 'env(safe-area-inset-bottom)'
     },
     avatar: {
       backgroundColor: theme.palette.grey[600],
@@ -47,7 +48,7 @@ function NavMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
       <ProfileSettings className={classes.list} />
       <AppSettings className={classes.list} />
 
-      <div className={classes.center}>
+      <div className={classes.logOutContainer}>
         <Button color="secondary" onClick={() => signOut()}>
           {t['SIGN_OUT']}
         </Button>
