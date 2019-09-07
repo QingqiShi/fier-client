@@ -6,7 +6,7 @@ function useFormInput(
   const [value, setValue] = useState(initialValue);
 
   function handleChange(e: React.FormEvent<HTMLInputElement>) {
-    setValue((e.target as HTMLInputElement).value);
+    setValue(e.currentTarget.value);
   }
 
   return [value, handleChange, setValue];

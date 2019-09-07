@@ -10,56 +10,48 @@ import {
   ListItemText
 } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
+import useTexts from 'hooks/useTexts';
 
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
       transitionProperty: 'box-shadow, margin',
-      '&:before': {
-        height: 0
-      }
+      '&:before': { height: 0 }
     },
-    summary: {
-      padding: '0 16px'
-    },
-    summaryContent: {
-      margin: 0
-    }
+    summary: { padding: '0 16px' },
+    summaryContent: { margin: 0 }
   })
 );
 
 function ProfileSettingsItem({
   icon,
   label,
-  expanded,
-  saveLabel,
+  actionLabel,
   disabled,
-  onChange,
   onSave,
-  children
-}: React.PropsWithChildren<{
-  icon: React.ReactElement;
-  label: string;
-  saveLabel: string;
-  expanded?: boolean;
-  disabled?: boolean;
-  onChange?: () => void;
-  onSave?: () => void;
-}>) {
+  children,
+  ...rest
+}: React.PropsWithChildren<
+  {
+    icon: React.ReactElement;
+    label: string;
+    actionLabel?: string;
+    disabled?: boolean;
+    onSave?: () => void;
+  } & React.ComponentProps<typeof ExpansionPanel>
+>) {
   const classes = useStyles();
+  const [t] = useTexts();
   return (
     <ExpansionPanel
       className={classes.root}
-      elevation={expanded ? 1 : 0}
-      expanded={expanded}
+      elevation={rest.expanded ? 1 : 0}
       square={true}
-      onChange={onChange}
+      {...rest}
     >
       <ExpansionPanelSummary
-        aria-controls="panel1a-content"
         classes={{ root: classes.summary, content: classes.summaryContent }}
         expandIcon={<ExpandMore />}
-        id="panel1a-header"
       >
         <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText primary={label} />
@@ -72,7 +64,7 @@ function ProfileSettingsItem({
           size="small"
           onClick={onSave}
         >
-          {saveLabel}
+          {actionLabel || t['SAVE']}
         </Button>
       </ExpansionPanelActions>
     </ExpansionPanel>

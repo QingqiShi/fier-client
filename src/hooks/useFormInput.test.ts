@@ -17,7 +17,7 @@ describe('useFormInput', () => {
     const handler = result.current[1];
 
     act(() => {
-      handler({ target: { value: 'test' } } as any);
+      handler({ currentTarget: { value: 'test' } } as any);
     });
 
     expect(result.current[0]).toEqual('test');

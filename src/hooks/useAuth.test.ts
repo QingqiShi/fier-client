@@ -1,8 +1,7 @@
 import { act } from '@testing-library/react-hooks';
 import { renderHook } from 'testUtils';
-import { auth as mockAuth, mockAuthState, mockError } from 'firebase/app';
+import { auth as mockAuth, mockAuthState } from 'firebase/app';
 import user from 'stores/user';
-import error from 'stores/error';
 import useAuth from './useAuth';
 
 afterEach(() => {

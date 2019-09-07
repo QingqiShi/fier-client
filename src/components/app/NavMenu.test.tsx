@@ -7,7 +7,7 @@ const mockSignOut = jest.fn();
 jest.mock('hooks/useAuth', () => ({
   __esModule: true,
   default: () => ({
-    user: { name: 'Test User' },
+    user: { name: 'Test User', email: 'current@email' },
     signOut: mockSignOut
   })
 }));
