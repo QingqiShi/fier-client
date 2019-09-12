@@ -10,7 +10,6 @@ import error from 'stores/error';
 import BottomNav from 'components/app/BottomNav';
 import ErrorMessage from 'components/app/ErrorMessage';
 import Routes from './Routes';
-import './App.css';
 
 const theme = createMuiTheme({
   shape: {
