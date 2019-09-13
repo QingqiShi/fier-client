@@ -1,12 +1,12 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import Login from 'views/Login';
-import Register from 'views/Register';
-import Dashboard from 'views/Dashboard';
-import Activity from 'views/Activity';
-import Charts from 'views/Charts';
-import Wallets from 'views/Wallets';
+import Login from 'components/views/Login';
+import Register from 'components/views/Register';
+import Dashboard from 'components/views/Dashboard';
+import Activity from 'components/views/Activity';
+import Charts from 'components/views/Charts';
+import Wallets from 'components/views/Wallets';
 import useAuth from 'hooks/useAuth';
 import useLocale from 'hooks/useLocale';
 
