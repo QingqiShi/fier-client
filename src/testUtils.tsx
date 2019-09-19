@@ -83,10 +83,3 @@ export function renderHook<P, R>(
     ...options
   });
 }
-
-/**
- * Utility function that flushes any pending promise.
- */
-export function flushPromise() {
-  return new Promise(resolve => setImmediate(resolve));
-}

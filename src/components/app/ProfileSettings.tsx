@@ -3,7 +3,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { List, ListSubheader, TextField } from '@material-ui/core';
 import { Email, Face, Lock, TextFields } from '@material-ui/icons';
 import ProfileSettingsItem from 'components/app/ProfileSettingsItem';
-import useAuth from 'hooks/useAuth';
+import useFirebaseAuth from 'hooks/useFirebaseAuth';
 import useTexts from 'hooks/useTexts';
 import useFormInput from 'hooks/useFormInput';
 
@@ -14,7 +14,7 @@ const useStyles = makeStyles(() =>
 function ProfileSettings({ className }: { className?: string }) {
   const [t] = useTexts();
   const classes = useStyles();
-  const { user, updateName, updateEmail, updatePassword } = useAuth();
+  const { user, updateName, updateEmail, updatePassword } = useFirebaseAuth();
 
   const [expanded, setExpanded] = useState<string | false>('');
   const handleSave = (callback: () => void) => () => {

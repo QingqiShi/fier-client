@@ -1,19 +1,11 @@
 let error = false;
-let currentUser = null;
 let authStateChangeCallback = user => {};
-
-export const mockError = e => {
-  error = e;
-};
-
-export const mockAuthState = user => {
-  authStateChangeCallback(user);
-  currentUser = user;
-};
 
 export const mockAuthFunctions = {
   createUserWithEmailAndPassword: jest.fn(() =>
-    error ? Promise.reject(error) : Promise.resolve({ user: currentUser })
+    error
+      ? Promise.reject(error)
+      : Promise.resolve({ user: authObj.currentUser })
   ),
   signInWithEmailAndPassword: jest.fn(() =>
     error ? Promise.reject(error) : Promise.resolve()
@@ -24,11 +16,23 @@ export const mockAuthFunctions = {
   signOut: jest.fn(() => (error ? Promise.reject(error) : Promise.resolve()))
 };
 
-export const auth = jest.fn(() => ({
+const authObj = {
   ...mockAuthFunctions,
-  currentUser,
+  currentUser: null,
   languageCode: ''
-}));
+};
+
+export const auth = jest.fn(() => authObj);
+
 auth.EmailAuthProvider = {
   credential: jest.fn()
+};
+
+export const mockError = e => {
+  error = e;
+};
+
+export const mockAuthState = user => {
+  authStateChangeCallback(user);
+  authObj.currentUser = user;
 };
