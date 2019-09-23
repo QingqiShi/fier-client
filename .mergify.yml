@@ -1,0 +1,9 @@
+pull_request_rules:
+  - name: automatic merge on dependency bump and ci success
+    conditions:
+      - author=dependabot[bot]
+      - status-success=ci/circleci
+      - base=master
+    actions:
+      merge:
+        method: merge
