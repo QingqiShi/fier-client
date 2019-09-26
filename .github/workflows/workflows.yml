@@ -3,7 +3,7 @@ name: Workflows
 on: [pull_request, push]
 
 jobs:
-  install:
+  lint:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -12,9 +12,35 @@ jobs:
       uses: actions/setup-node@master
       with:
         version: 12
-    - name: Install
+    - run: npm install
       env:
         CI: true
-      run: npm install
-    - name: Lint
-      run: npm lint
+    - run: npm run lint
+    
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@master
+      with:
+        version: 12
+    - run: npm install
+      env:
+        CI: true
+    - run: npm run build
+    
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@master
+      with:
+        version: 12
+    - run: npm install
+      env:
+        CI: true
+    - run: npm test
