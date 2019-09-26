@@ -19,7 +19,7 @@ jobs:
     - uses: actions/upload-artifact@master
       with:
         name: node_modules
-        path: $GITHUB_WORKSPACE
+        path: node_modules
     
   lint:
     needs: install
