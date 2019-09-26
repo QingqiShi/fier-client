@@ -1,5 +1,5 @@
-import { act } from '@testing-library/react-hooks';
 import { renderHook } from 'testUtils';
+import { act } from '@testing-library/react-hooks';
 import { auth as mockAuth, mockAuthState } from 'firebase/app';
 import user from 'stores/user';
 import useFirebaseAuth from './useFirebaseAuth';
@@ -70,14 +70,60 @@ test('update user profile', async () => {
   };
   mockAuthState(mockUser);
 
+  // Update name
   result.current.updateName('test name');
   expect(mockUser.updateProfile).toHaveBeenCalledWith({
     displayName: 'test name'
   });
 
+  // Update email
   await result.current.updateEmail('test email', 'test');
   expect(mockUser.updateEmail).toHaveBeenCalledWith('test email');
 
+  // Update password
   await result.current.updatePassword('test password', 'test');
   expect(mockUser.updatePassword).toHaveBeenCalledWith('test password');
+});
+
+test('error while updating name', async () => {
+  let state: ReturnType<typeof user['useStore']>[0] = null as any;
+  const { result, waitForNextUpdate } = renderHook(
+    () => useFirebaseAuth(),
+    [user],
+    {
+      useHook: () => {
+        const [userState] = user.useStore();
+        state = userState;
+      }
+    }
+  );
+
+  mockAuthState({
+    displayName: 'initial name',
+    // Reject to throw error
+    updateProfile: () => Promise.reject()
+  });
+
+  // Update name
+  act(() => {
+    result.current.updateName('test name');
+  });
+  await waitForNextUpdate();
+
+  expect(state && state.name).toBe('initial name');
+
+  // No initial name
+  mockAuthState({
+    displayName: null,
+    // Reject to throw error
+    updateProfile: () => Promise.reject()
+  });
+
+  // Update name
+  act(() => {
+    result.current.updateName('test name');
+  });
+  await waitForNextUpdate();
+
+  expect(state && state.name).toBe('');
 });

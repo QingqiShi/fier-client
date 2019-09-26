@@ -7,22 +7,19 @@ import Dashboard from 'components/views/Dashboard';
 import Activity from 'components/views/Activity';
 import Charts from 'components/views/Charts';
 import Wallets from 'components/views/Wallets';
-import useFirebaseAuth from 'hooks/useFirebaseAuth';
 import useFirebaseSetup from 'hooks/useFirebaseSetup';
+import user from 'stores/user';
 import useLocale from 'hooks/useLocale';
 
 function Routes() {
-  const { createPath } = useLocale(true);
+  const ready = useFirebaseSetup();
 
-  useFirebaseSetup();
+  const [{ isLoggedIn }] = user.useStore();
+  const { createPath } = useLocale(ready);
 
-  const {
-    user: { receivedInitialState, isLoggedIn }
-  } = useFirebaseAuth();
-  if (!receivedInitialState) return null;
+  if (!ready) return null;
 
   let routes;
-
   if (isLoggedIn) {
     routes = (
       <Switch>

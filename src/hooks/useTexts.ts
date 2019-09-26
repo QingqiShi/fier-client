@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import settings from 'stores/settings';
 import i18n from 'stores/i18n';
 
 type Texts = {
@@ -18,8 +19,9 @@ function getProxy(texts?: Texts) {
 }
 
 function useTexts(): [Texts, InjectParam] {
-  const [state] = i18n.useStore();
-  const texts = state.translations[state.locale];
+  const [{ locale }] = settings.useStore();
+  const [{ translations }] = i18n.useStore();
+  const texts = translations[locale];
   const [proxy, setProxy] = useState<{
     [key: string]: string;
   }>(getProxy(texts));

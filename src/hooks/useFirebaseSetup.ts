@@ -1,14 +1,21 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { auth } from 'firebase/app';
 import user from 'stores/user';
-import i18n from 'stores/i18n';
+import settings from 'stores/settings';
 
 function useFirebaseSetup() {
-  const [userState, userActions] = user.useStore();
+  const [, userActions] = user.useStore();
+  const [{ locale }] = settings.useStore();
+  const [ready, setReady] = useState(false);
+
+  /*
+    Listen for auth state changes
+  */
   useEffect(() => {
-    const unsubscribe = auth().onAuthStateChanged(user => {
+    return auth().onAuthStateChanged(user => {
       if (user && user.email) {
         userActions.setUser({
+          uid: user.uid,
           email: user.email,
           name: user.displayName || user.email.split('@')[0],
           emailVerified: user.emailVerified
@@ -16,18 +23,19 @@ function useFirebaseSetup() {
       } else {
         userActions.signOut();
       }
-      userActions.setInitialState();
-    });
 
-    return unsubscribe;
+      setReady(true);
+    });
   }, [userActions]);
 
-  const [{ locale }] = i18n.useStore();
+  /*
+    Set firebase language (for email)
+  */
   useEffect(() => {
     auth().languageCode = locale;
   }, [locale]);
 
-  return userState;
+  return ready;
 }
 
 export default useFirebaseSetup;

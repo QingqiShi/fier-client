@@ -9,15 +9,33 @@ import {
 import { RouteProvider } from 'libs/route-provider';
 import i18n from 'stores/i18n';
 import en from 'translations/en.json';
+import zh from 'translations/zh.json';
+
+type Options = {
+  translations?: boolean;
+  url?: string;
+  useHook?: () => void;
+};
 
 /**
  * Wrapper component that fetches English translations.
  */
-function App({ children }: React.PropsWithChildren<{}>) {
+function App({
+  children,
+  translations,
+  useHook = () => {}
+}: React.PropsWithChildren<{
+  translations?: boolean;
+  useHook?: Options['useHook'];
+}>) {
   const [, actions] = i18n.useStore();
   useEffect(() => {
-    actions.addTranslations({ en });
-  }, [actions]);
+    if (translations !== false) {
+      actions.addTranslations({ en, zh });
+    }
+  }, [actions, translations]);
+
+  useHook();
 
   return <>{children}</>;
 }
@@ -28,7 +46,7 @@ function App({ children }: React.PropsWithChildren<{}>) {
 export function render(
   ui: React.ReactElement<any>,
   stores: Store<any, any>[] = [],
-  options?: RenderOptions & { translations?: boolean; url?: string }
+  options?: RenderOptions & Options
 ) {
   function Wrapper({ children }: React.PropsWithChildren<{}>) {
     const Provider = useStoreProvider(i18n, ...stores);
@@ -36,11 +54,12 @@ export function render(
       <MemoryRouter initialEntries={[(options && options.url) || '/']}>
         <RouteProvider>
           <Provider>
-            {options && !options.translations ? (
-              children
-            ) : (
-              <App>{children}</App>
-            )}
+            <App
+              translations={options && options.translations}
+              useHook={options && options.useHook}
+            >
+              {children}
+            </App>
           </Provider>
         </RouteProvider>
       </MemoryRouter>
@@ -59,7 +78,7 @@ export function render(
 export function renderHook<P, R>(
   callback: (props: P) => R,
   stores: Store<any, any>[] = [],
-  options?: RenderHookOptions<P> & { translations?: boolean; url?: string }
+  options?: RenderHookOptions<P> & Options
 ) {
   function Wrapper({ children }: { children: React.ReactElement }) {
     const Provider = useStoreProvider(i18n, ...stores);
@@ -67,11 +86,12 @@ export function renderHook<P, R>(
       <MemoryRouter initialEntries={[(options && options.url) || '/']}>
         <RouteProvider>
           <Provider>
-            {options && !options.translations ? (
-              children
-            ) : (
-              <App>{children}</App>
-            )}
+            <App
+              translations={options && options.translations}
+              useHook={options && options.useHook}
+            >
+              {children}
+            </App>
           </Provider>
         </RouteProvider>
       </MemoryRouter>

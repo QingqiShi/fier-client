@@ -6,8 +6,8 @@ describe('user', () => {
   describe('state', () => {
     it.each`
       property
-      ${'receivedInitialState'}
       ${'isLoggedIn'}
+      ${'uid'}
       ${'name'}
       ${'email'}
       ${'emailVerified'}
@@ -18,24 +18,18 @@ describe('user', () => {
   });
 
   describe('actions', () => {
-    it('setInitialState', () => {
-      const { result } = renderHook(() => user.useStore(), [user]);
-      act(() => {
-        result.current[1].setInitialState();
-      });
-      expect(result.current[0].receivedInitialState).toBe(true);
-    });
-
     it('setUser', () => {
       const { result } = renderHook(() => user.useStore(), [user]);
       act(() => {
         result.current[1].setUser({
+          uid: 'testUserId',
           email: 'testEmail',
           name: 'testName',
           emailVerified: true
         });
       });
       expect(result.current[0].isLoggedIn).toBe(true);
+      expect(result.current[0].uid).toEqual('testUserId');
       expect(result.current[0].email).toEqual('testEmail');
       expect(result.current[0].name).toEqual('testName');
       expect(result.current[0].emailVerified).toBe(true);
@@ -45,6 +39,7 @@ describe('user', () => {
       const { result } = renderHook(() => user.useStore(), [user]);
       act(() => {
         result.current[1].setUser({
+          uid: '',
           email: '',
           name: '',
           emailVerified: true

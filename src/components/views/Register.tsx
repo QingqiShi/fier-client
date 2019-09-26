@@ -49,7 +49,7 @@ function Login() {
           passwordControl={passwordControl}
         />
       </form>
-      <LanguageSelector position="bottom" />
+      <LanguageSelector position="fixed" />
     </OverlayContainer>
   );
 }

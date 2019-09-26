@@ -47,3 +47,15 @@ test('ignores error when error exist already', async () => {
   await Promise.resolve();
   expect(mockSetError).not.toHaveBeenCalled();
 });
+
+test('set onError callback', async () => {
+  const { result } = renderHook(useFirebaseError, [], {
+    translations: true
+  });
+
+  const handleError = jest.fn();
+  result.current(() => Promise.reject({ code: 'test_error' }), handleError);
+
+  await Promise.resolve();
+  expect(handleError).toHaveBeenLastCalledWith({ code: 'test_error' });
+});

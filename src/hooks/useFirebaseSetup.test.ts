@@ -14,9 +14,9 @@ test('subscribe to auth state change when passed true as argument', () => {
   expect(mockAuth().onAuthStateChanged).toHaveBeenCalledTimes(1);
 });
 
-test('returns user state and updates on auth state change', () => {
+test('returns ready state that becomes true after first auth state change', () => {
   const { result } = renderHook(useFirebaseSetup, [user]);
-  expect(result.current.isLoggedIn).toBe(false);
+  expect(result.current).toBe(false);
 
   act(() => {
     mockAuthState({
@@ -25,22 +25,12 @@ test('returns user state and updates on auth state change', () => {
       emailVerified: true
     });
   });
-  expect(result.current.isLoggedIn).toBe(true);
-  expect(result.current.email).toBe('email');
-  expect(result.current.name).toBe('name');
-  expect(result.current.emailVerified).toBe(true);
-
-  act(() => {
-    mockAuthState({
-      email: 'test@email.com'
-    });
-  });
-  expect(result.current.name).toBe('test');
+  expect(result.current).toBe(true);
 
   act(() => {
     mockAuthState(null);
   });
-  expect(result.current.isLoggedIn).toBe(false);
+  expect(result.current).toBe(true);
 });
 
 test('sets language code', () => {

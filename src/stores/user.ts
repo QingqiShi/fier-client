@@ -1,8 +1,8 @@
 import { createStore } from 'react-lit-store';
 
 const initialState = {
-  receivedInitialState: false,
   isLoggedIn: false,
+  uid: '',
   name: '',
   email: '',
   emailVerified: false
@@ -10,17 +10,16 @@ const initialState = {
 type State = typeof initialState;
 
 const mutations = {
-  setInitialState: () => ({
-    receivedInitialState: true
-  }),
   setUser: (
     _: State,
     {
+      uid,
       email,
       name,
       emailVerified
-    }: { email: string; name: string; emailVerified: boolean }
+    }: { uid: string; email: string; name: string; emailVerified: boolean }
   ) => ({
+    uid,
     isLoggedIn: true,
     email,
     name,

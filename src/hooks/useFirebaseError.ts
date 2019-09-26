@@ -26,11 +26,14 @@ function useFirebaseError() {
     }
   };
 
-  return async (callback: () => Promise<any>) => {
+  return async (callback: () => Promise<any>, onError?: (e: any) => void) => {
     try {
       return await callback();
     } catch (e) {
       handleError(e);
+      if (onError) {
+        onError(e);
+      }
     }
   };
 }

@@ -34,9 +34,11 @@ function useFirebaseAuth() {
   }
 
   function signIn({ email, password }: { email: string; password: string }) {
-    return handleError(() =>
-      auth().signInWithEmailAndPassword(email, password)
-    );
+    return handleError(async () => {
+      const userCred = await auth().signInWithEmailAndPassword(email, password);
+
+      return userCred;
+    });
   }
 
   function signOut() {
@@ -47,14 +49,16 @@ function useFirebaseAuth() {
     const user = auth().currentUser;
     if (!user) return;
 
-    return handleError(async () => {
-      userActions.updateUser(name);
-      await user.updateProfile({ displayName: name });
-    }).catch(() => {
-      if (user.displayName) {
-        userActions.updateUser(user.displayName);
+    const currentName = user.displayName;
+    return handleError(
+      async () => {
+        userActions.updateUser(name);
+        await user.updateProfile({ displayName: name });
+      },
+      () => {
+        userActions.updateUser(currentName || '');
       }
-    });
+    );
   }
 
   function updateEmail(email: string, currentPassword: string) {
