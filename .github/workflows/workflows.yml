@@ -13,6 +13,8 @@ jobs:
       with:
         version: 12
     - name: Install
+      env:
+        CI: true
       run: npm install
     - uses: actions/upload-artifact@master
       with:
