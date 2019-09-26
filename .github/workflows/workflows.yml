@@ -16,23 +16,5 @@ jobs:
       env:
         CI: true
       run: npm install
-    - uses: actions/upload-artifact@master
-      with:
-        name: node_modules
-        path: node_modules
-    
-  lint:
-    needs: install
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@master
-    - name: Use Node.js 12.x
-      uses: actions/setup-node@v1
-      with:
-        version: 12.x
-    - uses: actions/download-artifact@master
-      with:
-        name: node_modules
     - name: Lint
       run: npm lint
