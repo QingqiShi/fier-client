@@ -32,6 +32,10 @@ jobs:
       - run:
           name: Linting
           command: npm run lint -- --format junit --output-file reports/junit/eslint-results.xml
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - reports/junit
   test:
     docker:
       - image: circleci/node:latest
@@ -52,7 +56,7 @@ jobs:
           root: ~/repo
           paths:
             - coverage
-            - reports
+            - reports/junit
   build:
     docker:
       - image: circleci/node:latest
@@ -88,6 +92,7 @@ jobs:
       - image: circleci/node:latest
     working_directory: ~/repo
     steps:
+      - checkout
       - attach_workspace:
           at: ~/repo
       - run:
