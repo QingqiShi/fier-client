@@ -123,6 +123,7 @@ workflows:
             - install
       - coverage:
           requires:
+            - lint
             - test
       - deploy:
           requires:
