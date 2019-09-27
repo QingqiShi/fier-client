@@ -1,5 +1,6 @@
 [![CircleCI](https://circleci.com/gh/QingqiShi/fier-client.svg?style=svg&circle-token=d333bb55e5cd9e7be1a921049b50111596623ce4)](https://circleci.com/gh/QingqiShi/fier-client)
 [![codecov](https://codecov.io/gh/QingqiShi/fier-client/branch/master/graph/badge.svg?token=25DtHPUGRe)](https://codecov.io/gh/QingqiShi/fier-client)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=QingqiShi/fier-client)](https://dependabot.com)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
