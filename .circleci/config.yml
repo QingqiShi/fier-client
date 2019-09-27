@@ -2,6 +2,57 @@ version: 2.1
 orbs:
   codecov: codecov/codecov@1.0.5
 jobs:
+  install:
+    docker:
+      - image: circleci/node:latest
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Update npm
+          command: 'sudo npm install -g npm@latest'
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
+  lint:
+    docker:
+      - image: circleci/node:latest
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Update npm
+          command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: Linting
+          command: npm run lint -- --format junit --output-file reports/junit/eslint-results.xml
+  test:
+    docker:
+      - image: circleci/node:latest
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Update npm
+          command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: Unit tests
+          command: npm test -- --coverage --reporters=jest-junit
+          environment:
+            JEST_JUNIT_OUTPUT: 'reports/junit/jest-results.xml'
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - coverage
+            - reports
   build:
     docker:
       - image: circleci/node:latest
@@ -14,27 +65,31 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
-          name: Install dependencies
-          command: npm install
-      - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+          name: Build
+          command: npm run build
+      - persist_to_workspace:
+          root: ~/repo
           paths:
-            - ./node_modules
-      - run:
-          name: Linting
-          command: npm run lint -- --format junit --output-file reports/junit/eslint-results.xml
-      - run:
-          name: Unit tests
-          command: npm test -- --coverage --reporters=jest-junit
-          environment:
-            JEST_JUNIT_OUTPUT: 'reports/junit/jest-results.xml'
+            - build
+  coverage:
+    docker:
+      - image: circleci/node:latest
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/repo
       - codecov/upload:
           file: coverage/lcov.info
       - store_test_results:
           path: reports/junit
-      - run:
-          name: Build
-          command: npm run build
+  deploy:
+    docker:
+      - image: circleci/node:latest
+    working_directory: ~/repo
+    steps:
+      - attach_workspace:
+          at: ~/repo
       - run:
           name: Prepare deploy
           command: |
@@ -47,3 +102,25 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
                 ./firebase-deploy/node_modules/.bin/firebase deploy --token "$FIREBASE_TOKEN"
             fi
+workflows:
+  version: 2
+  main:
+    jobs:
+      - install
+      - lint:
+          requires:
+            - install
+      - test:
+          requires:
+            - install
+      - build:
+          requires:
+            - install
+      - coverage:
+          requires:
+            - test
+      - deploy:
+          requires:
+            - lint
+            - test
+            - build
