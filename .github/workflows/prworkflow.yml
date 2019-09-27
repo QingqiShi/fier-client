@@ -61,8 +61,8 @@ jobs:
     steps:
     - uses: actions/download-artifact@master
       with:
-        name: my-artifact
-        path: path/to/artifact
+        name: coverage-results
+        path: coverage
     - uses: codecov/codecov-action@v1.0.2
       with:
         token: ${{secrets.CODECOV_TOKEN}}
