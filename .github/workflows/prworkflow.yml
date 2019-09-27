@@ -1,0 +1,52 @@
+name: PR Workflow
+
+on: [pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@master
+      with:
+        version: 12
+    - name: npm install and lint
+      run: |
+        npm install
+        npm run lint
+      env:
+        CI: true
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@master
+      with:
+        version: 12
+    - name: npm install and build
+      run: |
+        npm install
+        npm run build
+      env:
+        CI: true
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@master
+      with:
+        version: 12
+    - name: npm install and test
+      run: |
+        npm install
+        npm test -- --watchAll=false --coverage
+      env:
+        CI: true
