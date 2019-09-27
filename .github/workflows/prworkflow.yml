@@ -50,3 +50,20 @@ jobs:
         npm test -- --watchAll=false --coverage
       env:
         CI: true
+    - uses: actions/upload-artifact@master
+      with:
+        name: coverage-results
+        path: coverage
+
+  coverage:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@master
+      with:
+        name: my-artifact
+        path: path/to/artifact
+    - uses: codecov/codecov-action@v1.0.2
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
+        file: coverage/lcov.info
