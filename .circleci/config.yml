@@ -14,10 +14,10 @@ jobs:
       - run:
           name: Install dependencies
           command: npm ci
-      - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - persist_to_workspace:
+          root: ~/repo
           paths:
-            - ./node_modules
+            - node_modules
   lint:
     docker:
       - image: circleci/node:latest
@@ -27,8 +27,8 @@ jobs:
       - run:
           name: Update npm
           command: 'sudo npm install -g npm@latest'
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - attach_workspace:
+          at: ~/repo
       - run:
           name: Linting
           command: npm run lint -- --format junit --output-file reports/junit/eslint-results.xml
@@ -45,8 +45,8 @@ jobs:
       - run:
           name: Update npm
           command: 'sudo npm install -g npm@latest'
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - attach_workspace:
+          at: ~/repo
       - run:
           name: Unit tests
           command: npm test -- --coverage --reporters=jest-junit
@@ -66,8 +66,8 @@ jobs:
       - run:
           name: Update npm
           command: 'sudo npm install -g npm@latest'
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - attach_workspace:
+          at: ~/repo
       - run:
           name: Build
           command: npm run build
