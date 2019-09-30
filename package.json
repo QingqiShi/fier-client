@@ -19,7 +19,7 @@
     "react-dom": "^16.10.1",
     "react-helmet-async": "^1.0.3",
     "react-lit-store": "^1.1.0",
-    "react-router-dom": "^5.1.0",
+    "react-router-dom": "^5.1.1",
     "react-scripts": "3.1.2",
     "react-spring": "^8.0.27"
   },
