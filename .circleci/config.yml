@@ -83,8 +83,9 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/repo
-      - codecov/upload:
-          file: coverage/lcov.info
+      - run:
+          name: Coverage
+          command: npx codecov
       - store_test_results:
           path: reports/junit
   deploy:
