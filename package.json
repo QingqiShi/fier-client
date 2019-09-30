@@ -16,7 +16,7 @@
     "firebase": "^7.0.0",
     "fitty": "^2.2.6",
     "react": "^16.10.0",
-    "react-dom": "^16.10.0",
+    "react-dom": "^16.10.1",
     "react-helmet-async": "^1.0.3",
     "react-lit-store": "^1.1.0",
     "react-router-dom": "^5.1.0",
