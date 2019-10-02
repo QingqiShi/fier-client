@@ -17,12 +17,6 @@ function getEmptyActions<S, M extends Mutations<S>>(mutations: M) {
   return actions;
 }
 
-/**
- * Create a lit-store instance with the initial state and reducer.
- * @param initialState Initial store state
- * @param reducer Reducer to mutate state
- * @returns Store instance with `Provider` component and `useStore` hook.
- */
 export function createStore<S, M extends Mutations<S>>(
   initialState: S,
   mutations: M,
@@ -40,8 +34,8 @@ export function createStore<S, M extends Mutations<S>>(
     const doc = useMemo(() => (path ? db.doc(path) : undefined), [db, path]);
     const handleSnap = useRef((_snap: firestore.DocumentSnapshot) => {});
 
-    const actions: Actions<M> = useMemo(() => {
-      const result: Actions<M> = {} as any;
+    const actions = useMemo(() => {
+      const result = {} as Actions<M>;
       Object.keys(mutations).forEach((name: keyof M) => {
         result[name] = (...args) => {
           const delta = mutations[name](state, ...args);
@@ -67,13 +61,15 @@ export function createStore<S, M extends Mutations<S>>(
             return;
           }
 
-          const keys = Object.keys(state);
+          const keys = Object.keys(state) as (keyof S)[];
           if (typeof keys.find(key => !(key in data)) !== 'undefined') {
+            let delta: Partial<S> = {};
             keys.forEach(key => {
               if (!(key in data)) {
-                doc.set({ [key]: state[key as keyof S] }, { merge: true });
+                delta[key] = state[key];
               }
             });
+            doc.set(delta, { merge: true });
             return;
           }
 

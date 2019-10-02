@@ -6,15 +6,11 @@ import { getLocale } from 'hooks/useRoute';
 export type Category = { name: string };
 
 const initialState = {
-  locale: getLocale(window.location.pathname),
-  categories: [] as Category[]
+  locale: getLocale(window.location.pathname)
 };
 type State = typeof initialState;
 
 const mutations = {
-  setCategories: (_: State, newCategories: Category[]) => ({
-    categories: newCategories
-  }),
   setLocale: (_: State, newLocale: Locale) => ({
     locale: newLocale
   })
