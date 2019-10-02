@@ -6,7 +6,7 @@ import SlideModal from 'components/base/SlideModal';
 import ProfileSettings from 'components/app/ProfileSettings';
 import AppSettings from 'components/app/AppSettings';
 import useTexts from 'hooks/useTexts';
-import useAuth from 'hooks/useAuth';
+import useFirebaseAuth from 'hooks/useFirebaseAuth';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
 function NavMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
   const classes = useStyles();
   const [t] = useTexts();
-  const { user, signOut } = useAuth();
+  const { user, signOut } = useFirebaseAuth();
 
   return (
     <SlideModal open={open} title={t['APP_NAME']} onClose={onClose}>

@@ -18,9 +18,6 @@ firebase.initializeApp({
   appId: '1:136802262330:web:178fefc9383280c6'
 });
 
-const db = firebase.firestore();
-console.log(db);
-
 ReactDOM.render(
   <Router>
     <RouteProvider>

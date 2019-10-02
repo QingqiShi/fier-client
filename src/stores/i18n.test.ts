@@ -5,7 +5,9 @@ import i18n from './i18n';
 describe('i18n', () => {
   describe('addTranslations', () => {
     it('add new translations', () => {
-      const { result } = renderHook(() => i18n.useStore(), [i18n]);
+      const { result } = renderHook(() => i18n.useStore(), [i18n], {
+        translations: false
+      });
       expect(result.current[0].translations.zh).toBeUndefined();
       act(() => {
         result.current[1].addTranslations({
@@ -16,7 +18,9 @@ describe('i18n', () => {
     });
 
     it('merge with existing translations', () => {
-      const { result } = renderHook(() => i18n.useStore(), [i18n]);
+      const { result } = renderHook(() => i18n.useStore(), [i18n], {
+        translations: false
+      });
       act(() => {
         result.current[1].addTranslations({
           zh: { TEST: 'test' }
@@ -31,29 +35,6 @@ describe('i18n', () => {
         TEST: 'test',
         GREET: 'hello'
       });
-    });
-  });
-
-  describe('setLocale', () => {
-    it('change locale', () => {
-      const { result } = renderHook(() => i18n.useStore(), [i18n]);
-      act(() => {
-        result.current[1].addTranslations({
-          zh: { TEST: 'test' }
-        });
-      });
-      act(() => {
-        result.current[1].setLocale('zh');
-      });
-      expect(result.current[0].locale).toEqual('zh');
-    });
-
-    it('set empty translation if not exist', () => {
-      const { result } = renderHook(() => i18n.useStore(), [i18n]);
-      act(() => {
-        result.current[1].setLocale('zh');
-      });
-      expect(result.current[0].translations.zh).toEqual({});
     });
   });
 });

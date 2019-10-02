@@ -10,10 +10,9 @@ export type Translations = {
 };
 
 type State = {
-  locale: Locale;
   translations: Translations;
 };
-const initialState: State = { locale: 'en', translations: { en: {} } };
+const initialState: State = { translations: { en: {} } };
 
 const mutations = {
   addTranslations: (prevState: State, translations: Translations) => {
@@ -26,15 +25,6 @@ const mutations = {
       };
     });
     return result;
-  },
-  setLocale: (prevState: State, locale: Locale) => {
-    if (!prevState.translations[locale]) {
-      return {
-        locale,
-        translations: { ...prevState.translations, [locale]: {} }
-      };
-    }
-    return { locale };
   }
 };
 

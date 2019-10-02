@@ -1,53 +1,18 @@
-import { act } from '@testing-library/react-hooks';
 import { renderHook } from 'testUtils';
+import { act } from '@testing-library/react-hooks';
 import { auth as mockAuth, mockAuthState } from 'firebase/app';
 import user from 'stores/user';
-import useAuth from './useAuth';
+import useFirebaseAuth from './useFirebaseAuth';
 
 afterEach(() => {
   mockAuth().onAuthStateChanged(() => {});
   jest.clearAllMocks();
 });
 
-test('subscribe to auth state change when passed true as argument', () => {
-  renderHook(() => useAuth());
-  expect(mockAuth().onAuthStateChanged).not.toHaveBeenCalled();
-
-  renderHook(() => useAuth(true));
-  expect(mockAuth().onAuthStateChanged).toHaveBeenCalledTimes(1);
-});
-
-test('returns user state and updates on auth state change', () => {
-  const { result } = renderHook(() => useAuth(true), [user]);
-  expect(result.current.user.isLoggedIn).toBe(false);
-
-  act(() => {
-    mockAuthState({
-      email: 'email',
-      displayName: 'name',
-      emailVerified: true
-    });
-  });
-  expect(result.current.user.isLoggedIn).toBe(true);
-  expect(result.current.user.email).toBe('email');
-  expect(result.current.user.name).toBe('name');
-  expect(result.current.user.emailVerified).toBe(true);
-
-  act(() => {
-    mockAuthState({
-      email: 'test@email.com'
-    });
-  });
-  expect(result.current.user.name).toBe('test');
-
-  act(() => {
-    mockAuthState(null);
-  });
-  expect(result.current.user.isLoggedIn).toBe(false);
-});
-
 test('authentication actions', async () => {
-  const { result, waitForNextUpdate } = renderHook(() => useAuth(), [user]);
+  const { result, waitForNextUpdate } = renderHook(() => useFirebaseAuth(), [
+    user
+  ]);
 
   // Sign up creates user
   result.current.signUp({
@@ -87,7 +52,7 @@ test('authentication actions', async () => {
 });
 
 test('update user profile', async () => {
-  const { result } = renderHook(() => useAuth());
+  const { result } = renderHook(() => useFirebaseAuth());
 
   // No user signed in
   mockAuthState(null);
@@ -105,14 +70,60 @@ test('update user profile', async () => {
   };
   mockAuthState(mockUser);
 
+  // Update name
   result.current.updateName('test name');
   expect(mockUser.updateProfile).toHaveBeenCalledWith({
     displayName: 'test name'
   });
 
+  // Update email
   await result.current.updateEmail('test email', 'test');
   expect(mockUser.updateEmail).toHaveBeenCalledWith('test email');
 
+  // Update password
   await result.current.updatePassword('test password', 'test');
   expect(mockUser.updatePassword).toHaveBeenCalledWith('test password');
+});
+
+test('error while updating name', async () => {
+  let state: ReturnType<typeof user['useStore']>[0] = null as any;
+  const { result, waitForNextUpdate } = renderHook(
+    () => useFirebaseAuth(),
+    [user],
+    {
+      useHook: () => {
+        const [userState] = user.useStore();
+        state = userState;
+      }
+    }
+  );
+
+  mockAuthState({
+    displayName: 'initial name',
+    // Reject to throw error
+    updateProfile: () => Promise.reject()
+  });
+
+  // Update name
+  act(() => {
+    result.current.updateName('test name');
+  });
+  await waitForNextUpdate();
+
+  expect(state && state.name).toBe('initial name');
+
+  // No initial name
+  mockAuthState({
+    displayName: null,
+    // Reject to throw error
+    updateProfile: () => Promise.reject()
+  });
+
+  // Update name
+  act(() => {
+    result.current.updateName('test name');
+  });
+  await waitForNextUpdate();
+
+  expect(state && state.name).toBe('');
 });

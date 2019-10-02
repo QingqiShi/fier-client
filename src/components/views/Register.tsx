@@ -6,12 +6,12 @@ import SignUpFields from 'components/app/SignUpFields';
 import LanguageSelector from 'components/app/LanguageSelector';
 import useTexts from 'hooks/useTexts';
 import useFormInput from 'hooks/useFormInput';
-import useAuth from 'hooks/useAuth';
+import useFirebaseAuth from 'hooks/useFirebaseAuth';
 
 function Login() {
   const [t] = useTexts();
 
-  const { user, signUp } = useAuth();
+  const { user, signUp } = useFirebaseAuth();
   const [loading, setLoading] = useState(false);
 
   const emailControl = useFormInput('');
@@ -49,7 +49,7 @@ function Login() {
           passwordControl={passwordControl}
         />
       </form>
-      <LanguageSelector position="bottom" />
+      <LanguageSelector position="fixed" />
     </OverlayContainer>
   );
 }

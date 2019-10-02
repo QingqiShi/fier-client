@@ -7,6 +7,7 @@ import { useStoreProvider } from 'react-lit-store';
 import i18n from 'stores/i18n';
 import user from 'stores/user';
 import error from 'stores/error';
+import settings from 'stores/settings';
 import BottomNav from 'components/app/BottomNav';
 import ErrorMessage from 'components/app/ErrorMessage';
 import Routes from './Routes';
@@ -26,7 +27,7 @@ const theme = createMuiTheme({
 });
 
 function App() {
-  const StoreProvider = useStoreProvider(i18n, user, error);
+  const StoreProvider = useStoreProvider(settings, i18n, user, error);
 
   return (
     <HelmetProvider>

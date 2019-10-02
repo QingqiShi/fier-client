@@ -9,7 +9,7 @@ const mockUseAuth = {
   updateEmail: jest.fn(),
   updatePassword: jest.fn()
 };
-jest.mock('hooks/useAuth', () => ({
+jest.mock('hooks/useFirebaseAuth', () => ({
   __esModule: true,
   default: () => mockUseAuth
 }));

@@ -4,7 +4,7 @@ import { render } from 'testUtils';
 import NavMenu from './NavMenu';
 
 const mockSignOut = jest.fn();
-jest.mock('hooks/useAuth', () => ({
+jest.mock('hooks/useFirebaseAuth', () => ({
   __esModule: true,
   default: () => ({
     user: { name: 'Test User', email: 'current@email' },
