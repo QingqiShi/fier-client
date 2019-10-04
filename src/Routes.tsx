@@ -6,7 +6,28 @@ import useFirebaseSetup from 'hooks/useFirebaseSetup';
 import user from 'stores/user';
 import useLocale from 'hooks/useLocale';
 
-const LazyBottomNav = lazy(() => import('components/app/BottomNav'));
+const LazyBottomNav = lazy(() =>
+  import(/* webpackChunkName: "loggednInViews" */ 'components/app/BottomNav')
+);
+const LazyDashboard = lazy(() =>
+  import(/* webpackChunkName: "loggednInViews" */ 'components/views/Dashboard')
+);
+const LazyActivity = lazy(() =>
+  import(/* webpackChunkName: "loggednInViews" */ 'components/views/Activity')
+);
+const LazyCharts = lazy(() =>
+  import(/* webpackChunkName: "loggednInViews" */ 'components/views/Charts')
+);
+const LazyWallets = lazy(() =>
+  import(/* webpackChunkName: "loggednInViews" */ 'components/views/Wallets')
+);
+
+const LazyLogin = lazy(() =>
+  import(/* webpackChunkName: "guestViews" */ 'components/views/Login')
+);
+const LazyRegister = lazy(() =>
+  import(/* webpackChunkName: "guestViews" */ 'components/views/Register')
+);
 
 function Routes() {
   const ready = useFirebaseSetup();
@@ -20,60 +41,18 @@ function Routes() {
   if (isLoggedIn) {
     routes = (
       <Switch>
-        <Route
-          component={lazy(() =>
-            import(
-              /* webpackChunkName: "loggednInViews" */ 'components/views/Dashboard'
-            )
-          )}
-          path={createPath('/dashboard')}
-        />
-        <Route
-          component={lazy(() =>
-            import(
-              /* webpackChunkName: "loggednInViews" */ 'components/views/Activity'
-            )
-          )}
-          path={createPath('/activity')}
-        />
-        <Route
-          component={lazy(() =>
-            import(
-              /* webpackChunkName: "loggednInViews" */ 'components/views/Charts'
-            )
-          )}
-          path={createPath('/charts')}
-        />
-        <Route
-          component={lazy(() =>
-            import(
-              /* webpackChunkName: "loggednInViews" */ 'components/views/Wallets'
-            )
-          )}
-          path={createPath('/wallets')}
-        />
+        <Route component={LazyDashboard} path={createPath('/dashboard')} />
+        <Route component={LazyActivity} path={createPath('/activity')} />
+        <Route component={LazyCharts} path={createPath('/charts')} />
+        <Route component={LazyWallets} path={createPath('/wallets')} />
         <Route render={() => <Redirect to={createPath('/dashboard')} />} />
       </Switch>
     );
   } else {
     routes = (
       <Switch>
-        <Route
-          component={lazy(() =>
-            import(
-              /* webpackChunkName: "guestViews" */ 'components/views/Login'
-            )
-          )}
-          path={createPath('/login')}
-        />
-        <Route
-          component={lazy(() =>
-            import(
-              /* webpackChunkName: "guestViews" */ 'components/views/Register'
-            )
-          )}
-          path={createPath('/register')}
-        />
+        <Route component={LazyLogin} path={createPath('/login')} />
+        <Route component={LazyRegister} path={createPath('/register')} />
         <Route render={() => <Redirect to={createPath('/login')} />} />
       </Switch>
     );
