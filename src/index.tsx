@@ -3,9 +3,8 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/auth';
-import 'firebase/firestore';
 import { RouteProvider } from 'libs/route-provider';
 
 firebase.initializeApp({

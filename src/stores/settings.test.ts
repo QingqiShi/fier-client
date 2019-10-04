@@ -55,26 +55,3 @@ test('get and set locale', () => {
   act(() => result.current[1].setLocale('en'));
   expect(result.current[0].locale).toEqual('en');
 });
-
-test.skip('get and set categories', () => {});
-
-describe('user', () => {
-  describe('actions', () => {
-    it.skip('setUser', () => {
-      const { result } = renderHook(() => user.useStore(), [user]);
-      act(() => {
-        result.current[1].setUser({
-          uid: 'testUserId',
-          email: 'testEmail',
-          name: 'testName',
-          emailVerified: true
-        });
-      });
-      expect(result.current[0].isLoggedIn).toBe(true);
-      expect(result.current[0].uid).toEqual('testUserId');
-      expect(result.current[0].email).toEqual('testEmail');
-      expect(result.current[0].name).toEqual('testName');
-      expect(result.current[0].emailVerified).toBe(true);
-    });
-  });
-});

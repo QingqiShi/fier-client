@@ -30,9 +30,16 @@ export function createStore<S, M extends Mutations<S>>(
   function Provider({ children }: React.PropsWithChildren<{}>) {
     const path = usePath();
     const [state, setState] = useState(initialState);
-    const db = useMemo(() => firestore(), []);
-    const doc = useMemo(() => (path ? db.doc(path) : undefined), [db, path]);
+    const [doc, setDoc] = useState<firestore.DocumentReference | undefined>();
     const handleSnap = useRef((_snap: firestore.DocumentSnapshot) => {});
+
+    useEffect(() => {
+      const fetchAndSetDoc = async (path: string) => {
+        if (!firestore) await import('firebase/firestore');
+        setDoc(firestore().doc(path));
+      };
+      if (path) fetchAndSetDoc(path);
+    }, [path]);
 
     const actions = useMemo(() => {
       const result = {} as Actions<M>;

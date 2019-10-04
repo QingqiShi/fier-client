@@ -5,8 +5,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --runInBand",
+    "test": "react-scripts test",
     "lint": "eslint --ext js,ts,tsx --ignore-pattern json src",
+    "analyze": "npm run build && source-map-explorer 'build/static/js/*.js'",
     "commit": "npx git-cz",
     "eject": "react-scripts eject"
   },
@@ -42,6 +43,7 @@
     "lint-staged": "^9.4.1",
     "prettier": "^1.18.2",
     "react-test-renderer": "^16.10.2",
+    "source-map-explorer": "^2.1.0",
     "typescript": "^3.6.3"
   },
   "husky": {
