@@ -8,7 +8,6 @@ import i18n from 'stores/i18n';
 import user from 'stores/user';
 import error from 'stores/error';
 import settings from 'stores/settings';
-import BottomNav from 'components/app/BottomNav';
 import ErrorMessage from 'components/app/ErrorMessage';
 import Routes from './Routes';
 
@@ -36,7 +35,6 @@ function App() {
           <CssBaseline />
           <ErrorMessage />
           <Routes />
-          <BottomNav />
         </ThemeProvider>
       </StoreProvider>
     </HelmetProvider>
