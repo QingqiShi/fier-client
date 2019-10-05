@@ -1,37 +1,41 @@
-import { useContext } from 'react';
-import { RouteContext } from 'libs/route-provider';
-import { Locale, locales } from 'stores/i18n';
-
-// Some magic regular expression to strip away the local part of a given url path
-const stripLocaleRegExp = new RegExp(`\\/(?!(${locales.join('|')})(\\/|$)).*`);
-export function stripLocale(path: string) {
-  const pathWithoutLocale = path.match(stripLocaleRegExp);
-  return (pathWithoutLocale && pathWithoutLocale[0]) || '/';
-}
-
-// Some magic regular expression to get the local part of a given url path
-const getLocaleRegExp = new RegExp(`^\\/(${locales.join('|')})`);
-export function getLocale(path: string) {
-  const locale = path.match(getLocaleRegExp);
-  return (locale && (locale[1] as Locale)) || locales[0];
-}
-
-// Helper function to concatenate locale and a url path
-export function createUrl(locale: Locale, path: string) {
-  if (!path || path[0] !== '/') {
-    throw new Error(`Navigation failed, incorrect path: ${path}`);
-  }
-
-  let localeUrl: string = '/';
-  path = path.substring(1);
-  if (locale !== locales[0]) localeUrl += `${locale}/`;
-  if (path.length) localeUrl += path;
-
-  return localeUrl;
-}
+import { useCallback, useMemo } from 'react';
+import { useHistory, useLocation } from 'react-router';
+import { createUrl, getLocale, stripLocale } from 'libs/route-utils';
+import { Locale } from 'stores/i18n';
 
 function useRoute() {
-  return useContext(RouteContext);
+  const location = useLocation();
+  const history = useHistory();
+
+  const routeLocale = useMemo(() => getLocale(location.pathname), [
+    location.pathname
+  ]);
+  const routePath = useMemo(() => stripLocale(location.pathname), [
+    location.pathname
+  ]);
+  const routeHash = useMemo(() => location.hash, [location.hash]);
+
+  const getPath = useCallback((path: string) => createUrl(routeLocale, path), [
+    routeLocale
+  ]);
+  const redirect = useCallback(
+    (path: string, locale: Locale = routeLocale) =>
+      history.push({ ...location, pathname: createUrl(locale, path) }),
+    [history, location, routeLocale]
+  );
+  const setHash = useCallback(
+    (hash: string) => history.push({ ...location, hash }),
+    [history, location]
+  );
+
+  return {
+    routeLocale,
+    routePath,
+    routeHash,
+    getPath,
+    redirect,
+    setHash
+  };
 }
 
 export default useRoute;

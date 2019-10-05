@@ -6,7 +6,6 @@ import {
   RenderHookOptions,
   renderHook as rhtlRenderHook
 } from '@testing-library/react-hooks';
-import { RouteProvider } from 'libs/route-provider';
 import i18n from 'stores/i18n';
 import en from 'translations/en.json';
 import zh from 'translations/zh.json';
@@ -52,16 +51,14 @@ export function render(
     const Provider = useStoreProvider(i18n, ...stores);
     return (
       <MemoryRouter initialEntries={[(options && options.url) || '/']}>
-        <RouteProvider>
-          <Provider>
-            <App
-              translations={options && options.translations}
-              useHook={options && options.useHook}
-            >
-              {children}
-            </App>
-          </Provider>
-        </RouteProvider>
+        <Provider>
+          <App
+            translations={options && options.translations}
+            useHook={options && options.useHook}
+          >
+            {children}
+          </App>
+        </Provider>
       </MemoryRouter>
     );
   }
@@ -84,16 +81,14 @@ export function renderHook<P, R>(
     const Provider = useStoreProvider(i18n, ...stores);
     return (
       <MemoryRouter initialEntries={[(options && options.url) || '/']}>
-        <RouteProvider>
-          <Provider>
-            <App
-              translations={options && options.translations}
-              useHook={options && options.useHook}
-            >
-              {children}
-            </App>
-          </Provider>
-        </RouteProvider>
+        <Provider>
+          <App
+            translations={options && options.translations}
+            useHook={options && options.useHook}
+          >
+            {children}
+          </App>
+        </Provider>
       </MemoryRouter>
     );
   }

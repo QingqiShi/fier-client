@@ -2,6 +2,7 @@ import React from 'react';
 import { act, waitForDomChange } from '@testing-library/react';
 import { render } from 'testUtils';
 import { auth as mockAuth, mockAuthState } from 'firebase/app';
+import FirebaseSetup from 'components/app/FirebaseSetup';
 import user from 'stores/user';
 import Routes from './Routes';
 
@@ -23,7 +24,12 @@ test('renders guest user', async () => {
 });
 
 test('renders logged in user', async () => {
-  const { asFragment } = render(<Routes />, [user]);
+  const { asFragment } = render(
+    <FirebaseSetup>
+      <Routes />
+    </FirebaseSetup>,
+    [user]
+  );
   const mockUser = {
     email: 'test@test.com',
     updateProfile: jest.fn(() => Promise.resolve()),

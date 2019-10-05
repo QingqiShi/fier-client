@@ -1,75 +1,65 @@
 import React, { Suspense, lazy } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import { Redirect, Route, Switch } from 'react-router';
 import PageLoader from 'components/base/PageLoader';
-import useFirebaseSetup from 'hooks/useFirebaseSetup';
+import settings from 'stores/settings';
 import user from 'stores/user';
-import useLocale from 'hooks/useLocale';
+import useRoute from 'hooks/useRoute';
 
 const LazyBottomNav = lazy(() =>
-  import(/* webpackChunkName: "loggednInViews" */ 'components/app/BottomNav')
+  import(/* webpackChunkName: "user" */ 'components/app/BottomNav')
 );
 const LazyDashboard = lazy(() =>
-  import(/* webpackChunkName: "loggednInViews" */ 'components/views/Dashboard')
+  import(/* webpackChunkName: "user" */ 'components/views/Dashboard')
 );
 const LazyActivity = lazy(() =>
-  import(/* webpackChunkName: "loggednInViews" */ 'components/views/Activity')
+  import(/* webpackChunkName: "user" */ 'components/views/Activity')
 );
 const LazyCharts = lazy(() =>
-  import(/* webpackChunkName: "loggednInViews" */ 'components/views/Charts')
+  import(/* webpackChunkName: "user" */ 'components/views/Charts')
 );
 const LazyWallets = lazy(() =>
-  import(/* webpackChunkName: "loggednInViews" */ 'components/views/Wallets')
+  import(/* webpackChunkName: "user" */ 'components/views/Wallets')
 );
 
 const LazyLogin = lazy(() =>
-  import(/* webpackChunkName: "guestViews" */ 'components/views/Login')
+  import(/* webpackChunkName: "guest" */ 'components/views/Login')
 );
 const LazyRegister = lazy(() =>
-  import(/* webpackChunkName: "guestViews" */ 'components/views/Register')
+  import(/* webpackChunkName: "guest" */ 'components/views/Register')
 );
 
 function Routes() {
-  const ready = useFirebaseSetup();
-
   const [{ isLoggedIn }] = user.useStore();
-  const { createPath } = useLocale(ready);
+  const [{ locale }] = settings.useStore();
 
-  if (!ready) return null;
+  const { routeLocale, routePath, redirect, getPath } = useRoute();
 
-  let routes;
-  if (isLoggedIn) {
-    routes = (
-      <Switch>
-        <Route component={LazyDashboard} path={createPath('/dashboard')} />
-        <Route component={LazyActivity} path={createPath('/activity')} />
-        <Route component={LazyCharts} path={createPath('/charts')} />
-        <Route component={LazyWallets} path={createPath('/wallets')} />
-        <Route render={() => <Redirect to={createPath('/dashboard')} />} />
-      </Switch>
-    );
-  } else {
-    routes = (
-      <Switch>
-        <Route component={LazyLogin} path={createPath('/login')} />
-        <Route component={LazyRegister} path={createPath('/register')} />
-        <Route render={() => <Redirect to={createPath('/login')} />} />
-      </Switch>
-    );
+  if (routeLocale !== locale) {
+    redirect(routePath, locale);
+    return null;
   }
 
   return (
-    <>
-      <Suspense fallback={<PageLoader />}>
+    <Suspense fallback={<PageLoader />}>
+      {isLoggedIn ? (
         <>
-          {routes}
-          {isLoggedIn && <LazyBottomNav />}
+          <Switch>
+            <Route component={LazyDashboard} path={getPath('/dashboard')} />
+            <Route component={LazyActivity} path={getPath('/activity')} />
+            <Route component={LazyCharts} path={getPath('/charts')} />
+            <Route component={LazyWallets} path={getPath('/wallets')} />
+            <Route render={() => <Redirect to={getPath('/dashboard')} />} />
+          </Switch>
+          <LazyBottomNav />
         </>
-      </Suspense>
-      <Helmet>
-        <link href={createPath('/manifest.json')} rel="manifest" />
-      </Helmet>
-    </>
+      ) : (
+        <Switch>
+          <Route component={LazyLogin} path={getPath('/login')} />
+          <Route component={LazyRegister} path={getPath('/register')} />
+          <Route render={() => <Redirect to={getPath('/login')} />} />
+        </Switch>
+      )}
+    </Suspense>
   );
 }
 
