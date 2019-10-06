@@ -1,5 +1,6 @@
 {
   "APP_NAME": "fier",
+  "META_DESCRIPTION": "Fier 是一款帮你实现财务自由的记账工具。",
 
   "ERROR_NETWORK_FAILED": "猫把网线碰掉了？断网了！",
   "ERROR_USER_EXPIRED": "过了这么久，还是你吗？重新登陆吧",

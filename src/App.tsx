@@ -12,6 +12,7 @@ import ErrorMessage from 'components/app/ErrorMessage';
 import TranslationLoader from 'components/app/TranslationLoader';
 import FirebaseSetup from 'components/app/FirebaseSetup';
 import Routes from './Routes';
+import Meta from './Meta';
 
 const theme = createMuiTheme({
   shape: {
@@ -35,6 +36,7 @@ function App() {
       <StoreProvider>
         <FirebaseSetup>
           <TranslationLoader>
+            <Meta />
             <ThemeProvider theme={theme}>
               <CssBaseline />
               <ErrorMessage />
