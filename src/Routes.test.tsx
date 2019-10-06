@@ -1,15 +1,18 @@
 import React from 'react';
-import { act, waitForDomChange } from '@testing-library/react';
+import { act, waitForElementToBeRemoved } from '@testing-library/react';
 import { render } from 'testUtils';
 import { auth as mockAuth, mockAuthState } from 'firebase/app';
 import FirebaseSetup from 'components/app/FirebaseSetup';
 import user from 'stores/user';
 import Routes from './Routes';
 
-jest.mock('react-helmet-async', () => ({
-  __esModule: true,
-  Helmet: () => null
-}));
+import('components/app/BottomNav');
+import('components/views/Dashboard');
+import('components/views/Activity');
+import('components/views/Charts');
+import('components/views/Wallets');
+import('components/views/Login');
+import('components/views/Register');
 
 beforeEach(() => {
   mockAuth().onAuthStateChanged(() => {});
@@ -17,14 +20,14 @@ beforeEach(() => {
 });
 
 test('renders guest user', async () => {
-  const { asFragment } = render(<Routes />, [user]);
+  const { asFragment, getByRole } = render(<Routes />, [user]);
   act(() => mockAuthState(null));
-  await waitForDomChange();
+  await waitForElementToBeRemoved(() => getByRole('progressbar'));
   expect(asFragment()).toMatchSnapshot();
 });
 
 test('renders logged in user', async () => {
-  const { asFragment } = render(
+  const { asFragment, getByRole } = render(
     <FirebaseSetup>
       <Routes />
     </FirebaseSetup>,
@@ -38,6 +41,6 @@ test('renders logged in user', async () => {
     reauthenticateWithCredential: jest.fn(() => Promise.resolve())
   };
   act(() => mockAuthState(mockUser));
-  await waitForDomChange();
+  await waitForElementToBeRemoved(() => getByRole('progressbar'));
   expect(asFragment()).toMatchSnapshot();
 });
