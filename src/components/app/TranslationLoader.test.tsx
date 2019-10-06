@@ -9,8 +9,9 @@ const Component = () => {
   const [t] = useText();
   return (
     <div>
-      <TranslationLoader />
-      <span>{t['DASHBOARD']}</span>
+      <TranslationLoader>
+        <span>{t['DASHBOARD']}</span>
+      </TranslationLoader>
     </div>
   );
 };

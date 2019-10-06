@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import i18n from 'stores/i18n';
 import useRoute from 'hooks/useRoute';
 
-function TranslationLoader() {
+function TranslationLoader({ children }: React.PropsWithChildren<{}>) {
   const [{ translations }, { addTranslations }] = i18n.useStore();
   const { routeLocale } = useRoute();
 
@@ -17,7 +17,11 @@ function TranslationLoader() {
     }
   }, [addTranslations, currentTranslations, routeLocale]);
 
-  return null;
+  if (!currentTranslations || !Object.keys(currentTranslations).length) {
+    return null;
+  }
+
+  return <>{children}</>;
 }
 
 export default TranslationLoader;

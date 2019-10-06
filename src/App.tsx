@@ -33,14 +33,15 @@ function App() {
   return (
     <HelmetProvider>
       <StoreProvider>
-        <TranslationLoader />
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <ErrorMessage />
-          <FirebaseSetup>
-            <Routes />
-          </FirebaseSetup>
-        </ThemeProvider>
+        <FirebaseSetup>
+          <TranslationLoader>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <ErrorMessage />
+              <Routes />
+            </ThemeProvider>
+          </TranslationLoader>
+        </FirebaseSetup>
       </StoreProvider>
     </HelmetProvider>
   );
