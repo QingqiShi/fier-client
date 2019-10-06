@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { Redirect, Route, Switch } from 'react-router';
-import PageLoader from 'components/base/PageLoader';
+import PageLoadIndicator from 'components/base/PageLoadIndicator';
 import settings from 'stores/settings';
 import user from 'stores/user';
 import useRoute from 'hooks/useRoute';
@@ -40,7 +40,7 @@ function Routes() {
   }
 
   return (
-    <Suspense fallback={<PageLoader />}>
+    <Suspense fallback={<PageLoadIndicator />}>
       {isLoggedIn ? (
         <>
           <Switch>

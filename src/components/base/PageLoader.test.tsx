@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'testUtils';
-import PageLoader from './PageLoader';
+import PageLoadIndicator from './PageLoadIndicator';
 
 test('renders without blowing up', () => {
-  render(<PageLoader />);
+  render(<PageLoadIndicator />);
 });

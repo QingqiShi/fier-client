@@ -11,7 +11,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function LinearIndeterminate() {
+function PageLoadIndicator() {
   const classes = useStyles();
 
   return (
@@ -20,3 +20,5 @@ export default function LinearIndeterminate() {
     </div>
   );
 }
+
+export default PageLoadIndicator;
