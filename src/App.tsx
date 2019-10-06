@@ -9,6 +9,8 @@ import user from 'stores/user';
 import error from 'stores/error';
 import settings from 'stores/settings';
 import ErrorMessage from 'components/app/ErrorMessage';
+import TranslationLoader from 'components/app/TranslationLoader';
+import FirebaseSetup from 'components/app/FirebaseSetup';
 import Routes from './Routes';
 
 const theme = createMuiTheme({
@@ -31,10 +33,13 @@ function App() {
   return (
     <HelmetProvider>
       <StoreProvider>
+        <TranslationLoader />
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <ErrorMessage />
-          <Routes />
+          <FirebaseSetup>
+            <Routes />
+          </FirebaseSetup>
         </ThemeProvider>
       </StoreProvider>
     </HelmetProvider>

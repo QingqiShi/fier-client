@@ -13,7 +13,6 @@ import {
 } from '@material-ui/icons';
 import useTexts from 'hooks/useTexts';
 import useRoute from 'hooks/useRoute';
-import useLocale from 'hooks/useLocale';
 
 const useStyles = makeStyles({
   root: {
@@ -34,15 +33,15 @@ const navigationConfig = [
 function BottomNav() {
   const [t] = useTexts();
   const classes = useStyles();
-  const { location, history } = useRoute();
-  const { path, createPath } = useLocale();
+  const { routePath, redirect } = useRoute();
 
   const selectedNav =
-    navigationConfig.find(config => path.match(new RegExp(config.value))) ||
-    navigationConfig[0];
+    navigationConfig.find(config =>
+      routePath.match(new RegExp(config.value))
+    ) || navigationConfig[0];
 
   const handleChange = (e: React.ChangeEvent<{}>, newValue: string) => {
-    history.push({ ...location, pathname: createPath(newValue) });
+    redirect(newValue);
   };
 
   return (

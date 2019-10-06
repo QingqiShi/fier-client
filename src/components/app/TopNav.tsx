@@ -22,20 +22,20 @@ const CREATE_HASH = '#create';
 
 function TopNav({ title }: { title: string }) {
   const classes = useStyles();
-  const { location, history } = useRoute();
+  const { routeHash, setHash } = useRoute();
 
   function openProfile() {
-    history.push({ ...location, hash: PROFILE_HASH });
+    setHash(PROFILE_HASH);
   }
   function closeProfile() {
-    history.push({ ...location, hash: '' });
+    setHash('');
   }
 
   function openCreate() {
-    history.push({ ...location, hash: CREATE_HASH });
+    setHash(CREATE_HASH);
   }
   function closeCreate() {
-    history.push({ ...location, hash: '' });
+    setHash('');
   }
 
   return (
@@ -64,9 +64,9 @@ function TopNav({ title }: { title: string }) {
         }
         title={title}
       />
-      <NavMenu open={location.hash === PROFILE_HASH} onClose={closeProfile} />
+      <NavMenu open={routeHash === PROFILE_HASH} onClose={closeProfile} />
       <CreateTransaction
-        open={location.hash === CREATE_HASH}
+        open={routeHash === CREATE_HASH}
         onClose={closeCreate}
       />
     </>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import { Link } from '@material-ui/core';
-import useLocale from 'hooks/useLocale';
+import useRoute from 'hooks/useRoute';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,9 +20,9 @@ function EndOfFormLink({
   to: string;
 }>) {
   const classes = useStyles();
-  const { goto } = useLocale();
+  const { redirect } = useRoute();
   return (
-    <Link className={classes.link} variant="body2" onClick={() => goto(to)}>
+    <Link className={classes.link} variant="body2" onClick={() => redirect(to)}>
       {children}
     </Link>
   );
