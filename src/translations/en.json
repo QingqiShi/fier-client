@@ -1,5 +1,6 @@
 {
   "APP_NAME": "fier",
+  "META_DESCRIPTION": "Fier is an tool to help you track spending to achieve financial success.",
 
   "ERROR_NETWORK_FAILED": "Did your cat pull the internet cable? It's down!",
   "ERROR_USER_EXPIRED": "It's been too long, is that still you? Please loging in again",
