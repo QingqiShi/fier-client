@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -14,22 +14,40 @@ import FirebaseSetup from 'components/app/FirebaseSetup';
 import Routes from './Routes';
 import Meta from './Meta';
 
-const theme = createMuiTheme({
-  shape: {
-    borderRadius: 20
-  },
-  overrides: {
-    MuiButton: {
-      root: {
-        overflow: 'hidden',
-        borderRadius: 21
-      }
-    }
-  }
-});
-
 function App() {
   const StoreProvider = useStoreProvider(settings, i18n, user, error);
+  const [darkMode, setDarkMode] = useState(
+    window.matchMedia
+      ? !!window.matchMedia('(prefers-color-scheme: dark)').matches
+      : false
+  );
+
+  useEffect(() => {
+    if (window.matchMedia) {
+      window
+        .matchMedia('(prefers-color-scheme: dark)')
+        .addListener(e => (e.matches ? setDarkMode(true) : setDarkMode(false)));
+    }
+  }, []);
+
+  const theme = createMuiTheme({
+    palette: {
+      type: darkMode ? 'dark' : 'light',
+      primary: { main: darkMode ? '#6180FF' : '#1658FF' },
+      secondary: { main: darkMode ? '#FF85D4' : '#EE42B2' }
+    },
+    shape: {
+      borderRadius: 20
+    },
+    overrides: {
+      MuiButton: {
+        root: {
+          overflow: 'hidden',
+          borderRadius: 21
+        }
+      }
+    }
+  });
 
   return (
     <HelmetProvider>
