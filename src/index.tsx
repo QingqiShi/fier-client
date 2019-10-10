@@ -19,6 +19,7 @@ firebase.initializeApp({
 ReactDOM.render(
   <Router>
     <App />
+    test
   </Router>,
   document.getElementById('root')
 );
