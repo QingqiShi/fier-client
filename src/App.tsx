@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
-import { createMuiTheme } from '@material-ui/core/styles';
-import { ThemeProvider } from '@material-ui/styles';
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { useStoreProvider } from 'react-lit-store';
 import i18n from 'stores/i18n';
