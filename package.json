@@ -18,7 +18,7 @@
     "fitty": "^2.2.6",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
-    "react-helmet-async": "^1.0.3",
+    "react-helmet-async": "^1.0.4",
     "react-lit-store": "^1.2.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
