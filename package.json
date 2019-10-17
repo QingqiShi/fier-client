@@ -121,5 +121,6 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  }
+  },
+  "proxy": "https://fier-app.web.app"
 }
