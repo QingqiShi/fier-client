@@ -9,9 +9,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Update npm
-          command: 'sudo npm install -g npm@latest'
-      - run:
           name: Install dependencies
           command: npm ci
       - persist_to_workspace:
@@ -24,9 +21,6 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - run:
-          name: Update npm
-          command: 'sudo npm install -g npm@latest'
       - attach_workspace:
           at: ~/repo
       - run:
@@ -42,9 +36,6 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - run:
-          name: Update npm
-          command: 'sudo npm install -g npm@latest'
       - attach_workspace:
           at: ~/repo
       - run:
@@ -63,9 +54,6 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - run:
-          name: Update npm
-          command: 'sudo npm install -g npm@latest'
       - attach_workspace:
           at: ~/repo
       - run:
