@@ -4,13 +4,10 @@ orbs:
 jobs:
   install:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:lts
     working_directory: ~/repo
     steps:
       - checkout
-      - run:
-          name: Update npm
-          command: 'sudo npm install -g npm@latest'
       - run:
           name: Install dependencies
           command: npm ci
@@ -20,13 +17,10 @@ jobs:
             - node_modules
   lint:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:lts
     working_directory: ~/repo
     steps:
       - checkout
-      - run:
-          name: Update npm
-          command: 'sudo npm install -g npm@latest'
       - attach_workspace:
           at: ~/repo
       - run:
@@ -38,13 +32,10 @@ jobs:
             - reports/junit
   test:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:lts
     working_directory: ~/repo
     steps:
       - checkout
-      - run:
-          name: Update npm
-          command: 'sudo npm install -g npm@latest'
       - attach_workspace:
           at: ~/repo
       - run:
@@ -59,13 +50,10 @@ jobs:
             - reports/junit
   build:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:lts
     working_directory: ~/repo
     steps:
       - checkout
-      - run:
-          name: Update npm
-          command: 'sudo npm install -g npm@latest'
       - attach_workspace:
           at: ~/repo
       - run:
@@ -77,7 +65,7 @@ jobs:
             - build
   coverage:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:lts
     working_directory: ~/repo
     steps:
       - checkout
@@ -90,7 +78,7 @@ jobs:
           path: reports/junit
   deploy:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:lts
     working_directory: ~/repo
     steps:
       - checkout
