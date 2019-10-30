@@ -99,8 +99,9 @@ exports[`renders guest user 1`] = `
         >
           <div
             aria-haspopup="listbox"
+            aria-labelledby=" mui-component-select-language"
             class="MuiSelect-root MuiSelect-select MuiSelect-selectMenu MuiInputBase-input MuiInput-input MuiInputBase-inputSelect"
-            id="select-language"
+            id="mui-component-select-language"
             role="button"
             tabindex="0"
           >
@@ -140,10 +141,10 @@ exports[`renders logged in user 1`] = `
     style="padding: 5em 0px;"
   >
     <header
-      class="MuiPaper-root MuiPaper-elevation0 MuiAppBar-root MuiAppBar-positionFixed makeStyles-appBar-242 makeStyles-appBar-246 MuiAppBar-colorPrimary mui-fixed"
+      class="MuiPaper-root MuiPaper-elevation0 MuiAppBar-root MuiAppBar-positionFixed makeStyles-appBar-243 makeStyles-appBar-247 MuiAppBar-colorPrimary mui-fixed"
     >
       <div
-        class="MuiToolbar-root MuiToolbar-regular makeStyles-toolBar-243 MuiToolbar-gutters"
+        class="MuiToolbar-root MuiToolbar-regular makeStyles-toolBar-244 MuiToolbar-gutters"
       >
         <button
           class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeStart"
@@ -155,7 +156,7 @@ exports[`renders logged in user 1`] = `
             class="MuiIconButton-label"
           >
             <div
-              class="MuiAvatar-root makeStyles-avatar-241 MuiAvatar-colorDefault"
+              class="MuiAvatar-root makeStyles-avatar-242 MuiAvatar-colorDefault"
             >
               <svg
                 aria-hidden="true"
@@ -175,12 +176,12 @@ exports[`renders logged in user 1`] = `
           />
         </button>
         <h5
-          class="MuiTypography-root makeStyles-typography-244 MuiTypography-h5 MuiTypography-colorTextPrimary"
+          class="MuiTypography-root makeStyles-typography-245 MuiTypography-h5 MuiTypography-colorTextPrimary"
         >
           Dashboard
         </h5>
         <div
-          class="makeStyles-spacer-245"
+          class="makeStyles-spacer-246"
         />
         <button
           class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorPrimary MuiIconButton-edgeEnd"
@@ -211,7 +212,7 @@ exports[`renders logged in user 1`] = `
     </header>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation1 makeStyles-root-362 MuiPaper-rounded"
+    class="MuiPaper-root MuiPaper-elevation1 makeStyles-root-363 MuiPaper-rounded"
   >
     <div
       class="MuiBottomNavigation-root"
