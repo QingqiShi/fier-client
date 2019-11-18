@@ -2,7 +2,6 @@ import React from 'react';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import { Avatar, Button, Typography } from '@material-ui/core';
 import { Person } from '@material-ui/icons';
-import SlideModal from 'components/base/SlideModal';
 import ProfileSettings from 'components/app/ProfileSettings';
 import AppSettings from 'components/app/AppSettings';
 import useTexts from 'hooks/useTexts';
@@ -31,13 +30,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function NavMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
+function Profile() {
   const classes = useStyles();
   const [t] = useTexts();
   const { user, signOut } = useFirebaseAuth();
 
   return (
-    <SlideModal open={open} title={t['APP_NAME']} onClose={onClose}>
+    <>
       <Avatar className={classes.avatar}>
         <Person className={classes.avatarIcon} />
       </Avatar>
@@ -53,8 +52,8 @@ function NavMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
           {t['SIGN_OUT']}
         </Button>
       </div>
-    </SlideModal>
+    </>
   );
 }
 
-export default NavMenu;
+export default Profile;

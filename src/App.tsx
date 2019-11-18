@@ -13,6 +13,13 @@ import FirebaseSetup from 'components/app/FirebaseSetup';
 import Routes from './Routes';
 import Meta from './Meta';
 
+// Extend theme variables
+declare module '@material-ui/core/styles/createPalette' {
+  interface TypeBackground {
+    level1: string;
+  }
+}
+
 function App() {
   const StoreProvider = useStoreProvider(settings, i18n, user, error);
   const [darkMode, setDarkMode] = useState(
@@ -33,7 +40,11 @@ function App() {
     palette: {
       type: darkMode ? 'dark' : 'light',
       primary: { main: darkMode ? '#6180FF' : '#1658FF' },
-      secondary: { main: darkMode ? '#FF85D4' : '#EE42B2' }
+      secondary: { main: darkMode ? '#FF85D4' : '#EE42B2' },
+      background: {
+        default: darkMode ? '#121212' : '#F7F7F7',
+        paper: darkMode ? '#212121' : '#FFF'
+      }
     },
     shape: {
       borderRadius: 20
@@ -47,6 +58,7 @@ function App() {
       }
     }
   });
+  theme.palette.background.level1 = darkMode ? '#2e2e2e' : '#FFF';
 
   return (
     <HelmetProvider>

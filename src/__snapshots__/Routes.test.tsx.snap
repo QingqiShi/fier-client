@@ -212,7 +212,7 @@ exports[`renders logged in user 1`] = `
     </header>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation1 makeStyles-root-363 MuiPaper-rounded"
+    class="MuiPaper-root MuiPaper-elevation1 makeStyles-root-342 MuiPaper-rounded"
   >
     <div
       class="MuiBottomNavigation-root"

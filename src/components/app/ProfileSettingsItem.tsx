@@ -12,12 +12,13 @@ import {
 import { ExpandMore } from '@material-ui/icons';
 import useTexts from 'hooks/useTexts';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles(theme =>
   createStyles({
-    root: {
-      transitionProperty: 'box-shadow, margin',
+    root: ({ expanded }: { expanded: boolean }) => ({
+      transitionProperty: 'box-shadow, margin, background-color',
+      backgroundColor: expanded ? theme.palette.background.level1 : undefined,
       '&:before': { height: 0 }
-    },
+    }),
     summary: { padding: '0 16px' },
     summaryContent: { margin: 0 }
   })
@@ -30,6 +31,7 @@ function ProfileSettingsItem({
   disabled,
   onSave,
   children,
+  expanded,
   ...rest
 }: React.PropsWithChildren<
   {
@@ -40,12 +42,13 @@ function ProfileSettingsItem({
     onSave?: () => void;
   } & React.ComponentProps<typeof ExpansionPanel>
 >) {
-  const classes = useStyles();
+  const classes = useStyles({ expanded: !!expanded });
   const [t] = useTexts();
   return (
     <ExpansionPanel
       className={classes.root}
-      elevation={rest.expanded ? 1 : 0}
+      elevation={expanded ? 1 : 0}
+      expanded={expanded}
       square={true}
       {...rest}
     >
