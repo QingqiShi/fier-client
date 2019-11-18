@@ -86,13 +86,13 @@ exports[`renders guest user 1`] = `
           />
         </button>
         <a
-          class="MuiTypography-root MuiLink-root MuiLink-underlineHover makeStyles-link-177 MuiTypography-body2 MuiTypography-colorPrimary"
+          class="MuiTypography-root MuiLink-root MuiLink-underlineHover makeStyles-link-180 MuiTypography-body2 MuiTypography-colorPrimary"
         >
           Don't have an account? Sign up
         </a>
       </form>
       <div
-        class="makeStyles-languageContainer-185 makeStyles-languageContainer-186"
+        class="makeStyles-languageContainer-188 makeStyles-languageContainer-189"
       >
         <div
           class="MuiInputBase-root MuiInput-root MuiInput-underline"
@@ -106,7 +106,7 @@ exports[`renders guest user 1`] = `
             tabindex="0"
           >
             <span
-              class="makeStyles-emoji-184"
+              class="makeStyles-emoji-187"
               role="img"
             >
               🇺🇸
@@ -141,10 +141,10 @@ exports[`renders logged in user 1`] = `
     style="padding: 5em 0px;"
   >
     <header
-      class="MuiPaper-root MuiPaper-elevation0 MuiAppBar-root MuiAppBar-positionFixed makeStyles-appBar-243 makeStyles-appBar-247 MuiAppBar-colorPrimary mui-fixed"
+      class="MuiPaper-root MuiPaper-elevation0 MuiAppBar-root MuiAppBar-positionFixed makeStyles-appBar-246 makeStyles-appBar-250 MuiAppBar-colorPrimary mui-fixed"
     >
       <div
-        class="MuiToolbar-root MuiToolbar-regular makeStyles-toolBar-244 MuiToolbar-gutters"
+        class="MuiToolbar-root MuiToolbar-regular makeStyles-toolBar-247 MuiToolbar-gutters"
       >
         <button
           class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeStart"
@@ -156,7 +156,7 @@ exports[`renders logged in user 1`] = `
             class="MuiIconButton-label"
           >
             <div
-              class="MuiAvatar-root makeStyles-avatar-242 MuiAvatar-colorDefault"
+              class="MuiAvatar-root MuiAvatar-circle makeStyles-avatar-245 MuiAvatar-colorDefault"
             >
               <svg
                 aria-hidden="true"
@@ -176,12 +176,12 @@ exports[`renders logged in user 1`] = `
           />
         </button>
         <h5
-          class="MuiTypography-root makeStyles-typography-245 MuiTypography-h5 MuiTypography-colorTextPrimary"
+          class="MuiTypography-root makeStyles-typography-248 MuiTypography-h5 MuiTypography-colorTextPrimary"
         >
           Dashboard
         </h5>
         <div
-          class="makeStyles-spacer-246"
+          class="makeStyles-spacer-249"
         />
         <button
           class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorPrimary MuiIconButton-edgeEnd"
@@ -212,7 +212,7 @@ exports[`renders logged in user 1`] = `
     </header>
   </div>
   <div
-    class="MuiPaper-root MuiPaper-elevation1 makeStyles-root-342 MuiPaper-rounded"
+    class="MuiPaper-root MuiPaper-elevation1 makeStyles-root-348 MuiPaper-rounded"
   >
     <div
       class="MuiBottomNavigation-root"
