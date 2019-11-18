@@ -1,38 +1,34 @@
 import React, { Suspense, lazy } from 'react';
 import { Redirect, Route, Switch } from 'react-router';
 import PageLoadIndicator from 'components/base/PageLoadIndicator';
+import SlideModal from 'components/base/SlideModal';
 import settings from 'stores/settings';
 import user from 'stores/user';
 import useRoute from 'hooks/useRoute';
+import useModalHash, { Modal } from 'hooks/useModalHash';
 
-const LazyBottomNav = lazy(() =>
-  import(/* webpackChunkName: "user" */ 'components/app/BottomNav')
-);
-const LazyDashboard = lazy(() =>
-  import(/* webpackChunkName: "user" */ 'components/views/Dashboard')
-);
-const LazyActivity = lazy(() =>
-  import(/* webpackChunkName: "user" */ 'components/views/Activity')
-);
-const LazyCharts = lazy(() =>
-  import(/* webpackChunkName: "user" */ 'components/views/Charts')
-);
-const LazyWallets = lazy(() =>
-  import(/* webpackChunkName: "user" */ 'components/views/Wallets')
-);
+// Registered user
+const LazyBottomNav = lazy(() => import('components/app/BottomNav'));
+const LazyDashboard = lazy(() => import('components/views/Dashboard'));
+const LazyActivity = lazy(() => import('components/views/Activity'));
+const LazyCharts = lazy(() => import('components/views/Charts'));
+const LazyWallets = lazy(() => import('components/views/Wallets'));
 
-const LazyLogin = lazy(() =>
-  import(/* webpackChunkName: "guest" */ 'components/views/Login')
-);
-const LazyRegister = lazy(() =>
-  import(/* webpackChunkName: "guest" */ 'components/views/Register')
-);
+// Guest user
+const LazyLogin = lazy(() => import('components/views/Login'));
+const LazyRegister = lazy(() => import('components/views/Register'));
+
+// Modals
+const LazyProfile = lazy(() => import('components/modals/Profile'));
+const LazyCreate = lazy(() => import('components/modals/Create'));
 
 function Routes() {
   const [{ isLoggedIn }] = user.useStore();
   const [{ locale }] = settings.useStore();
 
   const { routeLocale, routePath, redirect, getPath } = useRoute();
+  const { isOpen: profileIsOpen, close } = useModalHash(Modal.PROFILE);
+  const { isOpen: createIsOpen } = useModalHash(Modal.CREATE);
 
   if (routeLocale !== locale) {
     redirect(routePath, locale);
@@ -59,6 +55,17 @@ function Routes() {
           <Route render={() => <Redirect to={getPath('/login')} />} />
         </Switch>
       )}
+
+      <SlideModal open={profileIsOpen} title="fier" onClose={close}>
+        <Suspense fallback={<PageLoadIndicator />}>
+          <LazyProfile />
+        </Suspense>
+      </SlideModal>
+      <SlideModal open={createIsOpen} onClose={close}>
+        <Suspense fallback={<PageLoadIndicator />}>
+          <LazyCreate onClose={close} />
+        </Suspense>
+      </SlideModal>
     </Suspense>
   );
 }

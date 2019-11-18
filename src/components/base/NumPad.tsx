@@ -28,7 +28,7 @@ const useStyles = makeStyles(() =>
       bottom: 0,
       left: 0,
       right: 0,
-      paddingBottom: 'calc(20px + env(safe-area-inset-bottom))'
+      paddingBottom: 'calc(20px + 5vh + env(safe-area-inset-bottom))'
     },
     spacer: {
       paddingTop: 20

@@ -13,7 +13,7 @@ function useRoute() {
   const routePath = useMemo(() => stripLocale(location.pathname), [
     location.pathname
   ]);
-  const routeHash = useMemo(() => location.hash, [location.hash]);
+  const routeHash = location.hash;
 
   const getPath = useCallback((path: string) => createUrl(routeLocale, path), [
     routeLocale

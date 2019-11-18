@@ -1,6 +1,7 @@
 import React from 'react';
 import { fireEvent } from '@testing-library/react';
 import { render } from 'testUtils';
+import { useHistory } from 'react-router';
 import TopNav from './TopNav';
 
 test('renders', () => {
@@ -12,15 +13,25 @@ test('renders', () => {
 });
 
 test('open profile menu', () => {
-  const { getByText, getByTestId } = render(<TopNav title="test title" />);
+  const historyRef: { history: any } = { history: null };
+  const { getByTestId } = render(<TopNav title="test title" />, [], {
+    useHook: () => {
+      historyRef.history = useHistory();
+    }
+  });
 
   fireEvent.click(getByTestId('topnav-profile'));
-  expect(getByText('fier')).toBeVisible();
+  expect(historyRef.history.location.hash).toEqual('#profile');
 });
 
 test('open create modal', () => {
-  const { getByText, getByTestId } = render(<TopNav title="test title" />);
+  const historyRef: { history: any } = { history: null };
+  const { getByText, getByTestId } = render(<TopNav title="test title" />, [], {
+    useHook: () => {
+      historyRef.history = useHistory();
+    }
+  });
 
   fireEvent.click(getByTestId('topnav-add'));
-  expect(getByText('1')).toBeVisible();
+  expect(historyRef.history.location.hash).toEqual('#create');
 });
