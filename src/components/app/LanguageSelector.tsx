@@ -5,14 +5,14 @@ import { Locale, locales } from 'stores/i18n';
 import useTexts from 'hooks/useTexts';
 import settings from 'stores/settings';
 
-const useStyles = makeStyles<any, { position: 'static' | 'fixed' }>(() =>
+const useStyles = makeStyles(() =>
   createStyles({
     emoji: {
       paddingLeft: 5
     },
-    languageContainer: ({ position }) => ({
+    languageContainer: ({ position }: { position: 'static' | 'fixed' }) => ({
       position: position,
-      right: 'calc(env(safe-area-inset-left) + 20px)',
+      right: 'calc(env(safe-area-inset-right) + 20px)',
       top: 20,
       textAlign: 'center'
     })
