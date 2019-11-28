@@ -1,4 +1,4 @@
-import { act, wait } from '@testing-library/react';
+import { wait } from '@testing-library/react';
 import { DragUtil, renderGestureHook } from 'testUtils';
 import useModalDrag from './useModalDrag';
 import createStub from 'raf-stub';
