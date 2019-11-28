@@ -126,7 +126,7 @@ test('overflow hidden while dragging', async () => {
 test('flick up to open', async () => {
   const handleClose = jest.fn();
   const { getByText } = render(
-    <SlideModal open={true} onCLose={handleClose}>
+    <SlideModal open={true} onClose={handleClose}>
       content
     </SlideModal>
   );
@@ -145,7 +145,7 @@ test('flick up to open', async () => {
 
 test('drag distance too short', async () => {
   const handleClose = jest.fn();
-  const { getByText, debug } = render(
+  const { getByText } = render(
     <SlideModal open={true} onClose={handleClose}>
       content
     </SlideModal>
