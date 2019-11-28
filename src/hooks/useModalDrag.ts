@@ -1,24 +1,37 @@
 import { useCallback } from 'react';
 import { useDrag } from 'react-use-gesture';
 
+type DragOptions = {
+  isOpen?: boolean;
+  el?: HTMLElement | null;
+  onDrag?: (my: number, vy: number) => void;
+  onDragStart?: (my: number, vy: number) => void;
+  onDragEnd?: (my: number, vy: number) => void;
+};
+
+function canScrollUp(el?: HTMLElement | null) {
+  return el ? el.scrollTop > 0 : false;
+}
+
+function canScrollDown(el?: HTMLElement | null) {
+  return el ? el.scrollTop < el.scrollHeight - el.clientHeight : false;
+}
+
 function useModalDrag({
   isOpen = false,
-  open = () => {},
-  close = () => {},
-  canScrollUp = () => false,
-  canScrollDown = () => false,
-  onDrag = (_y: number) => {},
-  onDragStart = () => {},
-  onDragEnd = () => {}
-}) {
+  el = null,
+  onDrag,
+  onDragStart,
+  onDragEnd
+}: DragOptions) {
   const dragHandler = useCallback(
     ({
       last,
-      vxvy: [, vy],
+      vxvy: [vx, vy],
       movement: [, my],
       memo = {
-        canDragDown: !canScrollUp(),
-        canDragUp: !canScrollDown(),
+        canDragDown: !canScrollUp(el),
+        canDragUp: !canScrollDown(el),
         isDragging: false
       },
       cancel
@@ -29,22 +42,7 @@ function useModalDrag({
       if (my < 0) my = my / (1 - my * 0.05);
 
       if (last && memo.isDragging) {
-        /*
-          At the end of the drag, decide if we should close the modal or keep it open.
-          Velocity takes higher priority (flicking gesture).
-        */
-        if (vy > 0.5) {
-          close();
-        } else if (vy < -0.5) {
-          open();
-        } else if (my > 200) {
-          close();
-        } else {
-          open();
-        }
-
-        // Callback
-        onDragEnd && onDragEnd();
+        onDragEnd && onDragEnd(my, vy);
       } else if (
         (memo.canDragDown && vy > 0) ||
         (memo.canDragUp && vy < 0) ||
@@ -53,11 +51,10 @@ function useModalDrag({
         /*
           Start dragging if direction is allowed (e.g. non-scrollable)
         */
-        onDrag && onDrag(my);
+        onDrag && onDrag(my, vy);
 
         if (!memo.isDragging) {
-          // Callback
-          onDragStart && onDragStart();
+          onDragStart && onDragStart(my, vy);
           return { ...memo, isDragging: true };
         }
       } else if (!memo.isDragging && vy !== 0) {
@@ -69,16 +66,7 @@ function useModalDrag({
       }
       return memo;
     },
-    [
-      canScrollDown,
-      canScrollUp,
-      close,
-      isOpen,
-      onDrag,
-      onDragEnd,
-      onDragStart,
-      open
-    ]
+    [el, isOpen, onDrag, onDragEnd, onDragStart]
   );
 
   return useDrag(dragHandler);

@@ -1,99 +1,163 @@
-import React from 'react';
-import { act, render } from '@testing-library/react';
+import React, { useState } from 'react';
+import { act, fireEvent, render, wait } from '@testing-library/react';
 import createStub from 'raf-stub';
-import { dragStart } from 'testUtils';
+import { DragUtil } from 'testUtils';
 import SlideModal from './SlideModal';
 
 const stub = createStub();
 jest.spyOn(window, 'requestAnimationFrame').mockImplementation(stub.add);
+jest.spyOn(window, 'cancelAnimationFrame').mockImplementation(stub.remove);
 
-const flushRaf = async () => {
-  act(() => stub.flush());
-};
-
+beforeEach(stub.reset);
 afterEach(() => {
-  flushRaf();
+  stub.flush();
 });
 
 test('renders children', () => {
   const { getByText } = render(
-    <SlideModal open={true} onClose={() => {}}>
-      test children
-    </SlideModal>
+    <SlideModal open={true}>test children</SlideModal>
   );
-  flushRaf();
   expect(getByText('test children')).toBeInTheDocument();
 });
 
 test('close then open again', async () => {
-  const { queryByText, rerender } = render(
-    <SlideModal open={true} onClose={() => {}}>
-      test children
-    </SlideModal>
-  );
-  flushRaf();
-  expect(queryByText('test children')).toBeInTheDocument();
+  const Component = () => {
+    const [open, setOpen] = useState(true);
+    return (
+      <div>
+        <SlideModal open={open}>content</SlideModal>
+        <button onClick={() => setOpen(!open)}>toggle</button>
+      </div>
+    );
+  };
+  const { getByText, queryByText } = render(<Component />);
 
-  rerender(
-    <SlideModal open={false} onClose={() => {}}>
-      test children
-    </SlideModal>
-  );
-  flushRaf();
-  expect(queryByText('test children')).toBeNull();
+  stub.flush();
+  expect(queryByText('content')).toBeInTheDocument();
 
-  rerender(
-    <SlideModal open={true} onClose={() => {}}>
-      test children
+  fireEvent.click(getByText('toggle'));
+  await wait(() => {
+    act(() => stub.flush());
+    expect(queryByText('content')).toBeNull();
+  });
+
+  fireEvent.click(getByText('toggle'));
+  expect(queryByText('content')).toBeInTheDocument();
+});
+
+test('flick close', () => {
+  const handleClose = jest.fn();
+  const { getByText } = render(
+    <SlideModal open={true} onClose={handleClose}>
+      content
     </SlideModal>
   );
-  flushRaf();
-  expect(queryByText('test children')).toBeInTheDocument();
+
+  const drag = new DragUtil(() => getByText('content'), stub);
+  drag
+    .dragStart()
+    .dragDown(50)
+    .dragEnd();
+
+  expect(handleClose).toHaveBeenCalled();
 });
 
 test('drag close', async () => {
   const handleClose = jest.fn();
   const { getByText } = render(
     <SlideModal open={true} onClose={handleClose}>
-      test children
+      content
     </SlideModal>
   );
-  flushRaf();
 
-  await dragStart(getByText('test children'), flushRaf)
-    .then(({ dragDown }) => dragDown())
-    .then(({ dragEnd }) => dragEnd());
+  await wait(() => {
+    handleClose.mockClear();
+    const drag = new DragUtil(() => getByText('content'), stub);
+    drag
+      .dragStart()
+      .dragDown(200)
+      .tick(1)
+      .dragDown(0.1)
+      .dragEnd();
 
-  expect(handleClose).toHaveBeenCalled();
+    expect(handleClose).toHaveBeenCalled();
+  });
 });
 
 test('drag close with handle', async () => {
   const handleClose = jest.fn();
   const { getByTestId } = render(
     <SlideModal open={true} onClose={handleClose}>
-      test children
+      content
     </SlideModal>
   );
-  flushRaf();
 
-  await dragStart(getByTestId('modal-card-handle'), flushRaf)
-    .then(({ dragDown }) => dragDown())
-    .then(({ dragEnd }) => dragEnd());
+  await wait(() => {
+    handleClose.mockClear();
+    const drag = new DragUtil(() => getByTestId('modal-card-handle'), stub);
+    drag
+      .dragStart()
+      .dragDown(50)
+      .dragEnd();
 
-  expect(handleClose).toHaveBeenCalled();
+    expect(handleClose).toHaveBeenCalled();
+  });
 });
 
 test('overflow hidden while dragging', async () => {
+  const { getByText } = render(<SlideModal open={true}>content</SlideModal>);
+
+  await wait(() => {
+    const drag = new DragUtil(() => getByText('content'), stub);
+    drag
+      .dragStart()
+      .tick(1)
+      .dragDown(50)
+      .wait();
+
+    expect(getByText('content')).toHaveStyle('overflow:hidden');
+
+    drag.dragEnd().wait();
+
+    expect(getByText('content')).not.toHaveStyle('overflow: hidden');
+  });
+});
+
+test('flick up to open', async () => {
   const handleClose = jest.fn();
   const { getByText } = render(
-    <SlideModal open={true} onClose={handleClose}>
-      test children
+    <SlideModal open={true} onCLose={handleClose}>
+      content
     </SlideModal>
   );
-  flushRaf();
 
-  const el = getByText('test children');
-  await dragStart(el, flushRaf).then(({ dragDown }) => dragDown());
+  const drag = new DragUtil(() => getByText('content'), stub);
+  drag
+    .dragStart()
+    .dragDown(300)
+    .tick(1000)
+    .dragUp(10)
+    .dragEnd()
+    .wait();
 
-  expect(el.parentElement).toHaveStyle('overflow: hidden');
+  expect(handleClose).not.toHaveBeenCalled();
+});
+
+test('drag distance too short', async () => {
+  const handleClose = jest.fn();
+  const { getByText, debug } = render(
+    <SlideModal open={true} onClose={handleClose}>
+      content
+    </SlideModal>
+  );
+
+  const drag = new DragUtil(() => getByText('content'), stub);
+  drag
+    .dragStart()
+    .dragDown(50)
+    .dragDown(0.5)
+    .dragEnd()
+    .wait();
+
+  expect(handleClose).not.toHaveBeenCalled();
 });

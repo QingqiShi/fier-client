@@ -9,11 +9,13 @@ const AnimatedModalCard = animated(ModalCard);
 
 function SlideModal({
   open,
-  onClose,
+  onClose = () => {},
+  preventClose = false,
   children
 }: React.PropsWithChildren<{
   open: boolean;
-  onClose: () => void;
+  onClose?: () => void;
+  preventClose?: boolean;
   title?: string;
 }>) {
   const [modalOpen, setModalOpen] = useState(open);
@@ -33,50 +35,44 @@ function SlideModal({
     }, [])
   });
 
-  const contentBind = useModalDrag({
-    isOpen: modalOpen,
-    open: animateReset,
-    close: onClose,
-    canScrollUp: useCallback(
-      () => (contentRef ? contentRef.scrollTop > 0 : false),
-      [contentRef]
-    ),
-    canScrollDown: useCallback(
-      () =>
-        contentRef
-          ? contentRef.scrollTop <
-            contentRef.scrollHeight - contentRef.clientHeight
-          : false,
-      [contentRef]
-    ),
-    onDrag: animateDrag,
-    onDragStart: useCallback(() => {
-      if (contentRef && contentRef.scrollTop <= 0) {
-        contentRef.style.overflow = 'hidden';
-      }
-    }, [contentRef]),
-    onDragEnd: useCallback(() => {
+  const handleDragStart = useCallback(() => {
+    if (contentRef && contentRef.scrollTop <= 0) {
+      contentRef.style.overflow = 'hidden';
+    }
+  }, [contentRef]);
+
+  const handleDragEnd = useCallback(
+    (my: number, vy: number) => {
       if (contentRef) {
+        if (vy > 0.5) {
+          onClose();
+        } else if (vy < -0.5) {
+          animateReset();
+        } else if (my > 200) {
+          onClose();
+        } else {
+          animateReset();
+        }
         contentRef.style.overflow = '';
       }
-    }, [contentRef])
+    },
+    [animateReset, contentRef, onClose]
+  );
+
+  const contentBind = useModalDrag({
+    el: contentRef,
+    isOpen: modalOpen,
+    onDrag: animateDrag,
+    onDragStart: handleDragStart,
+    onDragEnd: handleDragEnd
   });
 
   const headerBind = useModalDrag({
+    el: contentRef,
     isOpen: modalOpen,
-    open: animateReset,
-    close: onClose,
     onDrag: animateDrag,
-    onDragStart: () => {
-      if (contentRef && contentRef.scrollTop <= 0) {
-        contentRef.style.overflow = 'hidden';
-      }
-    },
-    onDragEnd: () => {
-      if (contentRef) {
-        contentRef.style.overflow = '';
-      }
-    }
+    onDragStart: handleDragStart,
+    onDragEnd: handleDragEnd
   });
 
   return (
@@ -92,6 +88,7 @@ function SlideModal({
       <AnimatedModalCard
         contentProps={contentBind()}
         contentRef={setContentRef}
+        data-testid="slide-modal-card"
         headerProps={headerBind()}
         style={props}
       >
