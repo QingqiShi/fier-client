@@ -68,7 +68,6 @@ function SlideModal({
   });
 
   const headerBind = useModalDrag({
-    el: contentRef,
     isOpen: modalOpen,
     onDrag: animateDrag,
     onDragStart: handleDragStart,
