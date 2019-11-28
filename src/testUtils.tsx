@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import {
   RenderOptions,
+  act,
   fireEvent,
   render as rtlRender
 } from '@testing-library/react';
@@ -139,69 +140,60 @@ export function renderGestureHook(
   const result = rtlRender(<GestureDiv useGestureHook={useGestureHook} />);
   return {
     ...result,
-    el: result.getByText('test'),
+    getEl: () => result.getByText('test'),
     rerender: () =>
       result.rerender(<GestureDiv useGestureHook={useGestureHook} />)
   };
 }
 
-export async function dragStart(el: HTMLElement, wait: () => {}, y = 0) {
-  fireEvent.touchStart(el, { touches: [{ clientX: 100, clientY: y }] });
-  // await wait();
-  // jest.runAllTimers();
-  await wait();
+export class DragUtil {
+  x = 0;
+  y = 0;
+  rafStub: RafStub;
+  getEl: () => HTMLElement;
 
-  return {
-    dragDown: (distance = 50) => dragDown(el, distance, wait, y),
-    dragUp: (distance = 50) => dragUp(el, distance, wait, y),
-    dragEnd: () => dragEnd(el, wait, y)
-  };
-}
+  constructor(getEl: () => HTMLElement, rafStub: RafStub) {
+    this.getEl = getEl;
+    this.rafStub = rafStub;
+  }
 
-export async function dragDown(
-  el: HTMLElement,
-  distance = 50,
-  wait: () => {},
-  y = 0
-) {
-  const newY = y + distance;
-  fireEvent.touchMove(el, {
-    touches: [{ clientX: 100, clientY: newY }]
-  });
-  // await wait();
-  // jest.runAllTimers();
-  await wait();
-  return {
-    dragDown: (distance = 50) => dragDown(el, distance, wait, newY),
-    dragUp: (distance = 50) => dragUp(el, distance, wait, newY),
-    dragEnd: () => dragEnd(el, wait, y)
-  };
-}
+  dragStart() {
+    fireEvent.touchStart(this.getEl(), {
+      touches: [{ clientX: this.x, clientY: this.y }]
+    });
+    return this;
+  }
 
-export async function dragUp(
-  el: HTMLElement,
-  distance = 50,
-  wait: () => {},
-  y = 0
-) {
-  const newY = y - distance;
-  fireEvent.touchMove(el, {
-    touches: [{ clientX: 100, clientY: newY }]
-  });
-  // await wait();
-  // jest.runAllTimers();
-  await wait();
-  return {
-    dragDown: (distance = 50) => dragDown(el, distance, wait, newY),
-    dragUp: (distance = 50) => dragUp(el, distance, wait, newY),
-    dragEnd: () => dragEnd(el, wait, y)
-  };
-}
+  dragDown(distance: number) {
+    this.y += distance;
+    fireEvent.touchMove(this.getEl(), {
+      touches: [{ clientX: this.x, clientY: this.y }]
+    });
+    return this;
+  }
 
-export async function dragEnd(el: HTMLElement, wait: () => {}, y = 0) {
-  fireEvent.touchEnd(el, {
-    touches: [{ clientX: 100, clientY: y }]
-  });
-  await wait();
-  // jest.runAllTimers();
+  dragUp(distance: number) {
+    this.y -= distance;
+    fireEvent.touchMove(this.getEl(), {
+      touches: [{ clientX: this.x, clientY: this.y }]
+    });
+    return this;
+  }
+
+  dragEnd() {
+    fireEvent.touchEnd(this.getEl(), {
+      touches: [{ clientX: this.x, clientY: this.y }]
+    });
+    return this;
+  }
+
+  wait() {
+    act(() => this.rafStub.flush());
+    return this;
+  }
+
+  tick(step?: number) {
+    act(() => this.rafStub.step(step));
+    return this;
+  }
 }
