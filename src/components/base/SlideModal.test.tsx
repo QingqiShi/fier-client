@@ -45,7 +45,7 @@ test('close then open again', async () => {
   expect(queryByText('content')).toBeInTheDocument();
 });
 
-test('flick close', () => {
+test('flick close', async () => {
   const handleClose = jest.fn();
   const { getByText } = render(
     <SlideModal open={true} onClose={handleClose}>
@@ -53,13 +53,16 @@ test('flick close', () => {
     </SlideModal>
   );
 
-  const drag = new DragUtil(() => getByText('content'), stub);
-  drag
-    .dragStart()
-    .dragDown(50)
-    .dragEnd();
+  await wait(() => {
+    handleClose.mockClear();
+    const drag = new DragUtil(() => getByText('content'), stub);
+    drag
+      .dragStart()
+      .dragDown(50)
+      .dragEnd();
 
-  expect(handleClose).toHaveBeenCalled();
+    expect(handleClose).toHaveBeenCalled();
+  });
 });
 
 test('drag close', async () => {
@@ -131,16 +134,20 @@ test('flick up to open', async () => {
     </SlideModal>
   );
 
-  const drag = new DragUtil(() => getByText('content'), stub);
-  drag
-    .dragStart()
-    .dragDown(300)
-    .tick(1000)
-    .dragUp(10)
-    .dragEnd()
-    .wait();
+  await wait(() => {
+    handleClose.mockClear();
+    const drag = new DragUtil(() => getByText('content'), stub);
+    drag
+      .wait()
+      .dragStart()
+      .dragDown(300)
+      .tick(1)
+      .dragUp(50)
+      .dragEnd()
+      .wait();
 
-  expect(handleClose).not.toHaveBeenCalled();
+    expect(handleClose).not.toHaveBeenCalled();
+  });
 });
 
 test('drag distance too short', async () => {
