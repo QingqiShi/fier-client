@@ -7,7 +7,9 @@ test('render children', () => {
   expect(getByText('test')).toBeInTheDocument();
 });
 
-test('render drag handle', () => {
-  const { getByTestId } = render(<ModalCard>test</ModalCard>);
-  expect(getByTestId('modal-card-handle')).toBeInTheDocument();
+test('sets custom style', () => {
+  const { getByText } = render(
+    <ModalCard style={{ transform: 'translateY(233px)' }}>test</ModalCard>
+  );
+  expect(getByText('test')).toHaveStyle('transform: translateY(233px)');
 });

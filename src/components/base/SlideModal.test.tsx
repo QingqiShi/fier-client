@@ -143,6 +143,8 @@ test('flick up to open', async () => {
       .dragDown(300)
       .tick(1)
       .dragUp(50)
+      .tick(1)
+      .dragUp(50)
       .dragEnd()
       .wait();
 
@@ -167,4 +169,44 @@ test('drag distance too short', async () => {
     .wait();
 
   expect(handleClose).not.toHaveBeenCalled();
+});
+
+test('prevent close modal', () => {
+  const handleClose = jest.fn();
+  const { getByText } = render(
+    <SlideModal open={true} preventClose onClose={handleClose}>
+      content
+    </SlideModal>
+  );
+
+  const drag = new DragUtil(() => getByText('content'), stub);
+  drag
+    .dragStart()
+    .dragDown(50)
+    .dragEnd()
+    .wait();
+
+  expect(handleClose).not.toHaveBeenCalled();
+});
+
+test('drag down slowly when prevent close', async () => {
+  const { getByText } = render(
+    <SlideModal open={true} preventClose>
+      content
+    </SlideModal>
+  );
+
+  await wait(() => {
+    const drag = new DragUtil(() => getByText('content'), stub);
+    drag
+      .dragStart()
+      .dragDown(500)
+      .wait();
+
+    expect(getByText('content').parentElement).toHaveStyle(
+      'transform: translate3d(0,calc(5% + 19.23076923076923px),0);'
+    );
+
+    drag.dragEnd();
+  });
 });
