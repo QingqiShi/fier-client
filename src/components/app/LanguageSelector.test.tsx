@@ -11,11 +11,11 @@ jest.mock('stores/settings', () => ({
   }
 }));
 
-test('select language using flags', () => {
-  const { getByText, getByRole } = render(<LanguageSelector />);
+test('select language using flags', async () => {
+  const { getByText } = render(<LanguageSelector />);
   expect(getByText('🇨🇳')).toBeInTheDocument();
 
-  fireEvent.click(getByRole('button'));
+  fireEvent.mouseDown(getByText('🇨🇳'));
   fireEvent.click(getByText('English'));
 
   expect(mockSettings[1].setLocale).toHaveBeenCalledWith('en');

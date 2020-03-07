@@ -20,14 +20,14 @@ beforeEach(() => {
 });
 
 test('renders guest user', async () => {
-  const { asFragment, getByRole } = render(<Routes />, [user]);
+  const { getByRole, getAllByText } = render(<Routes />, [user]);
   act(() => mockAuthState(null));
   await waitForElementToBeRemoved(() => getByRole('progressbar'));
-  expect(asFragment()).toMatchSnapshot();
+  expect(getAllByText('Log in').length).toBeGreaterThan(0);
 });
 
 test('renders logged in user', async () => {
-  const { asFragment, getByRole } = render(
+  const { getByRole, getByTestId } = render(
     <FirebaseSetup>
       <Routes />
     </FirebaseSetup>,
@@ -42,5 +42,5 @@ test('renders logged in user', async () => {
   };
   act(() => mockAuthState(mockUser));
   await waitForElementToBeRemoved(() => getByRole('progressbar'));
-  expect(asFragment()).toMatchSnapshot();
+  expect(getByTestId('topnav-profile')).toBeInTheDocument();
 });
