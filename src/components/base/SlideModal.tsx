@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { animated } from 'react-spring';
 import { Backdrop, Modal } from '@material-ui/core';
 import ModalCard from 'components/base/ModalCard';
+import ModalCardContent from 'components/base/ModalCardContent';
+import ModalCardHeader from 'components/base/ModalCardHeader';
 import useModalSpring from 'hooks/useModalSpring';
 import useModalDrag from 'hooks/useModalDrag';
 
@@ -44,11 +46,11 @@ function SlideModal({
   const handleDragEnd = useCallback(
     (my: number, vy: number) => {
       if (contentRef) {
-        if (vy > 0.5) {
+        if (vy > 0.5 && !preventClose) {
           onClose();
         } else if (vy < -0.5) {
           animateReset();
-        } else if (my > 200) {
+        } else if (my > 200 && !preventClose) {
           onClose();
         } else {
           animateReset();
@@ -56,20 +58,26 @@ function SlideModal({
         contentRef.style.overflow = '';
       }
     },
-    [animateReset, contentRef, onClose]
+    [animateReset, contentRef, onClose, preventClose]
+  );
+
+  const handleDrag = useCallback(
+    (my: number) =>
+      animateDrag(preventClose && my > 0 ? my / (1 + my * 0.05) : my),
+    [animateDrag, preventClose]
   );
 
   const contentBind = useModalDrag({
     el: contentRef,
     isOpen: modalOpen,
-    onDrag: animateDrag,
+    onDrag: handleDrag,
     onDragStart: handleDragStart,
     onDragEnd: handleDragEnd
   });
 
   const headerBind = useModalDrag({
     isOpen: modalOpen,
-    onDrag: animateDrag,
+    onDrag: handleDrag,
     onDragStart: handleDragStart,
     onDragEnd: handleDragEnd
   });
@@ -82,16 +90,16 @@ function SlideModal({
         timeout: 500
       }}
       open={modalOpen}
-      onClose={onClose}
+      onClose={!preventClose ? onClose : undefined}
     >
-      <AnimatedModalCard
-        contentProps={contentBind()}
-        contentRef={setContentRef}
-        data-testid="slide-modal-card"
-        headerProps={headerBind()}
-        style={props}
-      >
-        {children}
+      <AnimatedModalCard style={props}>
+        <ModalCardHeader
+          eventHandlers={preventClose ? undefined : headerBind()}
+          hideHandle={preventClose}
+        />
+        <ModalCardContent ref={setContentRef} eventHandlers={contentBind()}>
+          {children}
+        </ModalCardContent>
       </AnimatedModalCard>
     </Modal>
   );
