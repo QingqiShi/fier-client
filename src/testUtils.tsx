@@ -6,8 +6,9 @@ import {
   fireEvent,
   render as rtlRender
 } from '@testing-library/react';
-import { AnimatedValue, animated } from 'react-spring';
+import { animated } from 'react-spring';
 import { Store, useStoreProvider } from 'react-lit-store';
+import { MockRaf } from '@react-spring/mock-raf';
 import {
   RenderHookOptions,
   renderHook as rhtlRenderHook
@@ -106,16 +107,12 @@ export function renderHook<P, R>(
   });
 }
 
-function AnimatedDiv({
-  useSpringHook
-}: {
-  useSpringHook: () => AnimatedValue<any>;
-}) {
+function AnimatedDiv({ useSpringHook }: { useSpringHook: () => any }) {
   const styleProps = useSpringHook();
-  return <animated.div style={styleProps}>test</animated.div>;
+  return <animated.div {...styleProps}>test</animated.div>;
 }
 
-export function renderSpringHook(useSpringHook: () => AnimatedValue<any>) {
+export function renderSpringHook(useSpringHook: () => any) {
   const result = rtlRender(<AnimatedDiv useSpringHook={useSpringHook} />);
   return {
     ...result,
@@ -149,10 +146,10 @@ export function renderGestureHook(
 export class DragUtil {
   x = 0;
   y = 0;
-  rafStub: RafStub;
+  rafStub: MockRaf;
   getEl: () => HTMLElement;
 
-  constructor(getEl: () => HTMLElement, rafStub: RafStub) {
+  constructor(getEl: () => HTMLElement, rafStub: MockRaf) {
     this.getEl = getEl;
     this.rafStub = rafStub;
   }
@@ -193,7 +190,11 @@ export class DragUtil {
   }
 
   tick(step?: number) {
-    act(() => this.rafStub.step(step));
+    act(() => this.rafStub.step({ count: step || 1 }));
     return this;
+  }
+
+  later(delay: number) {
+    return new Promise(resolve => setTimeout(resolve, delay));
   }
 }

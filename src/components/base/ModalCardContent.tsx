@@ -7,7 +7,7 @@ const useStyles = makeStyles(theme =>
     contentRoot: {
       padding: `calc(${theme.spacing(8)}px) calc(${theme.spacing(
         3
-      )}px + env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 5vh + ${theme.spacing(
+      )}px + env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 40px + ${theme.spacing(
         3
       )}px) calc(${theme.spacing(3)}px + env(safe-area-inset-left))`,
       height: '100%',
