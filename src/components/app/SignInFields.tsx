@@ -4,6 +4,7 @@ import { TextField } from '@material-ui/core';
 import ProgressButton from 'components/base/ProgressButton';
 import EndOfFormLink from 'components/base/EndOfFormLink';
 import useTexts from 'hooks/useTexts';
+import useFormInput from 'hooks/useFormInput';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -18,8 +19,8 @@ function SignUpFields({
   passwordControl,
   loading
 }: {
-  emailControl: [string, React.FormEventHandler, any];
-  passwordControl: [string, React.FormEventHandler, any];
+  emailControl: ReturnType<typeof useFormInput>;
+  passwordControl: ReturnType<typeof useFormInput>;
   loading: boolean;
 }) {
   const [t] = useTexts();
