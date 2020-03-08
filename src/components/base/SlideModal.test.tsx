@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import { act, fireEvent, render, wait } from '@testing-library/react';
-import createStub from 'raf-stub';
+import { act, fireEvent, render } from '@testing-library/react';
+import createMockRaf, { MockRaf } from '@react-spring/mock-raf';
+import { FrameLoop, Globals } from 'react-spring';
 import { DragUtil } from 'testUtils';
 import SlideModal from './SlideModal';
 
-const stub = createStub();
-jest.spyOn(window, 'requestAnimationFrame').mockImplementation(stub.add);
-jest.spyOn(window, 'cancelAnimationFrame').mockImplementation(stub.remove);
-
-beforeEach(stub.reset);
-afterEach(() => {
-  stub.flush();
+let mockRaf: MockRaf;
+beforeEach(() => {
+  mockRaf = createMockRaf();
+  Globals.assign({
+    now: mockRaf.now,
+    requestAnimationFrame: mockRaf.raf,
+    cancelAnimationFrame: mockRaf.cancel,
+    frameLoop: new FrameLoop()
+  });
 });
 
 test('renders children', () => {
@@ -20,7 +23,7 @@ test('renders children', () => {
   expect(getByText('test children')).toBeInTheDocument();
 });
 
-test('close then open again', async () => {
+test('close then open again', () => {
   const Component = () => {
     const [open, setOpen] = useState(true);
     return (
@@ -32,14 +35,12 @@ test('close then open again', async () => {
   };
   const { getByText, queryByText } = render(<Component />);
 
-  stub.flush();
+  act(() => mockRaf.flush());
   expect(queryByText('content')).toBeInTheDocument();
 
   fireEvent.click(getByText('toggle'));
-  await wait(() => {
-    act(() => stub.flush());
-    expect(queryByText('content')).toBeNull();
-  });
+  act(() => mockRaf.flush());
+  expect(queryByText('content')).toBeNull();
 
   fireEvent.click(getByText('toggle'));
   expect(queryByText('content')).toBeInTheDocument();
@@ -53,16 +54,12 @@ test('flick close', async () => {
     </SlideModal>
   );
 
-  await wait(() => {
-    handleClose.mockClear();
-    const drag = new DragUtil(() => getByText('content'), stub);
-    drag
-      .dragStart()
-      .dragDown(50)
-      .dragEnd();
+  handleClose.mockClear();
+  const drag = new DragUtil(() => getByText('content'), mockRaf);
+  await drag.dragStart().later(50);
+  drag.dragDown(50).dragEnd();
 
-    expect(handleClose).toHaveBeenCalled();
-  });
+  expect(handleClose).toHaveBeenCalled();
 });
 
 test('drag close', async () => {
@@ -73,18 +70,16 @@ test('drag close', async () => {
     </SlideModal>
   );
 
-  await wait(() => {
-    handleClose.mockClear();
-    const drag = new DragUtil(() => getByText('content'), stub);
-    drag
-      .dragStart()
-      .dragDown(200)
-      .tick(1)
-      .dragDown(0.1)
-      .dragEnd();
+  handleClose.mockClear();
+  const drag = new DragUtil(() => getByText('content'), mockRaf);
+  await drag.dragStart().later(50);
+  await drag.dragDown(200).later(50);
+  drag
+    .dragDown(10)
+    .dragEnd()
+    .wait();
 
-    expect(handleClose).toHaveBeenCalled();
-  });
+  expect(handleClose).toHaveBeenCalled();
 });
 
 test('drag close with handle', async () => {
@@ -95,35 +90,32 @@ test('drag close with handle', async () => {
     </SlideModal>
   );
 
-  await wait(() => {
-    handleClose.mockClear();
-    const drag = new DragUtil(() => getByTestId('modal-card-handle'), stub);
-    drag
-      .dragStart()
-      .dragDown(50)
-      .dragEnd();
+  handleClose.mockClear();
+  const drag = new DragUtil(() => getByTestId('modal-card-handle'), mockRaf);
+  await drag.dragStart().later(50);
+  drag
+    .dragDown(50)
+    .dragEnd()
+    .wait();
 
-    expect(handleClose).toHaveBeenCalled();
-  });
+  expect(handleClose).toHaveBeenCalled();
 });
 
 test('overflow hidden while dragging', async () => {
   const { getByText } = render(<SlideModal open={true}>content</SlideModal>);
 
-  await wait(() => {
-    const drag = new DragUtil(() => getByText('content'), stub);
-    drag
-      .dragStart()
-      .tick(1)
-      .dragDown(50)
-      .wait();
+  const drag = new DragUtil(() => getByText('content'), mockRaf);
+  await drag.dragStart().later(50);
+  await drag
+    .dragDown(50)
+    .wait()
+    .later(50);
 
-    expect(getByText('content')).toHaveStyle('overflow:hidden');
+  expect(getByText('content')).toHaveStyle('overflow:hidden');
 
-    drag.dragEnd().wait();
+  drag.dragEnd().wait();
 
-    expect(getByText('content')).not.toHaveStyle('overflow: hidden');
-  });
+  expect(getByText('content')).not.toHaveStyle('overflow: hidden');
 });
 
 test('flick up to open', async () => {
@@ -134,22 +126,17 @@ test('flick up to open', async () => {
     </SlideModal>
   );
 
-  await wait(() => {
-    handleClose.mockClear();
-    const drag = new DragUtil(() => getByText('content'), stub);
-    drag
-      .wait()
-      .dragStart()
-      .dragDown(300)
-      .tick(1)
-      .dragUp(50)
-      .tick(1)
-      .dragUp(50)
-      .dragEnd()
-      .wait();
+  handleClose.mockClear();
+  const drag = new DragUtil(() => getByText('content'), mockRaf);
+  await drag.dragStart().later(50);
+  await drag.dragDown(300).later(50);
+  await drag.dragUp(50).later(50);
+  drag
+    .dragUp(50)
+    .dragEnd()
+    .wait();
 
-    expect(handleClose).not.toHaveBeenCalled();
-  });
+  expect(handleClose).not.toHaveBeenCalled();
 });
 
 test('drag distance too short', async () => {
@@ -160,10 +147,10 @@ test('drag distance too short', async () => {
     </SlideModal>
   );
 
-  const drag = new DragUtil(() => getByText('content'), stub);
+  const drag = new DragUtil(() => getByText('content'), mockRaf);
+  await drag.dragStart().later(50);
+  await drag.dragDown(50).later(50);
   drag
-    .dragStart()
-    .dragDown(50)
     .dragDown(0.5)
     .dragEnd()
     .wait();
@@ -171,7 +158,7 @@ test('drag distance too short', async () => {
   expect(handleClose).not.toHaveBeenCalled();
 });
 
-test('prevent close modal', () => {
+test('prevent close modal', async () => {
   const handleClose = jest.fn();
   const { getByText } = render(
     <SlideModal open={true} preventClose onClose={handleClose}>
@@ -179,9 +166,9 @@ test('prevent close modal', () => {
     </SlideModal>
   );
 
-  const drag = new DragUtil(() => getByText('content'), stub);
+  const drag = new DragUtil(() => getByText('content'), mockRaf);
+  await drag.dragStart().later(50);
   drag
-    .dragStart()
     .dragDown(50)
     .dragEnd()
     .wait();
@@ -196,17 +183,11 @@ test('drag down slowly when prevent close', async () => {
     </SlideModal>
   );
 
-  await wait(() => {
-    const drag = new DragUtil(() => getByText('content'), stub);
-    drag
-      .dragStart()
-      .dragDown(500)
-      .wait();
+  const drag = new DragUtil(() => getByText('content'), mockRaf);
+  await drag.dragStart().later(50);
+  drag.dragDown(500).wait();
 
-    expect(getByText('content').parentElement).toHaveStyle(
-      'transform: translate3d(0,calc(5% + 19.23076923076923px),0);'
-    );
-
-    drag.dragEnd();
-  });
+  expect(getByText('content').parentElement).toHaveStyle(
+    'transform: translate3d(0,calc(0% + 59.230769230769226px),0);'
+  );
 });

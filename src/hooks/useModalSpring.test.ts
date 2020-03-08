@@ -1,36 +1,51 @@
+import { useEffect } from 'react';
+import { act } from '@testing-library/react';
 import { renderSpringHook } from 'testUtils';
+import createMockRaf, { MockRaf } from '@react-spring/mock-raf';
+import { FrameLoop, Globals } from 'react-spring';
 import useModalSpring from './useModalSpring';
 
-jest.useFakeTimers();
-jest
-  .spyOn(window, 'requestAnimationFrame')
-  .mockImplementation(cb => setTimeout(cb, 0));
+let mockRaf: MockRaf;
+beforeEach(() => {
+  mockRaf = createMockRaf();
+  Globals.assign({
+    now: mockRaf.now,
+    requestAnimationFrame: mockRaf.raf,
+    cancelAnimationFrame: mockRaf.cancel,
+    frameLoop: new FrameLoop()
+  });
+});
 
 beforeEach(jest.clearAllMocks);
 
 test('closed modal style', () => {
-  const { el } = renderSpringHook(() => useModalSpring({}).props);
-  jest.runAllTimers();
-
+  const { el } = renderSpringHook(() => {
+    const { props } = useModalSpring({});
+    return { style: props };
+  });
+  act(() => mockRaf.flush());
   expect(el).toHaveStyle('transform: translate3d(0,calc(100% + 0px),0)');
 });
 
 test('open modal style', () => {
-  const { el } = renderSpringHook(() => useModalSpring({ isOpen: true }).props);
-  jest.runAllTimers();
-
-  expect(el).toHaveStyle('transform: translate3d(0,calc(5% + 0px),0)');
+  const { el } = renderSpringHook(() => {
+    const { props } = useModalSpring({ isOpen: true });
+    return { style: props };
+  });
+  act(() => mockRaf.flush());
+  expect(el).toHaveStyle('transform: translate3d(0,calc(0% + 40px),0)');
 });
 
 test('drag modal style', () => {
   const { el } = renderSpringHook(() => {
     const { props, animateDrag } = useModalSpring({ isOpen: true });
-    setTimeout(() => animateDrag(50), 0);
-    return props;
+    useEffect(() => {
+      animateDrag(50);
+    }, [animateDrag]);
+    return { style: props };
   });
-  jest.runAllTimers();
-
-  expect(el).toHaveStyle('transform: translate3d(0,calc(5% + 50px),0)');
+  act(() => mockRaf.flush());
+  expect(el).toHaveStyle('transform: translate3d(0,calc(0% + 90px),0)');
 });
 
 test('reset modal to open style', () => {
@@ -38,13 +53,14 @@ test('reset modal to open style', () => {
     const { props, animateDrag, animateReset } = useModalSpring({
       isOpen: true
     });
-    setTimeout(() => animateDrag(50), 0);
-    setTimeout(() => animateReset(), 20);
-    return props;
+    useEffect(() => {
+      animateDrag(50);
+      animateReset();
+    }, [animateDrag, animateReset]);
+    return { style: props };
   });
-  jest.runAllTimers();
-
-  expect(el).toHaveStyle('transform: translate3d(0,calc(5% + 0px),0)');
+  act(() => mockRaf.flush());
+  expect(el).toHaveStyle('transform: translate3d(0,calc(0% + 40px),0)');
 });
 
 test('reset modal to close style', () => {
@@ -52,12 +68,13 @@ test('reset modal to close style', () => {
     const { props, animateDrag, animateReset } = useModalSpring({
       isOpen: false
     });
-    setTimeout(() => animateDrag(50), 0);
-    setTimeout(() => animateReset(), 20);
-    return props;
+    useEffect(() => {
+      animateDrag(50);
+      animateReset();
+    }, [animateDrag, animateReset]);
+    return { style: props };
   });
-  jest.runAllTimers();
-
+  act(() => mockRaf.flush());
   expect(el).toHaveStyle('transform: translate3d(0,calc(100% + 0px),0)');
 });
 
@@ -71,13 +88,12 @@ test('fire onClose callback', () => {
         onClose: handleClose
       }).props
   );
-  jest.runAllTimers();
-
+  act(() => mockRaf.flush());
   expect(handleClose).not.toHaveBeenCalled();
 
   isOpen = false;
   rerender();
-  jest.runAllTimers();
+  act(() => mockRaf.flush());
 
   expect(handleClose).toHaveBeenCalledTimes(1);
 });

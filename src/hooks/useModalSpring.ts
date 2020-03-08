@@ -3,7 +3,7 @@ import { SpringConfig, config, useSpring } from 'react-spring';
 
 const modalSpringConfig: SpringConfig = { mass: 1, tension: 175, friction: 19 };
 
-const modalOpenTransform = 'translate3d(0,calc(5% + 0px),0)';
+const modalOpenTransform = 'translate3d(0,calc(0% + 40px),0)';
 const modalCloseTransform = 'translate3d(0,calc(100% + 0px),0)';
 
 function useModalSpring({ isOpen = false, onClose = () => {} }) {
@@ -33,7 +33,7 @@ function useModalSpring({ isOpen = false, onClose = () => {} }) {
   const animateDrag = useCallback(
     (my: number) => {
       set({
-        transform: `translate3d(0,calc(5% + ${my}px),0)`,
+        transform: `translate3d(0,calc(0% + ${40 + my}px),0)`,
         config: config.stiff,
         onRest: () => {}
       });
