@@ -1,23 +1,26 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import { SpringConfig, config, useSpring } from 'react-spring';
+import { SpringConfig, config, to, useSpring } from '@react-spring/web';
 
 const modalSpringConfig: SpringConfig = { mass: 1, tension: 175, friction: 19 };
 
-const modalOpenTransform = 'translate3d(0,calc(0% + 40px),0)';
-const modalCloseTransform = 'translate3d(0,calc(100% + 0px),0)';
+const modalOpenTo = { y: 40, percent: 0 };
+const modalCloseTo = { y: 0, percent: 100 };
+
+const getTransform = (y: number, percent: number) =>
+  `translate3d(0,calc(${percent}% + ${y}px),0)`;
 
 function useModalSpring({ isOpen = false, onClose = () => {} }) {
   // The react-spring style props for open and close modals
   const openStyle = useMemo(() => {
     return {
-      transform: modalOpenTransform,
+      to: modalOpenTo,
       config: modalSpringConfig,
       onRest: () => {}
     };
   }, []);
   const closeStyle = useMemo(() => {
     return {
-      transform: modalCloseTransform,
+      to: modalCloseTo,
       config: modalSpringConfig,
       onRest: onClose
     };
@@ -25,7 +28,7 @@ function useModalSpring({ isOpen = false, onClose = () => {} }) {
 
   // Create react-spring
   const [props, set] = useSpring(() => ({
-    transform: modalCloseTransform,
+    to: modalCloseTo,
     config: modalSpringConfig
   }));
 
@@ -33,7 +36,7 @@ function useModalSpring({ isOpen = false, onClose = () => {} }) {
   const animateDrag = useCallback(
     (my: number) => {
       set({
-        transform: `translate3d(0,calc(0% + ${40 + my}px),0)`,
+        to: { y: 40 + my, percent: 0 },
         config: config.stiff,
         onRest: () => {}
       });
@@ -52,7 +55,7 @@ function useModalSpring({ isOpen = false, onClose = () => {} }) {
   }, [closeStyle, isOpen, openStyle, set]);
 
   return {
-    props,
+    props: { transform: to([props.y, props.percent], getTransform) },
     animateDrag,
     animateReset
   };
