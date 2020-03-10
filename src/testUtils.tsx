@@ -6,7 +6,7 @@ import {
   fireEvent,
   render as rtlRender
 } from '@testing-library/react';
-import { animated } from 'react-spring';
+import { animated } from '@react-spring/web';
 import { Store, useStoreProvider } from 'react-lit-store';
 import { MockRaf } from '@react-spring/mock-raf';
 import {

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { animated } from 'react-spring';
+import { animated } from '@react-spring/web';
 import { Backdrop, Modal } from '@material-ui/core';
 import ModalCard from 'components/base/ModalCard';
 import ModalCardContent from 'components/base/ModalCardContent';

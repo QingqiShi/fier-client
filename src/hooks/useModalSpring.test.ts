@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { act } from '@testing-library/react';
 import { renderSpringHook } from 'testUtils';
 import createMockRaf, { MockRaf } from '@react-spring/mock-raf';
-import { FrameLoop, Globals } from 'react-spring';
+import { FrameLoop, Globals } from '@react-spring/web';
 import useModalSpring from './useModalSpring';
 
 let mockRaf: MockRaf;

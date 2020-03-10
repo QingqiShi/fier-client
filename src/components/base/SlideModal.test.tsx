@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { act, fireEvent, render } from '@testing-library/react';
 import createMockRaf, { MockRaf } from '@react-spring/mock-raf';
-import { FrameLoop, Globals } from 'react-spring';
+import { FrameLoop, Globals } from '@react-spring/web';
 import { DragUtil } from 'testUtils';
 import SlideModal from './SlideModal';
 

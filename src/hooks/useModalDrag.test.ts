@@ -1,5 +1,5 @@
 import { DragUtil, renderGestureHook } from 'testUtils';
-import { FrameLoop, Globals } from 'react-spring';
+import { FrameLoop, Globals } from '@react-spring/web';
 import createMockRaf, { MockRaf } from '@react-spring/mock-raf';
 import useModalDrag from './useModalDrag';
 
