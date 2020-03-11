@@ -23,6 +23,17 @@ test('renders children', () => {
   expect(getByText('test children')).toBeInTheDocument();
 });
 
+test('can specify height', () => {
+  const { getByText } = render(
+    <SlideModal height={300} open={true}>
+      test children
+    </SlideModal>
+  );
+  expect(getByText('test children').parentElement).toHaveStyle(
+    'top: calc(100% - 300px)'
+  );
+});
+
 test('close then open again', () => {
   const Component = () => {
     const [open, setOpen] = useState(true);

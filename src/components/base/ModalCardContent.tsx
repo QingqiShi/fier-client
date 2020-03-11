@@ -5,7 +5,7 @@ import { ReactEventHandlers } from 'react-use-gesture/dist/types';
 const useStyles = makeStyles(theme =>
   createStyles({
     contentRoot: {
-      padding: `calc(${theme.spacing(8)}px) calc(${theme.spacing(
+      padding: `${theme.spacing(8)}px calc(${theme.spacing(
         3
       )}px + env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 40px + ${theme.spacing(
         3

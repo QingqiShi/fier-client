@@ -13,3 +13,8 @@ test('sets custom style', () => {
   );
   expect(getByText('test')).toHaveStyle('transform: translateY(233px)');
 });
+
+test('can specify height', () => {
+  const { getByText } = render(<ModalCard height={300}>test</ModalCard>);
+  expect(getByText('test')).toHaveStyle('top: calc(100% - 300px)');
+});
