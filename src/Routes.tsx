@@ -56,15 +56,11 @@ function Routes() {
         </Switch>
       )}
 
-      <SlideModal open={profileIsOpen} title="fier" onClose={close}>
-        <Suspense fallback={<PageLoadIndicator />}>
+      <SlideModal open={profileIsOpen} onClose={close}>
           <LazyProfile />
-        </Suspense>
       </SlideModal>
       <SlideModal open={createIsOpen} onClose={close}>
-        <Suspense fallback={<PageLoadIndicator />}>
           <LazyCreate onClose={close} />
-        </Suspense>
       </SlideModal>
     </Suspense>
   );

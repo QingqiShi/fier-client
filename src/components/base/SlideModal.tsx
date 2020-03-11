@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import { animated } from '@react-spring/web';
 import { Backdrop, Modal } from '@material-ui/core';
 import ModalCard from 'components/base/ModalCard';
 import ModalCardContent from 'components/base/ModalCardContent';
 import ModalCardHeader from 'components/base/ModalCardHeader';
+import PageLoadIndicator from 'components/base/PageLoadIndicator';
 import useModalSpring from 'hooks/useModalSpring';
 import useModalDrag from 'hooks/useModalDrag';
 
@@ -13,14 +14,16 @@ function SlideModal({
   open,
   onClose = () => {},
   preventClose = false,
+  height,
   children
 }: React.PropsWithChildren<{
   open: boolean;
   onClose?: () => void;
   preventClose?: boolean;
-  title?: string;
+  height?: number;
 }>) {
   const [modalOpen, setModalOpen] = useState(open);
+  const [dragging, setDragging] = useState(false);
 
   useEffect(() => {
     if (open && !modalOpen) {
@@ -41,6 +44,7 @@ function SlideModal({
     if (contentRef && contentRef.scrollTop <= 0) {
       contentRef.style.overflow = 'hidden';
     }
+    setDragging(true);
   }, [contentRef]);
 
   const handleDragEnd = useCallback(
@@ -57,6 +61,7 @@ function SlideModal({
         }
         contentRef.style.overflow = '';
       }
+      setDragging(false);
     },
     [animateReset, contentRef, onClose, preventClose]
   );
@@ -86,19 +91,19 @@ function SlideModal({
     <Modal
       BackdropComponent={Backdrop}
       BackdropProps={{
-        open: open,
-        timeout: 500
+        open: open
       }}
       open={modalOpen}
       onClose={!preventClose ? onClose : undefined}
     >
-      <AnimatedModalCard style={props}>
+      <AnimatedModalCard height={height} style={props}>
         <ModalCardHeader
+          dragging={dragging}
           eventHandlers={preventClose ? undefined : headerBind()}
           hideHandle={preventClose}
         />
         <ModalCardContent ref={setContentRef} eventHandlers={contentBind()}>
-          {children}
+          <Suspense fallback={<PageLoadIndicator />}>{children}</Suspense>
         </ModalCardContent>
       </AnimatedModalCard>
     </Modal>
