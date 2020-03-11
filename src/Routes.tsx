@@ -21,6 +21,7 @@ const LazyRegister = lazy(() => import('components/views/Register'));
 // Modals
 const LazyProfile = lazy(() => import('components/modals/Profile'));
 const LazyCreate = lazy(() => import('components/modals/Create'));
+const LazySetup = lazy(() => import('components/modals/Setup'));
 
 function Routes() {
   const [{ isLoggedIn }] = user.useStore();
@@ -29,6 +30,7 @@ function Routes() {
   const { routeLocale, routePath, redirect, getPath } = useRoute();
   const { isOpen: profileIsOpen, close } = useModalHash(Modal.PROFILE);
   const { isOpen: createIsOpen } = useModalHash(Modal.CREATE);
+  const { isOpen: setupIsOpen } = useModalHash(Modal.SETUP);
 
   if (routeLocale !== locale) {
     redirect(routePath, locale);
@@ -57,10 +59,13 @@ function Routes() {
       )}
 
       <SlideModal open={profileIsOpen} onClose={close}>
-          <LazyProfile />
+        <LazyProfile />
       </SlideModal>
       <SlideModal open={createIsOpen} onClose={close}>
-          <LazyCreate onClose={close} />
+        <LazyCreate onClose={close} />
+      </SlideModal>
+      <SlideModal open={setupIsOpen} preventClose onClose={close}>
+        <LazySetup />
       </SlideModal>
     </Suspense>
   );
