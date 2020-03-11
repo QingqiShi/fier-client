@@ -25,7 +25,7 @@ function setupWithUser() {
 
 test('use default state without logged in user', () => {
   const { result } = renderHook(() => settings.useStore(), [settings, user]);
-  const initialState = { locale: 'en' };
+  const initialState = { locale: 'en', categories: [], ids: { categories: 0 } };
   expect(result.current[0]).toEqual(initialState);
 });
 
@@ -43,7 +43,8 @@ test('get and set locale', () => {
       exists: true,
       data: () => ({
         locale: 'zh',
-        categories: []
+        categories: [],
+        ids: { categories: 0 }
       })
     })
   );
@@ -54,4 +55,63 @@ test('get and set locale', () => {
   // Set locale
   act(() => result.current[1].setLocale('en'));
   expect(result.current[0].locale).toEqual('en');
+});
+
+test('get, add, edit and remove categories', () => {
+  const { result } = setupWithUser();
+  const setSnapshot = (firestore().doc('').onSnapshot as jest.Mock).mock
+    .calls[0][0];
+  act(() =>
+    setSnapshot({
+      exists: true,
+      data: () => ({
+        locale: 'zh',
+        categories: [],
+        ids: { categories: 0 }
+      })
+    })
+  );
+
+  // Get categories
+  expect(result.current[0].categories).toEqual([]);
+
+  // Add category
+  act(() =>
+    result.current[1].setCategory({
+      id: 0,
+      emoji: 'T',
+      name: 'Test',
+      type: 'income'
+    })
+  );
+  expect(result.current[0].categories).toEqual([
+    {
+      id: 1,
+      emoji: 'T',
+      name: 'Test',
+      type: 'income'
+    }
+  ]);
+
+  // Edit category
+  act(() =>
+    result.current[1].setCategory({
+      id: 1,
+      emoji: 'T',
+      name: 'Test 2',
+      type: 'income'
+    })
+  );
+  expect(result.current[0].categories).toEqual([
+    {
+      id: 1,
+      emoji: 'T',
+      name: 'Test 2',
+      type: 'income'
+    }
+  ]);
+
+  // Remove category
+  act(() => result.current[1].removeCategory(1));
+  expect(result.current[0].categories).toEqual([]);
 });
