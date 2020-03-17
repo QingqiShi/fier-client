@@ -11,8 +11,8 @@ import {
   renderHook as rhtlRenderHook
 } from '@testing-library/react-hooks';
 import { Store, useStoreProvider } from 'react-lit-store';
-import { FrameLoop, Globals, animated } from '@react-spring/web';
-import createMockRaf, { MockRaf } from '@react-spring/mock-raf';
+import { animated } from '@react-spring/web';
+import { MockRaf } from '@react-spring/mock-raf';
 import { ReactEventHandlers } from 'react-use-gesture/dist/types';
 import {
   clearFirestoreStates,
