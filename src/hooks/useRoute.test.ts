@@ -8,7 +8,7 @@ test.each`
   ${'/zh/test'} | ${'zh'}
   ${'/test'}    | ${'en'}
 `('routeLocale for url $url', ({ url, expected }) => {
-  const { result } = renderHook(() => useRoute(), [], { url });
+  const { result } = renderHook(() => useRoute(), { url });
   expect(result.current.routeLocale).toEqual(expected);
 });
 
@@ -17,7 +17,7 @@ test.each`
   ${'/zh/test'} | ${'/test'}
   ${'/test'}    | ${'/test'}
 `('routePath for url $url', ({ url, expected }) => {
-  const { result } = renderHook(() => useRoute(), [], { url });
+  const { result } = renderHook(() => useRoute(), { url });
   expect(result.current.routePath).toEqual(expected);
 });
 
@@ -26,7 +26,7 @@ test.each`
   ${'/zh/test#test'} | ${'#test'}
   ${'/test?test'}    | ${''}
 `('routeHash for url $url', ({ url, expected }) => {
-  const { result } = renderHook(() => useRoute(), [], { url });
+  const { result } = renderHook(() => useRoute(), { url });
   expect(result.current.routeHash).toEqual(expected);
 });
 
@@ -35,7 +35,7 @@ test.each`
   ${'/test'}    | ${'/abc'} | ${'/abc'}
   ${'/zh/test'} | ${'/abc'} | ${'/zh/abc'}
 `('getPath $path with $url', ({ url, path, expected }) => {
-  const { result } = renderHook(() => useRoute(), [], { url });
+  const { result } = renderHook(() => useRoute(), { url });
   expect(result.current.getPath(path)).toEqual(expected);
 });
 
@@ -43,7 +43,7 @@ test('redirect', () => {
   const historyObj: { history: import('history').History | null } = {
     history: null
   };
-  const { result } = renderHook(() => useRoute(), [], {
+  const { result } = renderHook(() => useRoute(), {
     useHook: () => {
       historyObj.history = useHistory();
     }

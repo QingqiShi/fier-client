@@ -1,9 +1,10 @@
 import React from 'react';
-import { act, waitForElementToBeRemoved } from '@testing-library/react';
-import { render } from 'testUtils';
-import { auth as mockAuth, mockAuthState } from 'firebase/app';
+import { act, waitFor } from '@testing-library/react';
+import { clearAuthListeners, mockAuthUser, render } from 'testUtils';
+import { mockDocSnapshot } from 'firebase/app';
 import FirebaseSetup from 'components/app/FirebaseSetup';
 import user from 'stores/user';
+import settings from 'stores/settings';
 import Routes from './Routes';
 
 import('components/app/BottomNav');
@@ -15,32 +16,67 @@ import('components/views/Login');
 import('components/views/Register');
 
 beforeEach(() => {
-  mockAuth().onAuthStateChanged(() => {});
+  clearAuthListeners();
   jest.clearAllMocks();
 });
 
 test('renders guest user', async () => {
-  const { getByRole, getAllByText } = render(<Routes />, [user]);
-  act(() => mockAuthState(null));
-  await waitForElementToBeRemoved(() => getByRole('progressbar'));
-  expect(getAllByText('Log in').length).toBeGreaterThan(0);
+  const { findAllByText } = render(<Routes />, { stores: [user] });
+  expect((await findAllByText('Log in')).length).toBeGreaterThan(0);
 });
 
-test('renders logged in user', async () => {
-  const { getByRole, getByTestId } = render(
+test('redirects to user locale', async () => {
+  const { findAllByText } = render(
     <FirebaseSetup>
       <Routes />
     </FirebaseSetup>,
-    [user]
+    { stores: [settings, user] }
   );
-  const mockUser = {
-    email: 'test@test.com',
-    updateProfile: jest.fn(() => Promise.resolve()),
-    updateEmail: jest.fn(() => Promise.resolve()),
-    updatePassword: jest.fn(() => Promise.resolve()),
-    reauthenticateWithCredential: jest.fn(() => Promise.resolve())
-  };
-  act(() => mockAuthState(mockUser));
-  await waitForElementToBeRemoved(() => getByRole('progressbar'));
-  expect(getByTestId('topnav-profile')).toBeInTheDocument();
+
+  act(() => {
+    mockAuthUser({ uid: 'testid' });
+  });
+  act(() => {
+    mockDocSnapshot('settings/testid', { locale: 'zh', categories: [1] });
+  });
+
+  expect((await findAllByText('概览')).length).toBeGreaterThan(0);
+});
+
+test('renders logged in user', async () => {
+  const { getByTestId } = render(
+    <FirebaseSetup>
+      <Routes />
+    </FirebaseSetup>,
+    { stores: [settings, user] }
+  );
+
+  act(() => {
+    mockAuthUser({ uid: 'testid' });
+  });
+  act(() => {
+    mockDocSnapshot('settings/testid', { locale: 'en', categories: [1] });
+  });
+
+  await waitFor(() => {
+    getByTestId('topnav-profile');
+  });
+});
+
+test('show setup modal if categories has length 0', async () => {
+  const { findByText } = render(
+    <FirebaseSetup>
+      <Routes />
+    </FirebaseSetup>,
+    { stores: [settings, user] }
+  );
+
+  act(() => {
+    mockAuthUser({ uid: 'testid' });
+  });
+  act(() => {
+    mockDocSnapshot('settings/testid', { locale: 'en', categories: [] });
+  });
+
+  expect(await findByText('Categories')).toBeInTheDocument();
 });

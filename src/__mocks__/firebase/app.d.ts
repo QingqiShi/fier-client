@@ -1,7 +1,8 @@
 import 'firebase/app';
 
 declare module 'firebase/app' {
-  export const mockAuthState = (user: any) => {};
-  export const mockError = (e: any) => {};
-  export const mockDocSnapshot = (snap: any) => {};
+  export const mockAuthState: (user: any) => void;
+  export const mockError: (e: any) => void;
+  export const mockDocSnapshot: (path: string, data: any) => void;
+  export const clearFirestoreStates: () => void;
 }

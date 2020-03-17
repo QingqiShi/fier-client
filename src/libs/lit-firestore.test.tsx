@@ -1,7 +1,7 @@
 import React from 'react';
 import { act, fireEvent } from '@testing-library/react';
 import { render } from 'testUtils';
-import { firestore as mockFirestore } from 'firebase/app';
+import { mockDocSnapshot, firestore as mockFirestore } from 'firebase/app';
 import { createStore } from './lit-firestore';
 
 beforeEach(jest.clearAllMocks);
@@ -23,7 +23,7 @@ test('works like normal react-lit-store without path', () => {
     processState(state);
     return <button onClick={actions.increment}>{state.counter}</button>;
   };
-  const { container, getByRole } = render(<Component />, [store]);
+  const { container, getByRole } = render(<Component />, { stores: [store] });
 
   // Get state
   expect(processState).toHaveBeenCalledWith({ counter: 0 });
@@ -36,7 +36,7 @@ test('works like normal react-lit-store without path', () => {
   expect(processState).toHaveBeenCalledWith({ counter: 1 });
 });
 
-test('aquire doc using path and subscribe to change', () => {
+test('aquire doc using path', () => {
   const store = createStore(
     { counter: 0 },
     { increment: state => ({ counter: state.counter + 1 }) },
@@ -48,13 +48,10 @@ test('aquire doc using path and subscribe to change', () => {
     const [state, actions] = store.useStore();
     return <button onClick={actions.increment}>{state.counter}</button>;
   };
-  render(<Component />, [store]);
+  render(<Component />, { stores: [store] });
 
   // Aquire doc and subscribe to snapshot changes
   expect(mockFirestore().doc).toHaveBeenCalledWith('/fake/path');
-  expect(mockFirestore().doc('').onSnapshot).toHaveBeenCalledWith(
-    expect.any(Function)
-  );
 });
 
 test('update state on firestore change', () => {
@@ -69,12 +66,10 @@ test('update state on firestore change', () => {
     const [state, actions] = store.useStore();
     return <button onClick={actions.increment}>{state.counter}</button>;
   };
-  const { getByRole } = render(<Component />, [store]);
+  const { getByRole } = render(<Component />, { stores: [store] });
 
   // Update snapshot through handler
-  const setSnapshot = (mockFirestore().doc('').onSnapshot as jest.Mock).mock
-    .calls[0][0];
-  act(() => setSnapshot({ data: () => ({ counter: 5 }), exists: true }));
+  act(() => mockDocSnapshot('/fake/path', { counter: 5 }));
 
   expect(getByRole('button')).toHaveTextContent('5');
 });
@@ -91,13 +86,8 @@ test('set firestore when actions called', () => {
     const [state, actions] = store.useStore();
     return <button onClick={actions.increment}>{state.counter}</button>;
   };
-  const { getByRole } = render(<Component />, [store]);
-  act(() =>
-    (mockFirestore().doc('').onSnapshot as jest.Mock).mock.calls[0][0]({
-      data: () => ({ counter: 5 }),
-      exists: true
-    })
-  );
+  const { getByRole } = render(<Component />, { stores: [store] });
+  act(() => mockDocSnapshot('/fake/path', { counter: 5 }));
 
   // Fire action to update counter
   fireEvent.click(getByRole('button'));
@@ -117,17 +107,10 @@ test('set firestore for non-existing state', () => {
     const [state, actions] = store.useStore();
     return <button onClick={actions.increment}>{state.counter}</button>;
   };
-  const { getByRole } = render(<Component />, [store]);
-  const doc = mockFirestore().doc('');
-  act(() =>
-    (doc.onSnapshot as jest.Mock).mock.calls[0][0]({
-      data: () => null,
-      exists: false
-    })
-  );
+  const { getByRole } = render(<Component />, { stores: [store] });
+  act(() => mockDocSnapshot('/fake/path', null));
 
   expect(getByRole('button')).toHaveTextContent('0');
-  expect(doc.set).toHaveBeenCalledWith({ counter: 0 });
 });
 
 test('create missing states', () => {
@@ -139,21 +122,17 @@ test('create missing states', () => {
 
   // Prepare component
   const Component = () => {
-    const [state, actions] = store.useStore();
-    return <button onClick={actions.increment}>{state.counter}</button>;
+    const [state] = store.useStore();
+    return (
+      <div>
+        <span>{state.message}</span>
+        <span>{state.total}</span>
+      </div>
+    );
   };
-  render(<Component />, [store]);
-  const doc = mockFirestore().doc('');
-  act(() =>
-    (doc.onSnapshot as jest.Mock).mock.calls[0][0]({
-      data: () => ({ counter: 0 }),
-      exists: true
-    })
-  );
+  const { getByText } = render(<Component />, { stores: [store] });
+  act(() => mockDocSnapshot('/fake/path', { counter: 0 }));
 
-  expect(doc.set).toHaveBeenCalledTimes(1);
-  expect(doc.set).toHaveBeenCalledWith(
-    { message: 'hi', total: 0 },
-    { merge: true }
-  );
+  expect(getByText('0')).toBeInTheDocument();
+  expect(getByText('hi')).toBeInTheDocument();
 });

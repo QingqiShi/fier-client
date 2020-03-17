@@ -4,7 +4,7 @@ import error from './error';
 
 describe('error', () => {
   it('setError', () => {
-    const { result } = renderHook(() => error.useStore(), [error]);
+    const { result } = renderHook(() => error.useStore(), { stores: [error] });
     expect(result.current[0].hasError).toBe(false);
     act(() => {
       result.current[1].setError('test');
@@ -14,7 +14,7 @@ describe('error', () => {
   });
 
   it('clearError', () => {
-    const { result } = renderHook(() => error.useStore(), [error]);
+    const { result } = renderHook(() => error.useStore(), { stores: [error] });
     act(() => {
       result.current[1].setError('test');
     });

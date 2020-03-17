@@ -11,10 +11,6 @@ export const mockError = e => {
 ====== */
 
 let authStateChangeCallback = () => {};
-export const mockAuthState = user => {
-  authStateChangeCallback(user);
-  authObj.currentUser = user;
-};
 
 const authObj = {
   createUserWithEmailAndPassword: jest.fn(() =>
@@ -33,6 +29,11 @@ const authObj = {
   languageCode: ''
 };
 
+export const mockAuthState = user => {
+  authStateChangeCallback(user);
+  authObj.currentUser = user;
+};
+
 export const auth = jest.fn(() => authObj);
 
 auth.EmailAuthProvider = {
@@ -43,25 +44,36 @@ auth.EmailAuthProvider = {
   Firestore Mocks
 ====== */
 
-let state = {};
-let docSnapshotChangeCallback = () => {};
-export const mockDocSnapshot = snap => {
-  state = snap.data();
-  docSnapshotChangeCallback(snap);
+let states = {};
+let docSnapshotChangeCallbacks = {};
+export const mockDocSnapshot = (path, data) => {
+  states[path] = data;
+  if (path in docSnapshotChangeCallbacks) {
+    docSnapshotChangeCallbacks[path]({
+      exists: !!data,
+      data: () => data
+    });
+  }
 };
 
 const mockFirestoreDB = {
-  doc: jest.fn(() => mockFirestoreDB),
-  onSnapshot: jest.fn(handler => {
-    docSnapshotChangeCallback = handler;
-  }),
-  set: jest.fn((data, opts = {}) => {
-    state = opts.merge ? { ...state, ...data } : data;
-    docSnapshotChangeCallback({
-      data: () => state,
-      exists: true
-    });
-  })
+  doc: jest.fn(path => ({
+    onSnapshot: jest.fn(handler => {
+      docSnapshotChangeCallbacks[path] = handler;
+    }),
+    set: jest.fn((data, opts = {}) => {
+      states[path] = opts.merge ? { ...states[path], ...data } : data;
+      docSnapshotChangeCallbacks[path]({
+        exists: true,
+        data: () => states[path]
+      });
+    })
+  }))
 };
 
 export const firestore = jest.fn(() => mockFirestoreDB);
+
+export function clearFirestoreStates() {
+  states = {};
+  docSnapshotChangeCallbacks = {};
+}

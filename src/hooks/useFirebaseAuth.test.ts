@@ -10,9 +10,9 @@ afterEach(() => {
 });
 
 test('authentication actions', async () => {
-  const { result, waitForNextUpdate } = renderHook(() => useFirebaseAuth(), [
-    user
-  ]);
+  const { result, waitForNextUpdate } = renderHook(() => useFirebaseAuth(), {
+    stores: [user]
+  });
 
   // Sign up creates user
   result.current.signUp({
@@ -87,16 +87,13 @@ test('update user profile', async () => {
 
 test('error while updating name', async () => {
   let state: ReturnType<typeof user['useStore']>[0] = null as any;
-  const { result, waitForNextUpdate } = renderHook(
-    () => useFirebaseAuth(),
-    [user],
-    {
-      useHook: () => {
-        const [userState] = user.useStore();
-        state = userState;
-      }
+  const { result, waitForNextUpdate } = renderHook(() => useFirebaseAuth(), {
+    stores: [user],
+    useHook: () => {
+      const [userState] = user.useStore();
+      state = userState;
     }
-  );
+  });
 
   mockAuthState({
     displayName: 'initial name',

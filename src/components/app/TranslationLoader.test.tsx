@@ -1,5 +1,5 @@
 import React from 'react';
-import { wait } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 import { render } from 'testUtils';
 import i18n from 'stores/i18n';
 import useText from 'hooks/useTexts';
@@ -17,7 +17,11 @@ const Component = () => {
 };
 
 test('load english', async () => {
-  const { getByText } = render(<Component />, [i18n], { translations: false });
-  await wait();
-  expect(getByText('Dashboard')).toBeInTheDocument();
+  const { getByText } = render(<Component />, {
+    stores: [i18n],
+    translations: false
+  });
+  await waitFor(() => {
+    expect(getByText('Dashboard')).toBeInTheDocument();
+  });
 });

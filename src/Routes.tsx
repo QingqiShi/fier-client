@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import { Redirect, Route, Switch } from 'react-router';
 import PageLoadIndicator from 'components/base/PageLoadIndicator';
 import SlideModal from 'components/base/SlideModal';
@@ -25,17 +25,25 @@ const LazySetup = lazy(() => import('components/modals/Setup'));
 
 function Routes() {
   const [{ isLoggedIn }] = user.useStore();
-  const [{ locale }] = settings.useStore();
+  const [{ locale, categories }] = settings.useStore();
+  const { loaded: settingsLoaded } = settings.useMeta();
 
   const { routeLocale, routePath, redirect, getPath } = useRoute();
   const { isOpen: profileIsOpen, close } = useModalHash(Modal.PROFILE);
   const { isOpen: createIsOpen } = useModalHash(Modal.CREATE);
-  const { isOpen: setupIsOpen } = useModalHash(Modal.SETUP);
+  const { isOpen: setupIsOpen, open: openSetup } = useModalHash(Modal.SETUP);
 
-  if (routeLocale !== locale) {
-    redirect(routePath, locale);
-    return null;
-  }
+  useEffect(() => {
+    if (routeLocale !== locale) {
+      redirect(routePath, locale);
+    }
+  }, [locale, redirect, routeLocale, routePath]);
+
+  useEffect(() => {
+    if (isLoggedIn && settingsLoaded && !categories.length && !setupIsOpen) {
+      openSetup();
+    }
+  }, [categories.length, isLoggedIn, openSetup, settingsLoaded, setupIsOpen]);
 
   return (
     <Suspense fallback={<PageLoadIndicator />}>

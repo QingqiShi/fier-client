@@ -57,7 +57,7 @@ function CategoryAddForm({
         <TextField
           id="category-emoji"
           inputProps={{
-            maxLength: 1
+            maxLength: 2
           }}
           label={t['CATEGORY_EMOJI_LABEL']}
           margin="normal"

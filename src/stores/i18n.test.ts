@@ -5,7 +5,8 @@ import i18n from './i18n';
 describe('i18n', () => {
   describe('addTranslations', () => {
     it('add new translations', () => {
-      const { result } = renderHook(() => i18n.useStore(), [i18n], {
+      const { result } = renderHook(() => i18n.useStore(), {
+        stores: [i18n],
         translations: false
       });
       expect(result.current[0].translations.zh).toBeUndefined();
@@ -18,7 +19,8 @@ describe('i18n', () => {
     });
 
     it('merge with existing translations', () => {
-      const { result } = renderHook(() => i18n.useStore(), [i18n], {
+      const { result } = renderHook(() => i18n.useStore(), {
+        stores: [i18n],
         translations: false
       });
       act(() => {
