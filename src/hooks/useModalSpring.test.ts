@@ -19,25 +19,25 @@ beforeEach(() => {
 beforeEach(jest.clearAllMocks);
 
 test('closed modal style', () => {
-  const { el } = renderSpringHook(() => {
+  const { getEl } = renderSpringHook(() => {
     const { props } = useModalSpring({});
     return { style: props };
   });
   act(() => mockRaf.flush());
-  expect(el).toHaveStyle('transform: translate3d(0,calc(100% + 0px),0)');
+  expect(getEl()).toHaveStyle('transform: translate3d(0,calc(100% + 0px),0)');
 });
 
 test('open modal style', () => {
-  const { el } = renderSpringHook(() => {
+  const { getEl } = renderSpringHook(() => {
     const { props } = useModalSpring({ isOpen: true });
     return { style: props };
   });
   act(() => mockRaf.flush());
-  expect(el).toHaveStyle('transform: translate3d(0,calc(0% + 40px),0)');
+  expect(getEl()).toHaveStyle('transform: translate3d(0,calc(0% + 40px),0)');
 });
 
 test('drag modal style', () => {
-  const { el } = renderSpringHook(() => {
+  const { getEl } = renderSpringHook(() => {
     const { props, animateDrag } = useModalSpring({ isOpen: true });
     useEffect(() => {
       animateDrag(50);
@@ -45,11 +45,11 @@ test('drag modal style', () => {
     return { style: props };
   });
   act(() => mockRaf.flush());
-  expect(el).toHaveStyle('transform: translate3d(0,calc(0% + 90px),0)');
+  expect(getEl()).toHaveStyle('transform: translate3d(0,calc(0% + 90px),0)');
 });
 
 test('reset modal to open style', () => {
-  const { el } = renderSpringHook(() => {
+  const { getEl } = renderSpringHook(() => {
     const { props, animateDrag, animateReset } = useModalSpring({
       isOpen: true
     });
@@ -60,11 +60,11 @@ test('reset modal to open style', () => {
     return { style: props };
   });
   act(() => mockRaf.flush());
-  expect(el).toHaveStyle('transform: translate3d(0,calc(0% + 40px),0)');
+  expect(getEl()).toHaveStyle('transform: translate3d(0,calc(0% + 40px),0)');
 });
 
 test('reset modal to close style', () => {
-  const { el } = renderSpringHook(() => {
+  const { getEl } = renderSpringHook(() => {
     const { props, animateDrag, animateReset } = useModalSpring({
       isOpen: false
     });
@@ -75,7 +75,7 @@ test('reset modal to close style', () => {
     return { style: props };
   });
   act(() => mockRaf.flush());
-  expect(el).toHaveStyle('transform: translate3d(0,calc(100% + 0px),0)');
+  expect(getEl()).toHaveStyle('transform: translate3d(0,calc(100% + 0px),0)');
 });
 
 test('fire onClose callback', () => {

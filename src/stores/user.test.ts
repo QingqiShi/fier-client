@@ -12,14 +12,14 @@ describe('user', () => {
       ${'email'}
       ${'emailVerified'}
     `('has property $property', ({ property }) => {
-      const { result } = renderHook(() => user.useStore(), [user]);
+      const { result } = renderHook(() => user.useStore(), { stores: [user] });
       expect(result.current[0]).toHaveProperty(property);
     });
   });
 
   describe('actions', () => {
     it('setUser', () => {
-      const { result } = renderHook(() => user.useStore(), [user]);
+      const { result } = renderHook(() => user.useStore(), { stores: [user] });
       act(() => {
         result.current[1].setUser({
           uid: 'testUserId',
@@ -36,7 +36,7 @@ describe('user', () => {
     });
 
     it('signOut', () => {
-      const { result } = renderHook(() => user.useStore(), [user]);
+      const { result } = renderHook(() => user.useStore(), { stores: [user] });
       act(() => {
         result.current[1].setUser({
           uid: '',
@@ -52,7 +52,7 @@ describe('user', () => {
     });
 
     it('updateUser', () => {
-      const { result } = renderHook(() => user.useStore(), [user]);
+      const { result } = renderHook(() => user.useStore(), { stores: [user] });
       act(() => {
         result.current[1].updateUser('testName');
       });

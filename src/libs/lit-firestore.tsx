@@ -21,17 +21,19 @@ export function createStore<S, M extends Mutations<S>>(
   initialState: S,
   mutations: M,
   usePath: () => string | false
-): Store<S, M> {
+): Store<S, M> & { useMeta: () => { loaded: boolean } } {
   const context: StoreContext<S, Actions<M>> = createContext([
     initialState,
     getEmptyActions<S, M>(mutations)
   ]);
+  const firestoreContext = createContext({ loaded: false });
 
   function Provider({ children }: React.PropsWithChildren<{}>) {
     const path = usePath();
     const [state, setState] = useState(initialState);
     const [doc, setDoc] = useState<firestore.DocumentReference | undefined>();
     const handleSnap = useRef((_snap: firestore.DocumentSnapshot) => {});
+    const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
       const fetchAndSetDoc = async (path: string) => {
@@ -81,6 +83,7 @@ export function createStore<S, M extends Mutations<S>>(
           }
 
           setState(data as any);
+          setLoaded(true);
         };
       }
     }, [doc, state]);
@@ -91,7 +94,11 @@ export function createStore<S, M extends Mutations<S>>(
     }, [doc]);
 
     return (
-      <context.Provider value={[state, actions]}>{children}</context.Provider>
+      <context.Provider value={[state, actions]}>
+        <firestoreContext.Provider value={{ loaded }}>
+          {children}
+        </firestoreContext.Provider>
+      </context.Provider>
     );
   }
 
@@ -99,5 +106,9 @@ export function createStore<S, M extends Mutations<S>>(
     return useContext(context);
   }
 
-  return { Provider, useStore };
+  function useMeta() {
+    return useContext(firestoreContext);
+  }
+
+  return { Provider, useStore, useMeta };
 }

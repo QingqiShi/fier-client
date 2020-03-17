@@ -6,7 +6,7 @@ import useModalHash, { Modal } from './useModalHash';
 test('open and close using Hash string', () => {
   const historyRef: { history: any } = { history: null };
 
-  const { result } = renderHook(() => useModalHash(Modal.PROFILE), [], {
+  const { result } = renderHook(() => useModalHash(Modal.PROFILE), {
     url: '/zh/test?test=bob#foo',
     useHook: () => {
       historyRef.history = useHistory();

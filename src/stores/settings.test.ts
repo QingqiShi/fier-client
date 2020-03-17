@@ -1,19 +1,22 @@
 import { useEffect } from 'react';
 import { act } from '@testing-library/react-hooks';
-import { renderHook } from 'testUtils';
+import { mockFirestore, renderHook } from 'testUtils';
 import { firestore } from 'firebase/app';
 import user from './user';
 import settings from './settings';
 
 beforeEach(jest.clearAllMocks);
 
-function setupWithUser() {
-  return renderHook(() => settings.useStore(), [settings, user], {
+const UID = 'testUserId';
+
+function renderHookWithUser(useHook: () => any, uid: string) {
+  return renderHook(useHook, {
+    stores: [settings, user],
     useHook: () => {
       const [, userActions] = user.useStore();
       useEffect(() => {
         userActions.setUser({
-          uid: 'testUserId',
+          uid,
           email: 'testEmail',
           name: 'testName',
           emailVerified: true
@@ -24,28 +27,26 @@ function setupWithUser() {
 }
 
 test('use default state without logged in user', () => {
-  const { result } = renderHook(() => settings.useStore(), [settings, user]);
+  const { result } = renderHook(() => settings.useStore(), {
+    stores: [settings, user]
+  });
   const initialState = { locale: 'en', categories: [], ids: { categories: 0 } };
   expect(result.current[0]).toEqual(initialState);
 });
 
 test('use correct document based on user id', () => {
-  setupWithUser();
+  renderHookWithUser(() => settings.useStore(), UID);
   expect(firestore().doc).toHaveBeenCalledWith('settings/testUserId');
 });
 
 test('get and set locale', () => {
-  const { result } = setupWithUser();
-  const setSnapshot = (firestore().doc('').onSnapshot as jest.Mock).mock
-    .calls[0][0];
+  const { result } = renderHookWithUser(() => settings.useStore(), UID);
+
   act(() =>
-    setSnapshot({
-      exists: true,
-      data: () => ({
-        locale: 'zh',
-        categories: [],
-        ids: { categories: 0 }
-      })
+    mockFirestore(`settings/${UID}`, {
+      locale: 'zh',
+      categories: [],
+      ids: { categories: 0 }
     })
   );
 
@@ -58,17 +59,13 @@ test('get and set locale', () => {
 });
 
 test('get, add, edit and remove categories', () => {
-  const { result } = setupWithUser();
-  const setSnapshot = (firestore().doc('').onSnapshot as jest.Mock).mock
-    .calls[0][0];
+  const { result } = renderHookWithUser(() => settings.useStore(), UID);
+
   act(() =>
-    setSnapshot({
-      exists: true,
-      data: () => ({
-        locale: 'zh',
-        categories: [],
-        ids: { categories: 0 }
-      })
+    mockFirestore(`settings/${UID}`, {
+      locale: 'zh',
+      categories: [],
+      ids: { categories: 0 }
     })
   );
 

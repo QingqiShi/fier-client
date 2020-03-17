@@ -14,7 +14,7 @@ test('renders', () => {
 
 test('open profile menu', () => {
   const historyRef: { history: any } = { history: null };
-  const { getByTestId } = render(<TopNav title="test title" />, [], {
+  const { getByTestId } = render(<TopNav title="test title" />, {
     useHook: () => {
       historyRef.history = useHistory();
     }
@@ -26,7 +26,7 @@ test('open profile menu', () => {
 
 test('open create modal', () => {
   const historyRef: { history: any } = { history: null };
-  const { getByTestId } = render(<TopNav title="test title" />, [], {
+  const { getByTestId } = render(<TopNav title="test title" />, {
     useHook: () => {
       historyRef.history = useHistory();
     }

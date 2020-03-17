@@ -6,75 +6,68 @@ import {
   fireEvent,
   render as rtlRender
 } from '@testing-library/react';
-import { animated } from '@react-spring/web';
-import { Store, useStoreProvider } from 'react-lit-store';
-import { MockRaf } from '@react-spring/mock-raf';
 import {
   RenderHookOptions,
   renderHook as rhtlRenderHook
 } from '@testing-library/react-hooks';
+import { Store, useStoreProvider } from 'react-lit-store';
+import { FrameLoop, Globals, animated } from '@react-spring/web';
+import createMockRaf, { MockRaf } from '@react-spring/mock-raf';
+import { ReactEventHandlers } from 'react-use-gesture/dist/types';
+import {
+  clearFirestoreStates,
+  auth as mockAuth,
+  mockAuthState,
+  mockDocSnapshot,
+  mockError
+} from 'firebase/app';
 import i18n from 'stores/i18n';
 import en from 'translations/en.json';
 import zh from 'translations/zh.json';
-import { ReactEventHandlers } from 'react-use-gesture/dist/types';
 
 type Options = {
   translations?: boolean;
   url?: string;
   useHook?: () => void;
+  stores?: Store<any, any>[];
 };
 
-/**
- * Wrapper component that fetches English translations.
- */
 function App({
   children,
-  translations,
-  useHook = () => {}
-}: React.PropsWithChildren<{
-  translations?: boolean;
-  useHook?: Options['useHook'];
-}>) {
+  options
+}: React.PropsWithChildren<{ options?: Options }>) {
   const [, actions] = i18n.useStore();
   useEffect(() => {
-    if (translations !== false) {
+    if (options?.translations !== false) {
       actions.addTranslations({ en, zh });
     }
-  }, [actions, translations]);
-
+  }, [actions, options]);
+  const useHook = options?.useHook ?? (() => {});
   useHook();
-
   return <>{children}</>;
 }
 
-/**
- * Render elements wrapped with lit-store providers.
- */
-export function render(
-  ui: React.ReactElement<any>,
-  stores: Store<any, any>[] = [],
-  options?: RenderOptions & Options
-) {
-  function Wrapper({ children }: React.PropsWithChildren<{}>) {
-    const Provider = useStoreProvider(i18n, ...stores);
+function createWrapper(options?: Options) {
+  return ({ children }: React.PropsWithChildren<{}>) => {
+    const Provider = useStoreProvider(i18n, ...(options?.stores ?? []));
     return (
-      <MemoryRouter initialEntries={[(options && options.url) || '/']}>
+      <MemoryRouter initialEntries={[options?.url ?? '/']}>
         <Provider>
-          <App
-            translations={options && options.translations}
-            useHook={options && options.useHook}
-          >
-            {children}
-          </App>
+          <App options={options}>{children}</App>
         </Provider>
       </MemoryRouter>
     );
-  }
+  };
+}
 
-  return rtlRender(ui, {
-    wrapper: Wrapper as React.FunctionComponent,
-    ...options
-  });
+/**
+ * React testing library render function wrapper.
+ */
+export function render(
+  ui: React.ReactElement<any>,
+  options?: RenderOptions & Options
+) {
+  return rtlRender(ui, { wrapper: createWrapper(options), ...options });
 }
 
 /**
@@ -82,64 +75,39 @@ export function render(
  */
 export function renderHook<P, R>(
   callback: (props: P) => R,
-  stores: Store<any, any>[] = [],
   options?: RenderHookOptions<P> & Options
 ) {
-  function Wrapper({ children }: { children: React.ReactElement }) {
-    const Provider = useStoreProvider(i18n, ...stores);
-    return (
-      <MemoryRouter initialEntries={[(options && options.url) || '/']}>
-        <Provider>
-          <App
-            translations={options && options.translations}
-            useHook={options && options.useHook}
-          >
-            {children}
-          </App>
-        </Provider>
-      </MemoryRouter>
-    );
-  }
-
   return rhtlRenderHook(callback, {
-    wrapper: Wrapper as React.FunctionComponent,
+    wrapper: createWrapper(options),
     ...options
   });
 }
 
-function AnimatedDiv({ useSpringHook }: { useSpringHook: () => any }) {
-  const styleProps = useSpringHook();
-  return <animated.div {...styleProps}>test</animated.div>;
-}
-
 export function renderSpringHook(useSpringHook: () => any) {
-  const result = rtlRender(<AnimatedDiv useSpringHook={useSpringHook} />);
+  function AnimatedDiv() {
+    const styleProps = useSpringHook();
+    return <animated.div {...styleProps}>el</animated.div>;
+  }
+  const result = rtlRender(<AnimatedDiv />);
   return {
     ...result,
-    el: result.getByText('test'),
-    rerender: () =>
-      result.rerender(<AnimatedDiv useSpringHook={useSpringHook} />)
+    getEl: () => result.getByText('el'),
+    rerender: () => result.rerender(<AnimatedDiv />)
   };
-}
-
-function GestureDiv({
-  useGestureHook
-}: {
-  useGestureHook: () => () => ReactEventHandlers;
-}) {
-  const bind = useGestureHook();
-  return <div {...bind()}>test</div>;
 }
 
 export function renderGestureHook(
   useGestureHook: () => () => ReactEventHandlers
 ) {
-  const result = rtlRender(<GestureDiv useGestureHook={useGestureHook} />);
+  function GestureDiv() {
+    const bind = useGestureHook();
+    return <div {...bind()}>test</div>;
+  }
+  const result = rtlRender(<GestureDiv />);
   return {
     ...result,
     getEl: () => result.getByText('test'),
-    rerender: () =>
-      result.rerender(<GestureDiv useGestureHook={useGestureHook} />)
+    rerender: () => result.rerender(<GestureDiv />)
   };
 }
 
@@ -197,4 +165,43 @@ export class DragUtil {
   later(delay: number) {
     return new Promise(resolve => setTimeout(resolve, delay));
   }
+}
+
+export function mockAuthUser(
+  user?: {
+    uid?: string;
+    email?: string;
+    displayName?: string;
+    emailVerified?: boolean;
+  },
+  error = ''
+) {
+  const mockUser = {
+    uid: 'testuid',
+    email: 'test@test.com',
+    displayName: 'testuser',
+    emailVerified: true,
+    updateProfile: jest.fn(() => Promise.resolve()),
+    updateEmail: jest.fn(() => Promise.resolve()),
+    updatePassword: jest.fn(() => Promise.resolve()),
+    reauthenticateWithCredential: jest.fn(() => Promise.resolve()),
+    ...user
+  };
+  if (error) {
+    mockError(error);
+  }
+  mockAuthState(mockUser);
+  return mockUser;
+}
+
+export function clearAuthListeners() {
+  mockAuth().onAuthStateChanged(() => {});
+}
+
+export function mockFirestore(path: string, data: any) {
+  mockDocSnapshot(path, data);
+}
+
+export function clearFirestore() {
+  clearFirestoreStates();
 }
