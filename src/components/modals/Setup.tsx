@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
+import { Done } from '@material-ui/icons';
 import useTexts from 'hooks/useTexts';
 import CategoriesList from 'components/app/CategoriesList';
 import SlideModal from 'components/base/SlideModal';
@@ -38,11 +39,18 @@ const useStyles = makeStyles(theme =>
       background: theme.palette.background.level1,
       transform: 'translate3d(0, 0, 0)',
       height: ADD_SHEET_HEIGHT
+    },
+    doneFab: {
+      position: 'fixed',
+      bottom: `calc(env(safe-area-inset-bottom) + 40px + ${theme.spacing(
+        4
+      )}px)`,
+      right: theme.spacing(4)
     }
   })
 );
 
-function Setup() {
+function Setup({ onClose }: { onClose: () => void }) {
   const [t] = useTexts();
   const [showAddSheet, setShowAddSheet] = useState(false);
   const classes = useStyles({ showAddSheet });
@@ -57,7 +65,7 @@ function Setup() {
   const [{ categories }, { setCategory, removeCategory }] = settings.useStore();
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} data-testid="setup-modal-root">
       <Typography className={classes.heading} variant="h3">
         {t['SETUP_CATEGORIES']}
       </Typography>
@@ -91,6 +99,18 @@ function Setup() {
           setShowAddSheet(true);
         }}
       />
+
+      <Button
+        className={classes.doneFab}
+        color="secondary"
+        disabled={!categories.length}
+        size="large"
+        startIcon={<Done />}
+        variant="contained"
+        onClick={onClose}
+      >
+        {t['DONE']}
+      </Button>
 
       <SlideModal
         height={ADD_SHEET_HEIGHT}

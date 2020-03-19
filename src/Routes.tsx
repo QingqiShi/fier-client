@@ -72,8 +72,12 @@ function Routes() {
       <SlideModal open={createIsOpen} onClose={close}>
         <LazyCreate onClose={close} />
       </SlideModal>
-      <SlideModal open={setupIsOpen} preventClose onClose={close}>
-        <LazySetup />
+      <SlideModal
+        open={setupIsOpen}
+        preventClose={!categories.length}
+        onClose={close}
+      >
+        <LazySetup onClose={close} />
       </SlideModal>
     </Suspense>
   );
