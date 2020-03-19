@@ -1,10 +1,13 @@
 import React from 'react';
 import { act, waitFor } from '@testing-library/react';
-import { clearAuthListeners, mockAuthUser, render } from 'testUtils';
-import { mockDocSnapshot } from 'firebase/app';
-import FirebaseSetup from 'components/app/FirebaseSetup';
-import user from 'stores/user';
-import settings from 'stores/settings';
+import createMockRaf, { MockRaf } from '@react-spring/mock-raf';
+import { FrameLoop, Globals } from '@react-spring/web';
+import {
+  clearAuthListeners,
+  mockAuthUser,
+  mockFirestore,
+  render
+} from 'testUtils';
 import Routes from './Routes';
 
 import('components/app/BottomNav');
@@ -15,48 +18,46 @@ import('components/views/Wallets');
 import('components/views/Login');
 import('components/views/Register');
 
+let mockRaf: MockRaf;
+beforeEach(() => {
+  mockRaf = createMockRaf();
+  Globals.assign({
+    now: mockRaf.now,
+    requestAnimationFrame: mockRaf.raf,
+    cancelAnimationFrame: mockRaf.cancel,
+    frameLoop: new FrameLoop()
+  });
+});
+
 beforeEach(() => {
   clearAuthListeners();
   jest.clearAllMocks();
 });
 
 test('renders guest user', async () => {
-  const { findAllByText } = render(<Routes />, { stores: [user] });
+  const { findAllByText } = render(<Routes />, { userAndSettings: true });
+  act(() => void mockAuthUser(null));
   expect((await findAllByText('Log in')).length).toBeGreaterThan(0);
 });
 
 test('redirects to user locale', async () => {
-  const { findAllByText } = render(
-    <FirebaseSetup>
-      <Routes />
-    </FirebaseSetup>,
-    { stores: [settings, user] }
-  );
+  const { findAllByText } = render(<Routes />, { userAndSettings: true });
 
-  act(() => {
-    mockAuthUser({ uid: 'testid' });
-  });
-  act(() => {
-    mockDocSnapshot('settings/testid', { locale: 'zh', categories: [1] });
-  });
+  act(() => void mockAuthUser({ uid: 'testid' }));
+  act(() =>
+    mockFirestore('settings/testid', { locale: 'zh', categories: [1] })
+  );
 
   expect((await findAllByText('概览')).length).toBeGreaterThan(0);
 });
 
 test('renders logged in user', async () => {
-  const { getByTestId } = render(
-    <FirebaseSetup>
-      <Routes />
-    </FirebaseSetup>,
-    { stores: [settings, user] }
-  );
+  const { getByTestId } = render(<Routes />, { userAndSettings: true });
 
-  act(() => {
-    mockAuthUser({ uid: 'testid' });
-  });
-  act(() => {
-    mockDocSnapshot('settings/testid', { locale: 'en', categories: [1] });
-  });
+  act(() => void mockAuthUser({ uid: 'testid' }));
+  act(() =>
+    mockFirestore('settings/testid', { locale: 'en', categories: [1] })
+  );
 
   await waitFor(() => {
     getByTestId('topnav-profile');
@@ -64,19 +65,11 @@ test('renders logged in user', async () => {
 });
 
 test('show setup modal if categories has length 0', async () => {
-  const { findByText } = render(
-    <FirebaseSetup>
-      <Routes />
-    </FirebaseSetup>,
-    { stores: [settings, user] }
-  );
+  const { findByText } = render(<Routes />, { userAndSettings: true });
 
-  act(() => {
-    mockAuthUser({ uid: 'testid' });
-  });
-  act(() => {
-    mockDocSnapshot('settings/testid', { locale: 'en', categories: [] });
-  });
+  act(() => void mockAuthUser({ uid: 'testid' }));
+  act(() => mockFirestore('settings/testid', { locale: 'en', categories: [] }));
+  act(() => mockRaf.flush());
 
   expect(await findByText('Categories')).toBeInTheDocument();
 });

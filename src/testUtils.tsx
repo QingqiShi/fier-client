@@ -22,11 +22,15 @@ import {
   mockError
 } from 'firebase/app';
 import i18n from 'stores/i18n';
+import settings from 'stores/settings';
+import user from 'stores/user';
+import FirebaseSetup from 'components/app/FirebaseSetup';
 import en from 'translations/en.json';
 import zh from 'translations/zh.json';
 
 type Options = {
   translations?: boolean;
+  userAndSettings?: boolean;
   url?: string;
   useHook?: () => void;
   stores?: Store<any, any>[];
@@ -49,7 +53,22 @@ function App({
 
 function createWrapper(options?: Options) {
   return ({ children }: React.PropsWithChildren<{}>) => {
-    const Provider = useStoreProvider(i18n, ...(options?.stores ?? []));
+    const Provider = useStoreProvider(
+      i18n,
+      ...(options?.stores ?? []),
+      ...(options?.userAndSettings ? [settings, user] : [])
+    );
+    if (options?.userAndSettings) {
+      return (
+        <MemoryRouter initialEntries={[options?.url ?? '/']}>
+          <Provider>
+            <FirebaseSetup>
+              <App options={options}>{children}</App>
+            </FirebaseSetup>
+          </Provider>
+        </MemoryRouter>
+      );
+    }
     return (
       <MemoryRouter initialEntries={[options?.url ?? '/']}>
         <Provider>
@@ -173,20 +192,23 @@ export function mockAuthUser(
     email?: string;
     displayName?: string;
     emailVerified?: boolean;
-  },
+  } | null,
   error = ''
 ) {
-  const mockUser = {
-    uid: 'testuid',
-    email: 'test@test.com',
-    displayName: 'testuser',
-    emailVerified: true,
-    updateProfile: jest.fn(() => Promise.resolve()),
-    updateEmail: jest.fn(() => Promise.resolve()),
-    updatePassword: jest.fn(() => Promise.resolve()),
-    reauthenticateWithCredential: jest.fn(() => Promise.resolve()),
-    ...user
-  };
+  const mockUser =
+    user === null
+      ? null
+      : {
+          uid: 'testuid',
+          email: 'test@test.com',
+          displayName: 'testuser',
+          emailVerified: true,
+          updateProfile: jest.fn(() => Promise.resolve()),
+          updateEmail: jest.fn(() => Promise.resolve()),
+          updatePassword: jest.fn(() => Promise.resolve()),
+          reauthenticateWithCredential: jest.fn(() => Promise.resolve()),
+          ...user
+        };
   if (error) {
     mockError(error);
   }
