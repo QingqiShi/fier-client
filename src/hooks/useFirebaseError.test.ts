@@ -1,12 +1,12 @@
 import { renderHook } from 'testUtils';
 import useFirebaseError from './useFirebaseError';
 
-const mockErrorState = { hasError: false };
-const mockSetError = jest.fn();
-jest.mock('stores/error', () => ({
+const mockErrorState = { isShowing: false };
+const mockSetMessage = jest.fn();
+jest.mock('stores/snackbar', () => ({
   __esModule: true,
   default: {
-    useStore: () => [mockErrorState, { setError: mockSetError }]
+    useStore: () => [mockErrorState, { setMessage: mockSetMessage }]
   }
 }));
 
@@ -15,41 +15,45 @@ beforeEach(() => {
 });
 
 test('catch errors and sets message', async () => {
-  const { result } = renderHook(useFirebaseError, [], {
+  const { result } = renderHook(useFirebaseError, {
     translations: true
   });
 
   result.current(() => Promise.reject({ code: 'test_error' }));
 
   await Promise.resolve();
-  expect(mockSetError).toHaveBeenLastCalledWith('Encountered unknown error');
+  expect(mockSetMessage).toHaveBeenLastCalledWith({
+    type: 'error',
+    message: 'Encountered unknown error'
+  });
 });
 
 test('catch firebase errors and sets custom message', async () => {
-  const { result } = renderHook(useFirebaseError, [], {
+  const { result } = renderHook(useFirebaseError, {
     translations: true
   });
 
   result.current(() => Promise.reject({ code: 'auth/wrong-password' }));
 
   await Promise.resolve();
-  expect(mockSetError).toHaveBeenLastCalledWith(
-    "Oops, that's a wrong password. Try again"
-  );
+  expect(mockSetMessage).toHaveBeenLastCalledWith({
+    type: 'error',
+    message: "Oops, that's a wrong password. Try again"
+  });
 });
 
 test('ignores error when error exist already', async () => {
-  mockErrorState.hasError = true;
+  mockErrorState.isShowing = true;
   const { result } = renderHook(useFirebaseError);
 
   result.current(() => Promise.reject({ code: 'test_error' }));
 
   await Promise.resolve();
-  expect(mockSetError).not.toHaveBeenCalled();
+  expect(mockSetMessage).not.toHaveBeenCalled();
 });
 
 test('set onError callback', async () => {
-  const { result } = renderHook(useFirebaseError, [], {
+  const { result } = renderHook(useFirebaseError, {
     translations: true
   });
 

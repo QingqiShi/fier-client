@@ -5,9 +5,10 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { useStoreProvider } from 'react-lit-store';
 import i18n from 'stores/i18n';
 import user from 'stores/user';
-import error from 'stores/error';
+import snackbar from 'stores/snackbar';
 import settings from 'stores/settings';
-import ErrorMessage from 'components/app/ErrorMessage';
+import sw from 'stores/sw';
+import SnackbarMessage from 'components/app/SnackbarMessage';
 import TranslationLoader from 'components/app/TranslationLoader';
 import FirebaseSetup from 'components/app/FirebaseSetup';
 import Routes from './Routes';
@@ -21,7 +22,7 @@ declare module '@material-ui/core/styles/createPalette' {
 }
 
 function App() {
-  const StoreProvider = useStoreProvider(settings, i18n, user, error);
+  const StoreProvider = useStoreProvider(settings, i18n, user, snackbar, sw);
   const [darkMode, setDarkMode] = useState(
     window.matchMedia
       ? !!window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -68,7 +69,7 @@ function App() {
             <Meta />
             <ThemeProvider theme={theme}>
               <CssBaseline />
-              <ErrorMessage />
+              <SnackbarMessage />
               <Routes />
             </ThemeProvider>
           </TranslationLoader>

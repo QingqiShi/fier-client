@@ -2,6 +2,9 @@
   "APP_NAME": "fier",
   "META_DESCRIPTION": "Fier is an tool to help you track spending to achieve financial success.",
 
+  "UPDATE_AVAILABLE_MESSAGE": "New update available 🎉",
+  "UPDATE_NOW": "Update Now",
+
   "ERROR_NETWORK_FAILED": "Did your cat pull the internet cable? It's down!",
   "ERROR_USER_EXPIRED": "It's been too long, is that still you? Please loging in again",
   "ERROR_INVALID_EMAIL": "That doesn't look like a valid email",

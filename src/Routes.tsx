@@ -4,8 +4,10 @@ import PageLoadIndicator from 'components/base/PageLoadIndicator';
 import SlideModal from 'components/base/SlideModal';
 import settings from 'stores/settings';
 import user from 'stores/user';
+import snackbar from 'stores/snackbar';
 import useRoute from 'hooks/useRoute';
 import useModalHash, { Modal } from 'hooks/useModalHash';
+import useText from 'hooks/useTexts';
 
 // Registered user
 const LazyBottomNav = lazy(() => import('components/app/BottomNav'));
@@ -27,6 +29,8 @@ function Routes() {
   const [{ isLoggedIn }] = user.useStore();
   const [{ locale, categories }] = settings.useStore();
   const { loaded: settingsLoaded } = settings.useMeta();
+  const [, { setMessage }] = snackbar.useStore();
+  const [t] = useText();
 
   const { routeLocale, routePath, redirect, getPath } = useRoute();
   const { isOpen: profileIsOpen, close } = useModalHash(Modal.PROFILE);
@@ -44,6 +48,42 @@ function Routes() {
       openSetup();
     }
   }, [categories.length, isLoggedIn, openSetup, settingsLoaded, setupIsOpen]);
+
+  const updateAvailableMessage = t['UPDATE_AVAILABLE_MESSAGE'];
+  const updateNowText = t['UPDATE_NOW'];
+
+  useEffect(() => {
+    function updateCallback() {
+      setMessage({
+        hideAfter: 0,
+        type: 'warning',
+        message: updateAvailableMessage,
+        actionLabel: updateNowText,
+        action: () => {
+          if (window.swStates.updated && window.swStates.reg) {
+            const registrationWaiting = window.swStates.reg.waiting;
+            if (registrationWaiting) {
+              registrationWaiting.postMessage({ type: 'SKIP_WAITING' });
+              registrationWaiting.addEventListener('statechange', e => {
+                if ((e.target as any)?.state === 'activated') {
+                  window.location.reload();
+                }
+              });
+            }
+          }
+        }
+      });
+    }
+
+    if (window.swStates.updated) {
+      updateCallback();
+    } else {
+      window.swStates.callback = updateCallback;
+      return () => {
+        window.swStates.callback = undefined;
+      };
+    }
+  }, [setMessage, updateAvailableMessage, updateNowText]);
 
   return (
     <Suspense fallback={<PageLoadIndicator />}>

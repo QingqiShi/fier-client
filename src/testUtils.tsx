@@ -28,6 +28,8 @@ import FirebaseSetup from 'components/app/FirebaseSetup';
 import en from 'translations/en.json';
 import zh from 'translations/zh.json';
 
+window.swStates = {};
+
 type Options = {
   translations?: boolean;
   userAndSettings?: boolean;
