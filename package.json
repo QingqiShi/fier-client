@@ -19,7 +19,7 @@
     "emoji-regex": "^8.0.0",
     "firebase": "^7.11.0",
     "fitty": "^2.3.0",
-    "react": "^16.13.0",
+    "react": "^16.13.1",
     "react-dom": "^16.13.0",
     "react-helmet-async": "^1.0.4",
     "react-lit-store": "^1.2.2",
