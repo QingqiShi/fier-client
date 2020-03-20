@@ -21,6 +21,10 @@
             "value": "max-age=31557600"
           }
         ]
+      },
+      {
+        "source": "/service-worker.js",
+        "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
       }
     ]
   }

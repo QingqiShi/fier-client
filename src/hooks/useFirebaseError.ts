@@ -1,4 +1,4 @@
-import error from 'stores/error';
+import snackbar from 'stores/snackbar';
 import useText from 'hooks/useTexts';
 
 const errorMap: { [key: string]: string } = {
@@ -14,15 +14,15 @@ const errorMap: { [key: string]: string } = {
 
 function useFirebaseError() {
   const [t] = useText();
-  const [errorState, errorActions] = error.useStore();
+  const [{ isShowing }, { setMessage }] = snackbar.useStore();
 
   const handleError = (error: any) => {
-    if (errorState.hasError) return;
+    if (isShowing) return;
 
     if (error && error.code && errorMap[error.code]) {
-      errorActions.setError(t[errorMap[error.code]]);
+      setMessage({ type: 'error', message: t[errorMap[error.code]] });
     } else {
-      errorActions.setError(t['ERROR_UNKNOWN']);
+      setMessage({ type: 'error', message: t['ERROR_UNKNOWN'] });
     }
   };
 

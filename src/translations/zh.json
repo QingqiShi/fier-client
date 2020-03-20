@@ -2,6 +2,9 @@
   "APP_NAME": "fier",
   "META_DESCRIPTION": "Fier 是一款帮你实现财务自由的记账工具。",
 
+  "UPDATE_AVAILABLE_MESSAGE": "版本过旧，快来更新 🎉",
+  "UPDATE_NOW": "更新",
+
   "ERROR_NETWORK_FAILED": "猫把网线碰掉了？断网了！",
   "ERROR_USER_EXPIRED": "过了这么久，还是你吗？重新登陆吧",
   "ERROR_INVALID_EMAIL": "这邮箱看着不对啊，检查一下吧",

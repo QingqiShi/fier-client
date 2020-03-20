@@ -6,6 +6,18 @@ import * as serviceWorker from './serviceWorker';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
+declare global {
+  interface Window {
+    swStates: {
+      updated?: boolean;
+      reg?: ServiceWorkerRegistration;
+      callback?: () => void;
+    };
+  }
+}
+
+window.swStates = {};
+
 firebase.initializeApp({
   apiKey: 'AIzaSyA9BuwuC9WcEGgCB60wVrph_AEM0oPsBO4',
   authDomain: 'fier-app.firebaseapp.com',
@@ -28,6 +40,10 @@ ReactDOM.render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.register({
   onUpdate: (reg: ServiceWorkerRegistration) => {
-    console.log('updated', reg);
+    window.swStates.updated = true;
+    window.swStates.reg = reg;
+    if (window.swStates.callback) {
+      window.swStates.callback();
+    }
   }
 });
