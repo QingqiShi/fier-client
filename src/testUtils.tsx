@@ -28,7 +28,9 @@ import FirebaseSetup from 'components/app/FirebaseSetup';
 import en from 'translations/en.json';
 import zh from 'translations/zh.json';
 
-window.swStates = {};
+window.swStates = {
+  updateAndReload: jest.fn()
+};
 
 type Options = {
   translations?: boolean;

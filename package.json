@@ -77,7 +77,7 @@
       "!<rootDir>/src/testUtils.tsx",
       "!<rootDir>/src/index.tsx",
       "!<rootDir>/src/*.d.ts",
-      "!<rootDir>/src/serviceWorker.js"
+      "!<rootDir>/src/serviceWorker.ts"
     ],
     "coverageReporters": [
       "json",
