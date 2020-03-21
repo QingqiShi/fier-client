@@ -202,3 +202,22 @@ test('drag down slowly when prevent close', async () => {
     'transform: translate3d(0,calc(0% + 59.230769230769226px),0);'
   );
 });
+
+test('modals prevents events from bubbling', async () => {
+  const handler = jest.fn();
+  const { getByText } = render(
+    <div onMouseDown={handler} onTouchStart={handler}>
+      <SlideModal open={true} preventClose>
+        content
+      </SlideModal>
+    </div>
+  );
+
+  const drag = new DragUtil(() => getByText('content'), mockRaf);
+  await drag.dragStart().later(50);
+  drag.dragDown(50).wait();
+
+  fireEvent.mouseDown(getByText('content'));
+
+  expect(handler).not.toBeCalled();
+});

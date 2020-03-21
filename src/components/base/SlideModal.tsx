@@ -95,6 +95,8 @@ function SlideModal({
       }}
       open={modalOpen}
       onClose={!preventClose ? onClose : undefined}
+      onMouseDown={e => e.stopPropagation()}
+      onTouchStart={e => e.stopPropagation()}
     >
       <AnimatedModalCard height={height} style={props}>
         <ModalCardHeader
