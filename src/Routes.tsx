@@ -59,19 +59,7 @@ function Routes() {
         type: 'warning',
         message: updateAvailableMessage,
         actionLabel: updateNowText,
-        action: () => {
-          if (window.swStates.updated && window.swStates.reg) {
-            const registrationWaiting = window.swStates.reg.waiting;
-            if (registrationWaiting) {
-              registrationWaiting.postMessage({ type: 'SKIP_WAITING' });
-              registrationWaiting.addEventListener('statechange', e => {
-                if ((e.target as any)?.state === 'activated') {
-                  window.location.reload();
-                }
-              });
-            }
-          }
-        }
+        action: window.swStates.updateAndReload
       });
     }
 

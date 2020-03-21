@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, waitFor } from '@testing-library/react';
+import { act, fireEvent, waitFor } from '@testing-library/react';
 import createMockRaf, { MockRaf } from '@react-spring/mock-raf';
 import { FrameLoop, Globals } from '@react-spring/web';
 import {
@@ -8,8 +8,11 @@ import {
   mockFirestore,
   render
 } from 'testUtils';
+import SnackbarMessage from 'components/app/SnackbarMessage';
+import snackbar from 'stores/snackbar';
 import Routes from './Routes';
 
+// Load files upfront to suppress lazy load
 import('components/app/BottomNav');
 import('components/views/Dashboard');
 import('components/views/Activity');
@@ -72,4 +75,47 @@ test('show setup modal if categories has length 0', async () => {
   act(() => mockRaf.flush());
 
   expect(await findByText('Categories')).toBeInTheDocument();
+});
+
+test('show snackbar message when updates available', async () => {
+  const { findByText, getByText } = render(
+    <div>
+      <Routes />
+      <SnackbarMessage />
+    </div>,
+    { userAndSettings: true, stores: [snackbar] }
+  );
+
+  act(() => void mockAuthUser({ uid: 'testid' }));
+  act(() => mockFirestore('settings/testid', { locale: 'en', categories: [] }));
+  act(() => mockRaf.flush());
+
+  // Mock service worker updated callback
+  act(() => window.swStates.callback && window.swStates.callback());
+  expect(await findByText(/New update available/)).toBeInTheDocument();
+
+  fireEvent.click(getByText('Update Now'));
+  expect(window.swStates.updateAndReload).toHaveBeenCalled();
+});
+
+test('show snackbar message when update event was missed', async () => {
+  // Mock service worker update have happened already
+  window.swStates.updated = true;
+
+  const { findByText, getByText } = render(
+    <div>
+      <Routes />
+      <SnackbarMessage />
+    </div>,
+    { userAndSettings: true, stores: [snackbar] }
+  );
+
+  act(() => void mockAuthUser({ uid: 'testid' }));
+  act(() => mockFirestore('settings/testid', { locale: 'en', categories: [] }));
+  act(() => mockRaf.flush());
+
+  expect(await findByText(/New update available/)).toBeInTheDocument();
+
+  fireEvent.click(getByText('Update Now'));
+  expect(window.swStates.updateAndReload).toHaveBeenCalled();
 });

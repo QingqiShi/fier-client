@@ -12,11 +12,26 @@ declare global {
       updated?: boolean;
       reg?: ServiceWorkerRegistration;
       callback?: () => void;
+      updateAndReload: () => void;
     };
   }
 }
 
-window.swStates = {};
+window.swStates = {
+  updateAndReload: () => {
+    if (window.swStates.updated && window.swStates.reg) {
+      const registrationWaiting = window.swStates.reg.waiting;
+      if (registrationWaiting) {
+        registrationWaiting.postMessage({ type: 'SKIP_WAITING' });
+        registrationWaiting.addEventListener('statechange', e => {
+          if ((e.target as any)?.state === 'activated') {
+            window.location.reload();
+          }
+        });
+      }
+    }
+  }
+};
 
 firebase.initializeApp({
   apiKey: 'AIzaSyA9BuwuC9WcEGgCB60wVrph_AEM0oPsBO4',

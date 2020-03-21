@@ -7,7 +7,6 @@ import i18n from 'stores/i18n';
 import user from 'stores/user';
 import snackbar from 'stores/snackbar';
 import settings from 'stores/settings';
-import sw from 'stores/sw';
 import SnackbarMessage from 'components/app/SnackbarMessage';
 import TranslationLoader from 'components/app/TranslationLoader';
 import FirebaseSetup from 'components/app/FirebaseSetup';
@@ -22,7 +21,7 @@ declare module '@material-ui/core/styles/createPalette' {
 }
 
 function App() {
-  const StoreProvider = useStoreProvider(settings, i18n, user, snackbar, sw);
+  const StoreProvider = useStoreProvider(settings, i18n, user, snackbar);
   const [darkMode, setDarkMode] = useState(
     window.matchMedia
       ? !!window.matchMedia('(prefers-color-scheme: dark)').matches
