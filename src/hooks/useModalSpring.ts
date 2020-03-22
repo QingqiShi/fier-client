@@ -21,7 +21,7 @@ function useModalSpring({ isOpen = false, onClose = () => {} }) {
   const closeStyle = useMemo(() => {
     return {
       to: modalCloseTo,
-      config: modalSpringConfig,
+      config: { ...modalSpringConfig, precision: 5 },
       onRest: onClose
     };
   }, [onClose]);
