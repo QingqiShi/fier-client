@@ -56,7 +56,7 @@ test('change handler', () => {
     id: 0,
     emoji: 'A',
     name: '',
-    type: 'expenses'
+    type: 'expenses',
   });
 
   fireEvent.change(getByLabelText(/Name/), { target: { value: 'Test' } });
@@ -64,15 +64,28 @@ test('change handler', () => {
     id: 0,
     emoji: '',
     name: 'Test',
-    type: 'expenses'
+    type: 'expenses',
   });
+});
+
+test('disables save button when name not provided', () => {
+  const { getByText } = render(
+    <CategoryAddForm
+      value={{ id: 0, emoji: '', name: '', type: 'expenses' }}
+      onChange={() => {}}
+      onDelete={() => {}}
+      onSave={() => {}}
+    />
+  );
+
+  expect(getByText('Add')).toBeDisabled();
 });
 
 test('fires save handler', () => {
   const handleSave = jest.fn();
   const { getByText } = render(
     <CategoryAddForm
-      value={{ id: 0, emoji: '', name: '', type: 'expenses' }}
+      value={{ id: 0, emoji: '', name: 'Test', type: 'expenses' }}
       onChange={() => {}}
       onDelete={() => {}}
       onSave={handleSave}
@@ -83,11 +96,24 @@ test('fires save handler', () => {
   expect(handleSave).toHaveBeenCalled();
 });
 
+test('disable edit button when name not provided', () => {
+  const { getByText } = render(
+    <CategoryAddForm
+      value={{ id: 1, emoji: '', name: '', type: 'expenses' }}
+      onChange={() => {}}
+      onDelete={() => {}}
+      onSave={() => {}}
+    />
+  );
+
+  expect(getByText('Edit')).toBeDisabled();
+});
+
 test('show edit button', () => {
   const handleSave = jest.fn();
   const { getByText } = render(
     <CategoryAddForm
-      value={{ id: 1, emoji: '', name: '', type: 'expenses' }}
+      value={{ id: 1, emoji: '', name: 'Test', type: 'expenses' }}
       onChange={() => {}}
       onDelete={() => {}}
       onSave={handleSave}
