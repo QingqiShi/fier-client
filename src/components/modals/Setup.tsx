@@ -13,18 +13,17 @@ const ADD_SHEET_HEIGHT = 330;
 interface StyleProps {
   showAddSheet: boolean;
 }
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
-      paddingBottom: ({ showAddSheet }: StyleProps) =>
-        showAddSheet ? ADD_SHEET_HEIGHT : theme.spacing(2)
+      paddingBottom: theme.spacing(2),
     },
     heading: {
-      marginBottom: theme.spacing(2)
+      marginBottom: theme.spacing(2),
     },
     subHeading: {
       color: theme.palette.grey[500],
-      marginBottom: theme.spacing(3)
+      marginBottom: theme.spacing(3),
     },
     addSheet: {
       position: 'fixed',
@@ -38,28 +37,29 @@ const useStyles = makeStyles(theme =>
       )}px)`}`,
       background: theme.palette.background.level1,
       transform: 'translate3d(0, 0, 0)',
-      height: ADD_SHEET_HEIGHT
+      height: ADD_SHEET_HEIGHT,
     },
     doneFab: {
       position: 'fixed',
       bottom: `calc(env(safe-area-inset-bottom) + 40px + ${theme.spacing(
         4
       )}px)`,
-      right: theme.spacing(4)
-    }
+      right: theme.spacing(4),
+      zIndex: 2,
+    },
   })
 );
 
 function Setup({ onClose }: { onClose: () => void }) {
   const [t] = useTexts();
-  const [showAddSheet, setShowAddSheet] = useState(false);
-  const classes = useStyles({ showAddSheet });
+  const classes = useStyles();
 
+  const [showAddSheet, setShowAddSheet] = useState(false);
   const [newCategory, setNewCategory] = useState<Category>({
     id: 0,
     emoji: '',
     name: '',
-    type: 'expenses'
+    type: 'expenses',
   });
 
   const [{ categories }, { setCategory, removeCategory }] = settings.useStore();
@@ -75,26 +75,26 @@ function Setup({ onClose }: { onClose: () => void }) {
 
       <CategoriesList
         addLabel={t['ADD_CATEGORY']}
-        categories={categories.filter(cat => cat.type === 'expenses')}
+        categories={categories.filter((cat) => cat.type === 'expenses')}
         header={t['SETUP_CATEGORIES_EXPENSES']}
         onAdd={() => {
           setNewCategory({ id: 0, emoji: '', name: '', type: 'expenses' });
           setShowAddSheet(true);
         }}
-        onClick={category => {
+        onClick={(category) => {
           setNewCategory(category);
           setShowAddSheet(true);
         }}
       />
       <CategoriesList
         addLabel={t['ADD_CATEGORY']}
-        categories={categories.filter(cat => cat.type === 'income')}
+        categories={categories.filter((cat) => cat.type === 'income')}
         header={t['SETUP_CATEGORIES_INCOME']}
         onAdd={() => {
           setNewCategory({ id: 0, emoji: '', name: '', type: 'income' });
           setShowAddSheet(true);
         }}
-        onClick={category => {
+        onClick={(category) => {
           setNewCategory(category);
           setShowAddSheet(true);
         }}
@@ -130,7 +130,7 @@ function Setup({ onClose }: { onClose: () => void }) {
             } else {
               setCategory({
                 ...newCategory,
-                emoji: newCategory.name.substring(0, 1)
+                emoji: newCategory.name.substring(0, 1),
               });
             }
             setShowAddSheet(false);

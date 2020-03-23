@@ -12,13 +12,13 @@ beforeEach(() => {
     now: mockRaf.now,
     requestAnimationFrame: mockRaf.raf,
     cancelAnimationFrame: mockRaf.cancel,
-    frameLoop: new FrameLoop()
+    frameLoop: new FrameLoop(),
   });
 });
 
 test('render title and add buttons', () => {
   const { getByText, getAllByText } = render(<Setup onClose={() => {}} />, {
-    userAndSettings: true
+    userAndSettings: true,
   });
   act(() => void mockAuthUser());
   expect(getByText('Categories')).toBeInTheDocument();
@@ -28,7 +28,7 @@ test('render title and add buttons', () => {
 test('show done button when categories exist', () => {
   const handleClose = jest.fn();
   const { getByText } = render(<Setup onClose={handleClose} />, {
-    userAndSettings: true
+    userAndSettings: true,
   });
   act(() => void mockAuthUser({ uid: 'testid' }));
 
@@ -39,8 +39,8 @@ test('show done button when categories exist', () => {
       locale: 'en',
       categories: [
         { id: 1, emoji: 'A', name: 'Test', type: 'expenses' },
-        { id: 2, emoji: 'B', name: 'Test', type: 'income' }
-      ]
+        { id: 2, emoji: 'B', name: 'Test', type: 'income' },
+      ],
     })
   );
 
@@ -54,7 +54,7 @@ test('click add to show new form', () => {
   const { getByText, getAllByText, getByTestId } = render(
     <Setup onClose={() => {}} />,
     {
-      userAndSettings: true
+      userAndSettings: true,
     }
   );
   act(() => void mockAuthUser());
@@ -63,7 +63,6 @@ test('click add to show new form', () => {
   act(() => mockRaf.flush());
 
   expect(getByText('Add Expenses Category')).toBeInTheDocument();
-  expect(getByTestId('setup-modal-root')).toHaveStyle('padding-bottom: 330px');
 });
 
 test('add categories and save then delete', () => {
@@ -71,7 +70,7 @@ test('add categories and save then delete', () => {
   const { getByLabelText, getAllByText, getByText, queryByText } = render(
     <Setup onClose={handleClose} />,
     {
-      userAndSettings: true
+      userAndSettings: true,
     }
   );
   act(() => void mockAuthUser());
@@ -119,7 +118,7 @@ test('add categories and save then delete', () => {
 
 test('add category form can be closed', () => {
   const { queryByText, getAllByText } = render(<Setup onClose={() => {}} />, {
-    userAndSettings: true
+    userAndSettings: true,
   });
   act(() => void mockAuthUser());
 

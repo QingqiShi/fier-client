@@ -4,29 +4,29 @@ import { Button, TextField, Typography } from '@material-ui/core';
 import { Add, Delete, Edit } from '@material-ui/icons';
 import useTexts from 'hooks/useTexts';
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     heading: {
-      marginBottom: theme.spacing(2)
+      marginBottom: theme.spacing(2),
     },
     addSheetForm: {
       display: 'flex',
       '& > *': {
-        flexGrow: 1
+        flexGrow: 1,
       },
       '& > :first-child': {
         flexGrow: 0,
         marginRight: theme.spacing(1),
-        width: 70
-      }
+        width: 70,
+      },
     },
     addSheetActions: {
       paddingTop: theme.spacing(2),
       textAlign: 'right',
       '& > button:not(:last-of-type)': {
-        marginRight: theme.spacing(1)
-      }
-    }
+        marginRight: theme.spacing(1),
+      },
+    },
   })
 );
 
@@ -34,7 +34,7 @@ function CategoryAddForm({
   value,
   onChange,
   onSave,
-  onDelete
+  onDelete,
 }: {
   value: Category;
   onChange: React.Dispatch<React.SetStateAction<Category>>;
@@ -57,13 +57,13 @@ function CategoryAddForm({
         <TextField
           id="category-emoji"
           inputProps={{
-            maxLength: 2
+            maxLength: 2,
           }}
           label={t['CATEGORY_EMOJI_LABEL']}
           margin="normal"
           type="text"
           value={emoji}
-          onChange={e => onChange({ ...value, emoji: e.target.value })}
+          onChange={(e) => onChange({ ...value, emoji: e.target.value })}
         />
         <TextField
           id="category-name"
@@ -72,7 +72,7 @@ function CategoryAddForm({
           type="text"
           value={name}
           required
-          onChange={e => onChange({ ...value, name: e.target.value })}
+          onChange={(e) => onChange({ ...value, name: e.target.value })}
         />
       </div>
       <div className={classes.addSheetActions}>
@@ -88,6 +88,7 @@ function CategoryAddForm({
         )}
         <Button
           color="primary"
+          disabled={!name}
           startIcon={id ? <Edit /> : <Add />}
           variant="contained"
           onClick={onSave}
