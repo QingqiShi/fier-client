@@ -9,7 +9,6 @@ test('renders', () => {
 
   expect(getByText('test title')).toBeVisible();
   expect(getByTestId('topnav-profile')).toBeVisible();
-  expect(getByTestId('topnav-add')).toBeVisible();
 });
 
 test('open profile menu', () => {
@@ -17,21 +16,9 @@ test('open profile menu', () => {
   const { getByTestId } = render(<TopNav title="test title" />, {
     useHook: () => {
       historyRef.history = useHistory();
-    }
+    },
   });
 
   fireEvent.click(getByTestId('topnav-profile'));
   expect(historyRef.history.location.hash).toEqual('#profile');
-});
-
-test('open create modal', () => {
-  const historyRef: { history: any } = { history: null };
-  const { getByTestId } = render(<TopNav title="test title" />, {
-    useHook: () => {
-      historyRef.history = useHistory();
-    }
-  });
-
-  fireEvent.click(getByTestId('topnav-add'));
-  expect(historyRef.history.location.hash).toEqual('#create');
 });

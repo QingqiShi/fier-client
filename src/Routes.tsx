@@ -10,11 +10,7 @@ import useModalHash, { Modal } from 'hooks/useModalHash';
 import useText from 'hooks/useTexts';
 
 // Registered user
-const LazyBottomNav = lazy(() => import('components/app/BottomNav'));
 const LazyDashboard = lazy(() => import('components/views/Dashboard'));
-const LazyActivity = lazy(() => import('components/views/Activity'));
-const LazyCharts = lazy(() => import('components/views/Charts'));
-const LazyWallets = lazy(() => import('components/views/Wallets'));
 
 // Guest user
 const LazyLogin = lazy(() => import('components/views/Login'));
@@ -23,31 +19,26 @@ const LazyRegister = lazy(() => import('components/views/Register'));
 // Modals
 const LazyProfile = lazy(() => import('components/modals/Profile'));
 const LazyCreate = lazy(() => import('components/modals/Create'));
-const LazySetup = lazy(() => import('components/modals/Setup'));
+const LazySetupCategories = lazy(() =>
+  import('components/modals/SetupCategories')
+);
 
 function Routes() {
   const [{ isLoggedIn }] = user.useStore();
   const [{ locale, categories }] = settings.useStore();
-  const { loaded: settingsLoaded } = settings.useMeta();
   const [, { setMessage }] = snackbar.useStore();
   const [t] = useText();
 
   const { routeLocale, routePath, redirect, getPath } = useRoute();
   const { isOpen: profileIsOpen, close } = useModalHash(Modal.PROFILE);
   const { isOpen: createIsOpen } = useModalHash(Modal.CREATE);
-  const { isOpen: setupIsOpen, open: openSetup } = useModalHash(Modal.SETUP);
+  const { isOpen: setupIsOpen } = useModalHash(Modal.SETUP);
 
   useEffect(() => {
     if (routeLocale !== locale) {
       redirect(routePath, locale);
     }
   }, [locale, redirect, routeLocale, routePath]);
-
-  useEffect(() => {
-    if (isLoggedIn && settingsLoaded && !categories.length && !setupIsOpen) {
-      openSetup();
-    }
-  }, [categories.length, isLoggedIn, openSetup, settingsLoaded, setupIsOpen]);
 
   const updateAvailableMessage = t['UPDATE_AVAILABLE_MESSAGE'];
   const updateNowText = t['UPDATE_NOW'];
@@ -59,7 +50,7 @@ function Routes() {
         type: 'warning',
         message: updateAvailableMessage,
         actionLabel: updateNowText,
-        action: window.swStates.updateAndReload
+        action: window.swStates.updateAndReload,
       });
     }
 
@@ -79,12 +70,9 @@ function Routes() {
         <>
           <Switch>
             <Route component={LazyDashboard} path={getPath('/dashboard')} />
-            <Route component={LazyActivity} path={getPath('/activity')} />
-            <Route component={LazyCharts} path={getPath('/charts')} />
-            <Route component={LazyWallets} path={getPath('/wallets')} />
             <Route render={() => <Redirect to={getPath('/dashboard')} />} />
           </Switch>
-          <LazyBottomNav />
+          {/* <LazyBottomNav /> */}
         </>
       ) : (
         <Switch>
@@ -105,7 +93,7 @@ function Routes() {
         preventClose={!categories.length}
         onClose={close}
       >
-        <LazySetup onClose={close} />
+        <LazySetupCategories onClose={close} />
       </SlideModal>
     </Suspense>
   );

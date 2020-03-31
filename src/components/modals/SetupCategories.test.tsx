@@ -3,7 +3,7 @@ import { act, fireEvent } from '@testing-library/react';
 import createMockRaf, { MockRaf } from '@react-spring/mock-raf';
 import { FrameLoop, Globals } from '@react-spring/web';
 import { mockAuthUser, mockFirestore, render } from 'testUtils';
-import Setup from './Setup';
+import SetupCategories from './SetupCategories';
 
 let mockRaf: MockRaf;
 beforeEach(() => {
@@ -17,9 +17,12 @@ beforeEach(() => {
 });
 
 test('render title and add buttons', () => {
-  const { getByText, getAllByText } = render(<Setup onClose={() => {}} />, {
-    userAndSettings: true,
-  });
+  const { getByText, getAllByText } = render(
+    <SetupCategories onClose={() => {}} />,
+    {
+      userAndSettings: true,
+    }
+  );
   act(() => void mockAuthUser());
   expect(getByText('Categories')).toBeInTheDocument();
   expect(getAllByText('Add')).toHaveLength(2);
@@ -27,7 +30,7 @@ test('render title and add buttons', () => {
 
 test('show done button when categories exist', () => {
   const handleClose = jest.fn();
-  const { getByText } = render(<Setup onClose={handleClose} />, {
+  const { getByText } = render(<SetupCategories onClose={handleClose} />, {
     userAndSettings: true,
   });
   act(() => void mockAuthUser({ uid: 'testid' }));
@@ -51,8 +54,8 @@ test('show done button when categories exist', () => {
 });
 
 test('click add to show new form', () => {
-  const { getByText, getAllByText, getByTestId } = render(
-    <Setup onClose={() => {}} />,
+  const { getByText, getAllByText } = render(
+    <SetupCategories onClose={() => {}} />,
     {
       userAndSettings: true,
     }
@@ -68,7 +71,7 @@ test('click add to show new form', () => {
 test('add categories and save then delete', () => {
   const handleClose = jest.fn();
   const { getByLabelText, getAllByText, getByText, queryByText } = render(
-    <Setup onClose={handleClose} />,
+    <SetupCategories onClose={handleClose} />,
     {
       userAndSettings: true,
     }
@@ -117,9 +120,12 @@ test('add categories and save then delete', () => {
 });
 
 test('add category form can be closed', () => {
-  const { queryByText, getAllByText } = render(<Setup onClose={() => {}} />, {
-    userAndSettings: true,
-  });
+  const { queryByText, getAllByText } = render(
+    <SetupCategories onClose={() => {}} />,
+    {
+      userAndSettings: true,
+    }
+  );
   act(() => void mockAuthUser());
 
   fireEvent.click(getAllByText('Add')[0]);
