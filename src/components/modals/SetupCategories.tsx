@@ -10,9 +10,6 @@ import settings from 'stores/settings';
 
 const ADD_SHEET_HEIGHT = 330;
 
-interface StyleProps {
-  showAddSheet: boolean;
-}
 const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
@@ -50,7 +47,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-function Setup({ onClose }: { onClose: () => void }) {
+function SetupCategories({ onClose }: { onClose: () => void }) {
   const [t] = useTexts();
   const classes = useStyles();
 
@@ -141,4 +138,4 @@ function Setup({ onClose }: { onClose: () => void }) {
   );
 }
 
-export default Setup;
+export default SetupCategories;

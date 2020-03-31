@@ -6,18 +6,14 @@ import {
   clearAuthListeners,
   mockAuthUser,
   mockFirestore,
-  render
+  render,
 } from 'testUtils';
 import SnackbarMessage from 'components/app/SnackbarMessage';
 import snackbar from 'stores/snackbar';
 import Routes from './Routes';
 
 // Load files upfront to suppress lazy load
-import('components/app/BottomNav');
 import('components/views/Dashboard');
-import('components/views/Activity');
-import('components/views/Charts');
-import('components/views/Wallets');
 import('components/views/Login');
 import('components/views/Register');
 
@@ -28,7 +24,7 @@ beforeEach(() => {
     now: mockRaf.now,
     requestAnimationFrame: mockRaf.raf,
     cancelAnimationFrame: mockRaf.cancel,
-    frameLoop: new FrameLoop()
+    frameLoop: new FrameLoop(),
   });
 });
 
@@ -44,14 +40,17 @@ test('renders guest user', async () => {
 });
 
 test('redirects to user locale', async () => {
-  const { findAllByText } = render(<Routes />, { userAndSettings: true });
+  const { findAllByText, findByTestId } = render(<Routes />, {
+    userAndSettings: true,
+  });
 
   act(() => void mockAuthUser({ uid: 'testid' }));
   act(() =>
     mockFirestore('settings/testid', { locale: 'zh', categories: [1] })
   );
 
-  expect((await findAllByText('概览')).length).toBeGreaterThan(0);
+  fireEvent.click(await findByTestId('topnav-profile'));
+  expect((await findAllByText('用户')).length).toBeGreaterThan(0);
 });
 
 test('renders logged in user', async () => {
@@ -65,16 +64,6 @@ test('renders logged in user', async () => {
   await waitFor(() => {
     getByTestId('topnav-profile');
   });
-});
-
-test('show setup modal if categories has length 0', async () => {
-  const { findByText } = render(<Routes />, { userAndSettings: true });
-
-  act(() => void mockAuthUser({ uid: 'testid' }));
-  act(() => mockFirestore('settings/testid', { locale: 'en', categories: [] }));
-  act(() => mockRaf.flush());
-
-  expect(await findByText('Categories')).toBeInTheDocument();
 });
 
 test('show snackbar message when updates available', async () => {

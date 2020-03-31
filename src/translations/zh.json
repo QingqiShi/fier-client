@@ -28,9 +28,6 @@
   "ALREADY_REGISTERED_PROMPT": "已经有账户了？登陆",
 
   "DASHBOARD": "概览",
-  "ACTIVITY": "流水",
-  "CHARTS": "统计",
-  "WALLETS": "账户",
 
   "PROFILE": "用户",
   "CHANGE_NAME": "修改显示名",
@@ -59,6 +56,5 @@
   "ADD_INCOME_CATEGORY": "添加收入分类",
   "ADD_EXPENSES_CATEGORY": "添加支出分类",
   "CATEGORY_NAME_LABEL": "分类名",
-  "CATEGORY_EMOJI_LABEL": "表情图标",
-  "CATEGORY_TYPE_LABEL": "类型"
+  "CATEGORY_EMOJI_LABEL": "表情图标"
 }

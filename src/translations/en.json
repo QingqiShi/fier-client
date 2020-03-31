@@ -28,9 +28,6 @@
   "ALREADY_REGISTERED_PROMPT": "Already have an account? Sign in",
 
   "DASHBOARD": "Dashboard",
-  "ACTIVITY": "Activity",
-  "CHARTS": "Charts",
-  "WALLETS": "Wallets",
 
   "PROFILE": "Profile",
   "CHANGE_NAME": "Change Name",
@@ -59,6 +56,5 @@
   "ADD_INCOME_CATEGORY": "Add Income Category",
   "ADD_EXPENSES_CATEGORY": "Add Expenses Category",
   "CATEGORY_NAME_LABEL": "Name",
-  "CATEGORY_EMOJI_LABEL": "Emoji",
-  "CATEGORY_TYPE_LABEL": "Type"
+  "CATEGORY_EMOJI_LABEL": "Emoji"
 }
