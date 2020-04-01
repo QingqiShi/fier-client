@@ -56,5 +56,9 @@
   "ADD_INCOME_CATEGORY": "添加收入分类",
   "ADD_EXPENSES_CATEGORY": "添加支出分类",
   "CATEGORY_NAME_LABEL": "分类名",
-  "CATEGORY_EMOJI_LABEL": "表情图标"
+  "CATEGORY_EMOJI_LABEL": "表情图标",
+
+  "NET_WORTH": "净资产",
+  "ACCOUNTS": "账户",
+  "TRANSACTIONS": "流水"
 }

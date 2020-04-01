@@ -73,7 +73,7 @@ function Dashboard() {
       <TopNav title={t['APP_NAME']} />
 
       <Typography align="right" color="textSecondary" variant="subtitle1">
-        Xxx xxxxx
+        {t['NET_WORTH']}
       </Typography>
       <Currency
         align="right"
@@ -83,7 +83,7 @@ function Dashboard() {
       />
 
       <Typography className={classes.sectionTitle} variant="h6">
-        Xxxxxxx
+        {t['ACCOUNTS']}
       </Typography>
       <div className={classes.gridListContainer}>
         <GridList
@@ -141,7 +141,7 @@ function Dashboard() {
       </div>
 
       <Typography className={classes.sectionTitle} variant="h6">
-        Xxxxxxxx
+        {t['TRANSACTIONS']}
       </Typography>
       <List
         component="div"
