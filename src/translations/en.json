@@ -56,5 +56,9 @@
   "ADD_INCOME_CATEGORY": "Add Income Category",
   "ADD_EXPENSES_CATEGORY": "Add Expenses Category",
   "CATEGORY_NAME_LABEL": "Name",
-  "CATEGORY_EMOJI_LABEL": "Emoji"
+  "CATEGORY_EMOJI_LABEL": "Emoji",
+
+  "NET_WORTH": "Net Worth",
+  "ACCOUNTS": "Accounts",
+  "TRANSACTIONS": "Transactions"
 }
