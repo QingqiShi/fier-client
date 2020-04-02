@@ -8,15 +8,15 @@ function useRoute() {
   const history = useHistory();
 
   const routeLocale = useMemo(() => getLocale(location.pathname), [
-    location.pathname
+    location.pathname,
   ]);
   const routePath = useMemo(() => stripLocale(location.pathname), [
-    location.pathname
+    location.pathname,
   ]);
   const routeHash = location.hash;
 
   const getPath = useCallback((path: string) => createUrl(routeLocale, path), [
-    routeLocale
+    routeLocale,
   ]);
   const redirect = useCallback(
     (path: string, locale: Locale = routeLocale) =>
@@ -34,7 +34,7 @@ function useRoute() {
     routeHash,
     getPath,
     redirect,
-    setHash
+    setHash,
   };
 }
 

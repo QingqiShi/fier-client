@@ -4,7 +4,7 @@ import snackbar from './snackbar';
 
 test('setError', () => {
   const { result } = renderHook(() => snackbar.useStore(), {
-    stores: [snackbar]
+    stores: [snackbar],
   });
   expect(result.current[0].isShowing).toBe(false);
   act(() => result.current[1].setMessage({ type: 'error', message: 'test' }));
@@ -15,7 +15,7 @@ test('setError', () => {
 
 test('clearError', () => {
   const { result } = renderHook(() => snackbar.useStore(), {
-    stores: [snackbar]
+    stores: [snackbar],
   });
   act(() => result.current[1].setMessage({ type: 'error', message: 'test' }));
   act(() => result.current[1].clearMessage());
@@ -24,7 +24,7 @@ test('clearError', () => {
 
 test('set actions', () => {
   const { result } = renderHook(() => snackbar.useStore(), {
-    stores: [snackbar]
+    stores: [snackbar],
   });
   const mockAction = jest.fn();
   act(() =>
@@ -32,7 +32,7 @@ test('set actions', () => {
       type: 'error',
       message: 'test',
       actionLabel: 'Reload',
-      action: mockAction
+      action: mockAction,
     })
   );
   expect(result.current[0].actionLabel).toEqual('Reload');

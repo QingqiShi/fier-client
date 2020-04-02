@@ -3,7 +3,7 @@ import useTexts from './useTexts';
 
 jest.mock('translations/en.json', () => ({
   GREETING: 'Hello world',
-  AUTHER: 'Written by {{firstName}} {{lastName}}'
+  AUTHER: 'Written by {{firstName}} {{lastName}}',
 }));
 
 describe('useText', () => {

@@ -12,13 +12,13 @@ function useFirebaseSetup() {
     Listen for auth state changes
   */
   useEffect(() => {
-    return auth().onAuthStateChanged(user => {
+    return auth().onAuthStateChanged((user) => {
       if (user && user.email) {
         userActions.setUser({
           uid: user.uid,
           email: user.email,
           name: user.displayName || user.email.split('@')[0],
-          emailVerified: user.emailVerified
+          emailVerified: user.emailVerified,
         });
       } else {
         userActions.signOut();

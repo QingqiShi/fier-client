@@ -70,7 +70,7 @@ function Dashboard() {
 
   return (
     <div className={classes.container}>
-      <TopNav title={t['APP_NAME']} />
+      <TopNav title={t.APP_NAME} />
 
       <Typography align="right" color="textSecondary" variant="subtitle1">
         {t['NET_WORTH']}
@@ -92,7 +92,7 @@ function Dashboard() {
           cols={1.5}
           spacing={16}
         >
-          {[1, 2, 3].map((i) => (
+          {[1].map((i) => (
             <GridListTile
               key={`account-${i}`}
               classes={{
@@ -111,7 +111,7 @@ function Dashboard() {
                       align="right"
                       currency="GBP"
                       value={1234.56}
-                      variant={['h5', 'h6']}
+                      variant={['h6', 'subtitle1']}
                     />
                   </CardContent>
                 </CardActionArea>
@@ -131,7 +131,7 @@ function Dashboard() {
                     +
                   </Typography>
                   <Typography align="center" color="textSecondary">
-                    Xxxxxx Xxxxx
+                    {t.CREATE_ACCOUNT}
                   </Typography>
                 </CardContent>
               </CardActionArea>

@@ -10,7 +10,7 @@ test('open and close using Hash string', () => {
     url: '/zh/test?test=bob#foo',
     useHook: () => {
       historyRef.history = useHistory();
-    }
+    },
   });
 
   expect(result.current.isOpen).toBe(false);

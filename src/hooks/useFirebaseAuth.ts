@@ -10,7 +10,7 @@ function useFirebaseAuth() {
   function signUp({
     email,
     password,
-    name
+    name,
   }: {
     email: string;
     password: string;
@@ -24,7 +24,7 @@ function useFirebaseAuth() {
 
       if (userCred.user) {
         await userCred.user.updateProfile({
-          displayName: name
+          displayName: name,
         });
         userActions.updateUser(name);
       }
@@ -96,7 +96,7 @@ function useFirebaseAuth() {
     signOut,
     updateName,
     updateEmail,
-    updatePassword
+    updatePassword,
   };
 }
 

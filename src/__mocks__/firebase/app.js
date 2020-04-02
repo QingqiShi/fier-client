@@ -2,7 +2,7 @@
   Error Mocks
 ====== */
 let error = false;
-export const mockError = e => {
+export const mockError = (e) => {
   error = e;
 };
 
@@ -21,15 +21,15 @@ const authObj = {
   signInWithEmailAndPassword: jest.fn(() =>
     error ? Promise.reject(error) : Promise.resolve()
   ),
-  onAuthStateChanged: jest.fn(callback => {
+  onAuthStateChanged: jest.fn((callback) => {
     authStateChangeCallback = callback;
   }),
   signOut: jest.fn(() => (error ? Promise.reject(error) : Promise.resolve())),
   currentUser: null,
-  languageCode: ''
+  languageCode: '',
 };
 
-export const mockAuthState = user => {
+export const mockAuthState = (user) => {
   authStateChangeCallback(user);
   authObj.currentUser = user;
 };
@@ -37,7 +37,7 @@ export const mockAuthState = user => {
 export const auth = jest.fn(() => authObj);
 
 auth.EmailAuthProvider = {
-  credential: jest.fn()
+  credential: jest.fn(),
 };
 
 /* ======
@@ -51,24 +51,24 @@ export const mockDocSnapshot = (path, data) => {
   if (path in docSnapshotChangeCallbacks) {
     docSnapshotChangeCallbacks[path]({
       exists: !!data,
-      data: () => data
+      data: () => data,
     });
   }
 };
 
 const mockFirestoreDB = {
-  doc: jest.fn(path => ({
-    onSnapshot: jest.fn(handler => {
+  doc: jest.fn((path) => ({
+    onSnapshot: jest.fn((handler) => {
       docSnapshotChangeCallbacks[path] = handler;
     }),
     set: jest.fn((data, opts = {}) => {
       states[path] = opts.merge ? { ...states[path], ...data } : data;
       docSnapshotChangeCallbacks[path]({
         exists: true,
-        data: () => states[path]
+        data: () => states[path],
       });
-    })
-  }))
+    }),
+  })),
 };
 
 export const firestore = jest.fn(() => mockFirestoreDB);

@@ -7,12 +7,12 @@ describe('i18n', () => {
     it('add new translations', () => {
       const { result } = renderHook(() => i18n.useStore(), {
         stores: [i18n],
-        translations: false
+        translations: false,
       });
       expect(result.current[0].translations.zh).toBeUndefined();
       act(() => {
         result.current[1].addTranslations({
-          zh: { TEST: 'test' }
+          zh: { TEST: 'test' },
         });
       });
       expect(result.current[0].translations.zh).toEqual({ TEST: 'test' });
@@ -21,21 +21,21 @@ describe('i18n', () => {
     it('merge with existing translations', () => {
       const { result } = renderHook(() => i18n.useStore(), {
         stores: [i18n],
-        translations: false
+        translations: false,
       });
       act(() => {
         result.current[1].addTranslations({
-          zh: { TEST: 'test' }
+          zh: { TEST: 'test' },
         });
       });
       act(() => {
         result.current[1].addTranslations({
-          zh: { GREET: 'hello' }
+          zh: { GREET: 'hello' },
         });
       });
       expect(result.current[0].translations.zh).toEqual({
         TEST: 'test',
-        GREET: 'hello'
+        GREET: 'hello',
       });
     });
   });

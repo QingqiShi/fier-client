@@ -13,7 +13,7 @@ const initialState: State = {
   type: 'error',
   message: '',
   isShowing: false,
-  hideAfter: 60000
+  hideAfter: 60000,
 };
 
 const mutations = {
@@ -24,7 +24,7 @@ const mutations = {
       message,
       actionLabel,
       action,
-      hideAfter = 6000
+      hideAfter = 6000,
     }: {
       type: MessageType;
       message: string;
@@ -38,14 +38,14 @@ const mutations = {
     actionLabel,
     action,
     hideAfter,
-    isShowing: true
+    isShowing: true,
   }),
   clearMessage: (_: State) => ({
     isShowing: false,
     action: undefined,
     actionLabel: undefined,
-    hideAfter: 6000
-  })
+    hideAfter: 6000,
+  }),
 };
 
 const store = createStore(initialState, mutations);

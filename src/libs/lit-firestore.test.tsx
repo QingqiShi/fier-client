@@ -10,7 +10,7 @@ test('works like normal react-lit-store without path', () => {
   // Returns Provider and useStore
   const store = createStore(
     { counter: 0 },
-    { increment: state => ({ counter: state.counter + 1 }) },
+    { increment: (state) => ({ counter: state.counter + 1 }) },
     () => ''
   );
   expect(store).toHaveProperty('Provider');
@@ -39,7 +39,7 @@ test('works like normal react-lit-store without path', () => {
 test('aquire doc using path', () => {
   const store = createStore(
     { counter: 0 },
-    { increment: state => ({ counter: state.counter + 1 }) },
+    { increment: (state) => ({ counter: state.counter + 1 }) },
     () => '/fake/path'
   );
 
@@ -57,7 +57,7 @@ test('aquire doc using path', () => {
 test('update state on firestore change', () => {
   const store = createStore(
     { counter: 0 },
-    { increment: state => ({ counter: state.counter + 1 }) },
+    { increment: (state) => ({ counter: state.counter + 1 }) },
     () => '/fake/path'
   );
 
@@ -77,7 +77,7 @@ test('update state on firestore change', () => {
 test('set firestore when actions called', () => {
   const store = createStore(
     { counter: 0 },
-    { increment: state => ({ counter: state.counter + 1 }) },
+    { increment: (state) => ({ counter: state.counter + 1 }) },
     () => '/fake/path'
   );
 
@@ -98,7 +98,7 @@ test('set firestore when actions called', () => {
 test('set firestore for non-existing state', () => {
   const store = createStore(
     { counter: 0 },
-    { increment: state => ({ counter: state.counter + 1 }) },
+    { increment: (state) => ({ counter: state.counter + 1 }) },
     () => '/fake/path'
   );
 
@@ -116,7 +116,7 @@ test('set firestore for non-existing state', () => {
 test('create missing states', () => {
   const store = createStore(
     { counter: 0, message: 'hi', total: 0 },
-    { increment: state => ({ counter: state.counter + 1 }) },
+    { increment: (state) => ({ counter: state.counter + 1 }) },
     () => '/fake/path'
   );
 

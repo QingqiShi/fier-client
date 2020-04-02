@@ -22,7 +22,7 @@ function useModalDrag({
   el = null,
   onDrag,
   onDragStart,
-  onDragEnd
+  onDragEnd,
 }: DragOptions) {
   const dragHandler = useCallback(
     ({
@@ -32,9 +32,9 @@ function useModalDrag({
       memo = {
         canDragDown: !canScrollUp(el),
         canDragUp: !canScrollDown(el),
-        isDragging: false
+        isDragging: false,
       },
-      cancel
+      cancel,
     }) => {
       if (!isOpen) return;
 

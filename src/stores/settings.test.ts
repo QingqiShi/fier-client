@@ -19,16 +19,16 @@ function renderHookWithUser(useHook: () => any, uid: string) {
           uid,
           email: 'testEmail',
           name: 'testName',
-          emailVerified: true
+          emailVerified: true,
         });
       }, [userActions]);
-    }
+    },
   });
 }
 
 test('use default state without logged in user', () => {
   const { result } = renderHook(() => settings.useStore(), {
-    stores: [settings, user]
+    stores: [settings, user],
   });
   const initialState = { locale: 'en', categories: [], ids: { categories: 0 } };
   expect(result.current[0]).toEqual(initialState);
@@ -46,7 +46,7 @@ test('get and set locale', () => {
     mockFirestore(`settings/${UID}`, {
       locale: 'zh',
       categories: [],
-      ids: { categories: 0 }
+      ids: { categories: 0 },
     })
   );
 
@@ -65,7 +65,7 @@ test('get, add, edit and remove categories', () => {
     mockFirestore(`settings/${UID}`, {
       locale: 'zh',
       categories: [],
-      ids: { categories: 0 }
+      ids: { categories: 0 },
     })
   );
 
@@ -78,7 +78,7 @@ test('get, add, edit and remove categories', () => {
       id: 0,
       emoji: 'T',
       name: 'Test',
-      type: 'income'
+      type: 'income',
     })
   );
   expect(result.current[0].categories).toEqual([
@@ -86,8 +86,8 @@ test('get, add, edit and remove categories', () => {
       id: 1,
       emoji: 'T',
       name: 'Test',
-      type: 'income'
-    }
+      type: 'income',
+    },
   ]);
 
   // Edit category
@@ -96,7 +96,7 @@ test('get, add, edit and remove categories', () => {
       id: 1,
       emoji: 'T',
       name: 'Test 2',
-      type: 'income'
+      type: 'income',
     })
   );
   expect(result.current[0].categories).toEqual([
@@ -104,8 +104,8 @@ test('get, add, edit and remove categories', () => {
       id: 1,
       emoji: 'T',
       name: 'Test 2',
-      type: 'income'
-    }
+      type: 'income',
+    },
   ]);
 
   // Remove category

@@ -10,7 +10,7 @@ beforeEach(() => {
     now: mockRaf.now,
     requestAnimationFrame: mockRaf.raf,
     cancelAnimationFrame: mockRaf.cancel,
-    frameLoop: new FrameLoop()
+    frameLoop: new FrameLoop(),
   });
 });
 
@@ -19,10 +19,7 @@ test('ignores drag when closed', () => {
   const { getEl } = renderGestureHook(() => useModalDrag({ onDrag }));
   const drag = new DragUtil(getEl, mockRaf);
 
-  drag
-    .dragStart()
-    .dragUp(50)
-    .dragDown(50);
+  drag.dragStart().dragUp(50).dragDown(50);
   expect(onDrag).not.toHaveBeenCalled();
 });
 
@@ -72,10 +69,7 @@ test('fire dragEnd callback', async () => {
 
   const drag = new DragUtil(getEl, mockRaf);
   await drag.dragStart().later(50);
-  drag
-    .dragDown(50)
-    .dragEnd()
-    .wait();
+  drag.dragDown(50).dragEnd().wait();
   expect(onDragEnd).toHaveBeenCalledWith(50, expect.any(Number));
 });
 
@@ -85,16 +79,13 @@ test('scroll down will cancel drag', async () => {
     useModalDrag({
       isOpen: true,
       onDrag,
-      el: { scrollTop: 50, scrollHeight: 200 } as any
+      el: { scrollTop: 50, scrollHeight: 200 } as any,
     })
   );
 
   const drag = new DragUtil(getEl, mockRaf);
   await drag.dragStart().later(50);
   await drag.dragDown(5).later(50);
-  drag
-    .dragDown(50)
-    .dragEnd()
-    .wait();
+  drag.dragDown(50).dragEnd().wait();
   expect(onDrag).not.toHaveBeenCalled();
 });
