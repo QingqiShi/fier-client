@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-  useState
+  useState,
 } from 'react';
 import { Actions, Mutations, Store, StoreContext } from 'react-lit-store';
 import { firestore } from 'firebase/app';
@@ -24,7 +24,7 @@ export function createStore<S, M extends Mutations<S>>(
 ): Store<S, M> & { useMeta: () => { loaded: boolean } } {
   const context: StoreContext<S, Actions<M>> = createContext([
     initialState,
-    getEmptyActions<S, M>(mutations)
+    getEmptyActions<S, M>(mutations),
   ]);
   const firestoreContext = createContext({ loaded: false });
 
@@ -62,7 +62,7 @@ export function createStore<S, M extends Mutations<S>>(
       if (!doc) {
         handleSnap.current = (_snap: firestore.DocumentSnapshot) => {};
       } else {
-        handleSnap.current = snap => {
+        handleSnap.current = (snap) => {
           const data = snap.data();
 
           if (!snap.exists || !data) {
@@ -71,9 +71,9 @@ export function createStore<S, M extends Mutations<S>>(
           }
 
           const keys = Object.keys(state) as (keyof S)[];
-          if (typeof keys.find(key => !(key in data)) !== 'undefined') {
+          if (typeof keys.find((key) => !(key in data)) !== 'undefined') {
             let delta: Partial<S> = {};
-            keys.forEach(key => {
+            keys.forEach((key) => {
               if (!(key in data)) {
                 delta[key] = state[key];
               }

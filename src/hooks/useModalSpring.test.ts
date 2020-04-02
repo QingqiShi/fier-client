@@ -12,7 +12,7 @@ beforeEach(() => {
     now: mockRaf.now,
     requestAnimationFrame: mockRaf.raf,
     cancelAnimationFrame: mockRaf.cancel,
-    frameLoop: new FrameLoop()
+    frameLoop: new FrameLoop(),
   });
 });
 
@@ -51,7 +51,7 @@ test('drag modal style', () => {
 test('reset modal to open style', () => {
   const { getEl } = renderSpringHook(() => {
     const { props, animateDrag, animateReset } = useModalSpring({
-      isOpen: true
+      isOpen: true,
     });
     useEffect(() => {
       animateDrag(50);
@@ -66,7 +66,7 @@ test('reset modal to open style', () => {
 test('reset modal to close style', () => {
   const { getEl } = renderSpringHook(() => {
     const { props, animateDrag, animateReset } = useModalSpring({
-      isOpen: false
+      isOpen: false,
     });
     useEffect(() => {
       animateDrag(50);
@@ -85,7 +85,7 @@ test('fire onClose callback', () => {
     () =>
       useModalSpring({
         isOpen,
-        onClose: handleClose
+        onClose: handleClose,
       }).props
   );
   act(() => mockRaf.flush());

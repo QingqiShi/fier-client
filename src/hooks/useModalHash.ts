@@ -4,7 +4,7 @@ import useRoute from 'hooks/useRoute';
 export enum Modal {
   PROFILE = '#profile',
   CREATE = '#create',
-  SETUP = '#setup'
+  SETUP = '#setup',
 }
 
 function useModalHash(modal: Modal) {
@@ -13,7 +13,7 @@ function useModalHash(modal: Modal) {
   return {
     isOpen: routeHash === modal,
     open: useCallback(() => setHash(modal), [modal, setHash]),
-    close: useCallback(() => setHash(''), [setHash])
+    close: useCallback(() => setHash(''), [setHash]),
   };
 }
 

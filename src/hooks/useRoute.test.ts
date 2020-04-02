@@ -41,12 +41,12 @@ test.each`
 
 test('redirect', () => {
   const historyObj: { history: import('history').History | null } = {
-    history: null
+    history: null,
   };
   const { result } = renderHook(() => useRoute(), {
     useHook: () => {
       historyObj.history = useHistory();
-    }
+    },
   });
   act(() => result.current.redirect('/abc'));
   expect(historyObj.history && historyObj.history.location.pathname).toEqual(

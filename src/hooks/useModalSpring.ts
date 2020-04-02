@@ -15,21 +15,21 @@ function useModalSpring({ isOpen = false, onClose = () => {} }) {
     return {
       to: modalOpenTo,
       config: modalSpringConfig,
-      onRest: () => {}
+      onRest: () => {},
     };
   }, []);
   const closeStyle = useMemo(() => {
     return {
       to: modalCloseTo,
       config: { ...modalSpringConfig, precision: 5 },
-      onRest: onClose
+      onRest: onClose,
     };
   }, [onClose]);
 
   // Create react-spring
   const [props, set] = useSpring(() => ({
     to: modalCloseTo,
-    config: modalSpringConfig
+    config: modalSpringConfig,
   }));
 
   // Callback for dragging the modal vertically
@@ -38,7 +38,7 @@ function useModalSpring({ isOpen = false, onClose = () => {} }) {
       set({
         to: { y: 40 + my, percent: 0 },
         config: config.stiff,
-        onRest: () => {}
+        onRest: () => {},
       });
     },
     [set]
@@ -57,7 +57,7 @@ function useModalSpring({ isOpen = false, onClose = () => {} }) {
   return {
     props: { transform: to([props.y, props.percent], getTransform) },
     animateDrag,
-    animateReset
+    animateReset,
   };
 }
 

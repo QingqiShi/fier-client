@@ -22,7 +22,7 @@ test('returns ready state that becomes true after first auth state change', () =
     mockAuthState({
       email: 'email',
       displayName: 'name',
-      emailVerified: true
+      emailVerified: true,
     });
   });
   expect(result.current).toBe(true);

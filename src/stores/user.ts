@@ -5,7 +5,7 @@ const initialState = {
   uid: '',
   name: '',
   email: '',
-  emailVerified: false
+  emailVerified: false,
 };
 type State = typeof initialState;
 
@@ -16,21 +16,21 @@ const mutations = {
       uid,
       email,
       name,
-      emailVerified
+      emailVerified,
     }: { uid: string; email: string; name: string; emailVerified: boolean }
   ) => ({
     uid,
     isLoggedIn: true,
     email,
     name,
-    emailVerified: !!emailVerified
+    emailVerified: !!emailVerified,
   }),
   signOut: () => ({
-    isLoggedIn: false
+    isLoggedIn: false,
   }),
   updateUser: (_: State, name: string) => ({
-    name
-  })
+    name,
+  }),
 };
 
 const store = createStore(initialState, mutations);

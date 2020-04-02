@@ -11,14 +11,14 @@ afterEach(() => {
 
 test('authentication actions', async () => {
   const { result, waitForNextUpdate } = renderHook(() => useFirebaseAuth(), {
-    stores: [user]
+    stores: [user],
   });
 
   // Sign up creates user
   result.current.signUp({
     email: 'test@test.com',
     password: '12345',
-    name: 'Test'
+    name: 'Test',
   });
   expect(mockAuth().createUserWithEmailAndPassword).toHaveBeenCalledWith(
     'test@test.com',
@@ -31,7 +31,7 @@ test('authentication actions', async () => {
   result.current.signUp({
     email: 'test@test.com',
     password: '12345',
-    name: 'Test'
+    name: 'Test',
   });
   await waitForNextUpdate();
   expect(updateProfile).toHaveBeenCalledWith({ displayName: 'Test' });
@@ -39,7 +39,7 @@ test('authentication actions', async () => {
   // Sign in with email and password
   result.current.signIn({
     email: 'test@test.com',
-    password: '12345'
+    password: '12345',
   });
   expect(mockAuth().signInWithEmailAndPassword).toHaveBeenCalledWith(
     'test@test.com',
@@ -66,14 +66,14 @@ test('update user profile', async () => {
     updateProfile: jest.fn(() => Promise.resolve()),
     updateEmail: jest.fn(() => Promise.resolve()),
     updatePassword: jest.fn(() => Promise.resolve()),
-    reauthenticateWithCredential: jest.fn(() => Promise.resolve())
+    reauthenticateWithCredential: jest.fn(() => Promise.resolve()),
   };
   mockAuthState(mockUser);
 
   // Update name
   result.current.updateName('test name');
   expect(mockUser.updateProfile).toHaveBeenCalledWith({
-    displayName: 'test name'
+    displayName: 'test name',
   });
 
   // Update email
@@ -92,13 +92,13 @@ test('error while updating name', async () => {
     useHook: () => {
       const [userState] = user.useStore();
       state = userState;
-    }
+    },
   });
 
   mockAuthState({
     displayName: 'initial name',
     // Reject to throw error
-    updateProfile: () => Promise.reject()
+    updateProfile: () => Promise.reject(),
   });
 
   // Update name
@@ -113,7 +113,7 @@ test('error while updating name', async () => {
   mockAuthState({
     displayName: null,
     // Reject to throw error
-    updateProfile: () => Promise.reject()
+    updateProfile: () => Promise.reject(),
   });
 
   // Update name

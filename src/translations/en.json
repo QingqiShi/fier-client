@@ -60,5 +60,6 @@
 
   "NET_WORTH": "Net Worth",
   "ACCOUNTS": "Accounts",
-  "TRANSACTIONS": "Transactions"
+  "TRANSACTIONS": "Transactions",
+  "CREATE_ACCOUNT": "Create Account"
 }

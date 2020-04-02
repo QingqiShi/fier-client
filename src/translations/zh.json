@@ -60,5 +60,6 @@
 
   "NET_WORTH": "净资产",
   "ACCOUNTS": "账户",
-  "TRANSACTIONS": "流水"
+  "TRANSACTIONS": "流水",
+  "CREATE_ACCOUNT": "创建账户"
 }

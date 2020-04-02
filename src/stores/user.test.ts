@@ -25,7 +25,7 @@ describe('user', () => {
           uid: 'testUserId',
           email: 'testEmail',
           name: 'testName',
-          emailVerified: true
+          emailVerified: true,
         });
       });
       expect(result.current[0].isLoggedIn).toBe(true);
@@ -42,7 +42,7 @@ describe('user', () => {
           uid: '',
           email: '',
           name: '',
-          emailVerified: true
+          emailVerified: true,
         });
       });
       act(() => {

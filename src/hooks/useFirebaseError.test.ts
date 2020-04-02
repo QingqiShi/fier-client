@@ -6,8 +6,8 @@ const mockSetMessage = jest.fn();
 jest.mock('stores/snackbar', () => ({
   __esModule: true,
   default: {
-    useStore: () => [mockErrorState, { setMessage: mockSetMessage }]
-  }
+    useStore: () => [mockErrorState, { setMessage: mockSetMessage }],
+  },
 }));
 
 beforeEach(() => {
@@ -16,7 +16,7 @@ beforeEach(() => {
 
 test('catch errors and sets message', async () => {
   const { result } = renderHook(useFirebaseError, {
-    translations: true
+    translations: true,
   });
 
   result.current(() => Promise.reject({ code: 'test_error' }));
@@ -24,13 +24,13 @@ test('catch errors and sets message', async () => {
   await Promise.resolve();
   expect(mockSetMessage).toHaveBeenLastCalledWith({
     type: 'error',
-    message: 'Encountered unknown error'
+    message: 'Encountered unknown error',
   });
 });
 
 test('catch firebase errors and sets custom message', async () => {
   const { result } = renderHook(useFirebaseError, {
-    translations: true
+    translations: true,
   });
 
   result.current(() => Promise.reject({ code: 'auth/wrong-password' }));
@@ -38,7 +38,7 @@ test('catch firebase errors and sets custom message', async () => {
   await Promise.resolve();
   expect(mockSetMessage).toHaveBeenLastCalledWith({
     type: 'error',
-    message: "Oops, that's a wrong password. Try again"
+    message: "Oops, that's a wrong password. Try again",
   });
 });
 
@@ -54,7 +54,7 @@ test('ignores error when error exist already', async () => {
 
 test('set onError callback', async () => {
   const { result } = renderHook(useFirebaseError, {
-    translations: true
+    translations: true,
   });
 
   const handleError = jest.fn();
