@@ -8,26 +8,26 @@ import settings from 'stores/settings';
 const useStyles = makeStyles(() =>
   createStyles({
     emoji: {
-      paddingLeft: 5
+      paddingLeft: 5,
     },
     languageContainer: ({ position }: { position: 'static' | 'fixed' }) => ({
       position: position,
       right: 'calc(env(safe-area-inset-right) + 20px)',
       top: 20,
-      textAlign: 'center'
-    })
+      textAlign: 'center',
+    }),
   })
 );
 
-const options = locales.map(locale => ({
-  language: `LANGUAGE_${locale.toUpperCase()}`,
-  flag: `FLAG_${locale.toUpperCase()}`,
+const options = locales.map((locale) => ({
+  language: `LANGUAGE_${locale.toUpperCase()}` as 'LANGUAGE_EN' | 'LANGUAGE_ZH',
+  flag: `FLAG_${locale.toUpperCase()}` as 'FLAG_EN' | 'FLAG_ZH',
   key: `language-selector-option-${locale}`,
-  value: locale
+  value: locale,
 }));
 
 function LanguageSelector({
-  position = 'static'
+  position = 'static',
 }: {
   position?: 'static' | 'fixed';
 }) {
@@ -37,7 +37,7 @@ function LanguageSelector({
 
   const handleLanguageChange: React.ComponentProps<
     typeof Select
-  >['onChange'] = event => {
+  >['onChange'] = (event) => {
     const newLocale = event.target.value as Locale;
     setLocale(newLocale);
   };
@@ -46,9 +46,15 @@ function LanguageSelector({
     <div className={classes.languageContainer}>
       <Select
         name="language"
-        renderValue={value => (
+        renderValue={(value) => (
           <span className={classes.emoji} role="img">
-            {t[`FLAG_${(value as Locale).toUpperCase()}`]}
+            {
+              t[
+                `FLAG_${(value as Locale).toUpperCase()}` as
+                  | 'FLAG_EN'
+                  | 'FLAG_ZH'
+              ]
+            }
           </span>
         )}
         value={locale}

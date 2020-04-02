@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { List, ListSubheader, TextField } from '@material-ui/core';
-import { Email, Face, Lock, TextFields } from '@material-ui/icons';
+import { Email, Lock, TextFields } from '@material-ui/icons';
 import ProfileSettingsItem from 'components/app/ProfileSettingsItem';
 import useFirebaseAuth from 'hooks/useFirebaseAuth';
 import useTexts from 'hooks/useTexts';
@@ -45,7 +45,7 @@ function ProfileSettings({ className }: { className?: string }) {
     setName,
     setPassword,
     user.email,
-    user.name
+    user.name,
   ]);
 
   return (
@@ -77,21 +77,6 @@ function ProfileSettings({ className }: { className?: string }) {
             />
           </form>
         </ProfileSettingsItem>
-
-        {false && (
-          <ProfileSettingsItem
-            actionLabel={t['CHANGE_AVATAR']}
-            expanded={expanded === 'avatar'}
-            icon={<Face />}
-            label={t['AVATAR_LABEL']}
-            onChange={() =>
-              setExpanded(expanded === 'avatar' ? false : 'avatar')
-            }
-            onSave={() => setExpanded(false)}
-          >
-            test
-          </ProfileSettingsItem>
-        )}
 
         <ProfileSettingsItem
           actionLabel={t['CHANGE_EMAIL']}
