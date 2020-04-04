@@ -4,14 +4,14 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  useScrollTrigger
+  useScrollTrigger,
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     appBar: ({
       scrolled,
-      color
+      color,
     }: {
       scrolled: boolean;
       color: 'default' | 'paper';
@@ -23,17 +23,17 @@ const useStyles = makeStyles((theme: Theme) =>
       height: theme.spacing(9),
       paddingLeft: 'env(safe-area-inset-left)',
       paddingRight: 'env(safe-area-inset-right)',
-      transition: 'background 0.5s, box-shadow 0.5s'
+      transition: 'background 0.5s, box-shadow 0.5s',
     }),
     toolBar: {
-      minHeight: '100%'
+      minHeight: '100%',
     },
     typography: {
-      fontWeight: 'bold'
+      fontWeight: 'bold',
     },
     spacer: {
-      flexGrow: 1
-    }
+      flexGrow: 1,
+    },
   })
 );
 
@@ -42,7 +42,7 @@ function TitleBar({
   color,
   leftAction,
   rightAction,
-  scrollTarget
+  scrollTarget,
 }: {
   title?: string;
   color?: 'paper' | 'default';
@@ -53,7 +53,7 @@ function TitleBar({
   const scrolled = useScrollTrigger({
     disableHysteresis: true,
     threshold: 0,
-    target: scrollTarget || window
+    target: scrollTarget || window,
   });
   const classes = useStyles({ scrolled, color: color || 'default' });
   return (

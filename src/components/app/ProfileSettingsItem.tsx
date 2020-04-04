@@ -7,20 +7,20 @@ import {
   ExpansionPanelDetails,
   ExpansionPanelSummary,
   ListItemIcon,
-  ListItemText
+  ListItemText,
 } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
 import useTexts from 'hooks/useTexts';
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     root: ({ expanded }: { expanded: boolean }) => ({
       transitionProperty: 'box-shadow, margin, background-color',
       backgroundColor: expanded ? theme.palette.background.level1 : undefined,
-      '&:before': { height: 0 }
+      '&:before': { height: 0 },
     }),
     summary: { padding: '0 16px' },
-    summaryContent: { margin: 0 }
+    summaryContent: { margin: 0 },
   })
 );
 

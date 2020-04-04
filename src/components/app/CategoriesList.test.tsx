@@ -7,7 +7,7 @@ test('renders categories list', () => {
   const handleClick = jest.fn();
   const mockCategories = [
     { id: 1, emoji: 'A', name: 'Test 1', type: 'expenses' as const },
-    { id: 2, emoji: '😃', name: 'Test 2', type: 'expenses' as const }
+    { id: 2, emoji: '😃', name: 'Test 2', type: 'expenses' as const },
   ];
   const { getByText } = render(
     <CategoriesList
@@ -47,7 +47,7 @@ test('hide add button if handler not provided', () => {
 
 test('render list items without click handler', () => {
   const mockCategories = [
-    { id: 1, emoji: 'A', name: 'Test 1', type: 'expenses' as const }
+    { id: 1, emoji: 'A', name: 'Test 1', type: 'expenses' as const },
   ];
   const { queryByRole, getByText } = render(
     <CategoriesList categories={mockCategories} header="Test Header" />

@@ -31,7 +31,7 @@ test('controled expansion', () => {
         expanded={expanded}
         icon={<MockIcon />}
         label="test label"
-        onChange={() => setExpanded(val => !val)}
+        onChange={() => setExpanded((val) => !val)}
       >
         content
       </ProfileSettingsItem>

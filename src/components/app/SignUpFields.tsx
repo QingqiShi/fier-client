@@ -10,8 +10,8 @@ import useFormInput from 'hooks/useFormInput';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
-      marginTop: theme.spacing(5)
-    }
+      marginTop: theme.spacing(5),
+    },
   })
 );
 
@@ -19,7 +19,7 @@ function SignUpFields({
   emailControl,
   passwordControl,
   nameControl,
-  loading
+  loading,
 }: {
   emailControl: ReturnType<typeof useFormInput>;
   passwordControl: ReturnType<typeof useFormInput>;
@@ -66,12 +66,12 @@ function SignUpFields({
             <InputAdornment position="end">
               <IconButton
                 aria-label="toggle password visibility"
-                onClick={() => setShowPassword(val => !val)}
+                onClick={() => setShowPassword((val) => !val)}
               >
                 {showPassword ? <Visibility /> : <VisibilityOff />}
               </IconButton>
             </InputAdornment>
-          )
+          ),
         }}
         label={t['PASSWORD_LABEL']}
         margin="normal"

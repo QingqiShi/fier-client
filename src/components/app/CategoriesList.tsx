@@ -8,37 +8,37 @@ import {
   ListItemText,
   ListSubheader,
   createStyles,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     list: {
-      backgroundColor: theme.palette.background.paper
+      backgroundColor: theme.palette.background.paper,
     },
     listHeader: {
-      top: theme.spacing(-8)
+      top: theme.spacing(-8),
     },
     emoji: {
       fontSize: theme.typography.h5.fontSize,
-      color: theme.palette.text.primary
+      color: theme.palette.text.primary,
     },
     emojiAvatar: {
       width: 24,
       height: 24,
-      fontSize: '0.7rem'
+      fontSize: '0.7rem',
     },
     truncatedText: {
       overflow: 'hidden',
-      textOverflow: 'ellipsis'
+      textOverflow: 'ellipsis',
     },
     addText: {
-      color: theme.palette.primary.main
+      color: theme.palette.primary.main,
     },
     addIcon: {
-      color: theme.palette.primary.main
-    }
+      color: theme.palette.primary.main,
+    },
   })
 );
 
@@ -49,7 +49,7 @@ function CategoriesList({
   categories,
   onClick,
   onAdd,
-  addLabel
+  addLabel,
 }: {
   header: string;
   categories: Category[];

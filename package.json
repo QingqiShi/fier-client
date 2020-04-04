@@ -9,7 +9,7 @@
     "lint": "eslint --ext js,ts,tsx --ignore-pattern json src",
     "analyze": "npm run build && source-map-explorer 'build/static/js/*.js'",
     "commit": "npx git-cz",
-    "format": "prettier --single-quote --write src/**/*.{js,ts,tsx}",
+    "format": "prettier --single-quote --write \"src/**/*.{js,ts,tsx}\"",
     "eject": "react-scripts eject"
   },
   "dependencies": {

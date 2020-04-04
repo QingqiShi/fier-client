@@ -12,27 +12,27 @@ const useStyles = makeStyles(() =>
       display: 'block',
       width: '1em',
       height: '1em',
-      touchAction: 'manipulation'
+      touchAction: 'manipulation',
     },
     alignCenter: {
-      textAlign: 'center'
+      textAlign: 'center',
     },
     numberButton: {
       width: '100%',
       borderRadius: 0,
       paddingTop: 15,
-      paddingBottom: 15
+      paddingBottom: 15,
     },
     container: {
       position: 'fixed',
       bottom: 0,
       left: 0,
       right: 0,
-      paddingBottom: 'calc(20px + 40px + env(safe-area-inset-bottom))'
+      paddingBottom: 'calc(20px + 40px + env(safe-area-inset-bottom))',
     },
     spacer: {
-      paddingTop: 20
-    }
+      paddingTop: 20,
+    },
   })
 );
 
@@ -60,7 +60,7 @@ const numbers: (number | '.')[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, '.', 0];
 
 function NumPad({
   onChange,
-  onDone
+  onDone,
 }: {
   onChange?: (raw: string, parsed: number) => void;
   onDone?: (raw: string, parsed: number) => void;
@@ -79,7 +79,7 @@ function NumPad({
     if (num === '0' && newNum !== '.') {
       setNum(newNum.toString());
     } else {
-      setNum(val => val + newNum);
+      setNum((val) => val + newNum);
     }
   };
 
@@ -90,7 +90,7 @@ function NumPad({
   return (
     <Container className={classes.container} maxWidth="sm">
       <Grid justify="center" spacing={0} container>
-        {numbers.map(n => (
+        {numbers.map((n) => (
           <Grid
             key={`num-pad-${n}`}
             className={classes.alignCenter}
@@ -104,7 +104,7 @@ function NumPad({
         <Grid className={classes.alignCenter} xs={4} item>
           <NumberButton
             color="secondary"
-            onClick={() => setNum(val => val.slice(0, val.length - 1) || '0')}
+            onClick={() => setNum((val) => val.slice(0, val.length - 1) || '0')}
           >
             <Backspace data-testid="numpad-delete" />
           </NumberButton>

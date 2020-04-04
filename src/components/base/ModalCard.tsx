@@ -16,8 +16,8 @@ const useStyles = makeStyles(() =>
       right: 0,
       bottom: 0,
       overflow: 'hidden',
-      willChange: 'transform'
-    }
+      willChange: 'transform',
+    },
   })
 );
 

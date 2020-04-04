@@ -7,11 +7,11 @@ const mockUseAuth = {
   user: { name: 'current name', email: 'current@email' },
   updateName: jest.fn(),
   updateEmail: jest.fn(),
-  updatePassword: jest.fn()
+  updatePassword: jest.fn(),
 };
 jest.mock('hooks/useFirebaseAuth', () => ({
   __esModule: true,
-  default: () => mockUseAuth
+  default: () => mockUseAuth,
 }));
 
 jest.useFakeTimers();
@@ -39,7 +39,7 @@ test('change name', () => {
   expect((nameField as HTMLInputElement).value).toBe(mockUseAuth.user.name);
 
   fireEvent.change(nameField, {
-    target: { value: 'New Name' }
+    target: { value: 'New Name' },
   });
   fireEvent.click(getByText('Change Name'));
   jest.runAllTimers();
@@ -59,10 +59,10 @@ test('change email', () => {
   expect((emailField as HTMLInputElement).value).toBe(mockUseAuth.user.email);
 
   fireEvent.change(emailField, {
-    target: { value: 'new@email' }
+    target: { value: 'new@email' },
   });
   fireEvent.change(getAllByLabelText('Current Password', { exact: false })[0], {
-    target: { value: '12345' }
+    target: { value: '12345' },
   });
   fireEvent.click(getByText('Change Email'));
   jest.runAllTimers();
@@ -78,10 +78,10 @@ test('change password', () => {
 
   fireEvent.click(getAllByText('Password')[0]);
   fireEvent.change(getByLabelText('New Password', { exact: false }), {
-    target: { value: 'testing' }
+    target: { value: 'testing' },
   });
   fireEvent.change(getAllByLabelText('Current Password', { exact: false })[1], {
-    target: { value: '12345' }
+    target: { value: '12345' },
   });
   fireEvent.click(getByText('Change Password'));
   jest.runAllTimers();

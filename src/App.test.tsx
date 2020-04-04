@@ -10,7 +10,7 @@ test('renders dark mode without blowing up', () => {
   // @ts-ignore
   window.matchMedia = jest.fn(() => ({
     matches: true,
-    addListener: jest.fn()
+    addListener: jest.fn(),
   }));
   render(<App />);
 });
@@ -20,7 +20,7 @@ test('switches to dark mode without blowing up', () => {
   // @ts-ignore
   window.matchMedia = jest.fn(() => ({
     matches: false,
-    addListener: mockMediaListener
+    addListener: mockMediaListener,
   }));
   render(<App />);
 

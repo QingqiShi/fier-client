@@ -9,8 +9,8 @@ const useStyles = makeStyles((theme: Theme) =>
       top: 0,
       left: 0,
       right: 0,
-      zIndex: theme.zIndex.snackbar
-    }
+      zIndex: theme.zIndex.snackbar,
+    },
   })
 );
 

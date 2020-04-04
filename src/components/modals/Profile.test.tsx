@@ -8,8 +8,8 @@ jest.mock('hooks/useFirebaseAuth', () => ({
   __esModule: true,
   default: () => ({
     user: { name: 'Test User', email: 'current@email' },
-    signOut: mockSignOut
-  })
+    signOut: mockSignOut,
+  }),
 }));
 
 test('show user name', () => {

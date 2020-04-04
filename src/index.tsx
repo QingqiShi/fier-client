@@ -23,14 +23,14 @@ window.swStates = {
       const registrationWaiting = window.swStates.reg.waiting;
       if (registrationWaiting) {
         registrationWaiting.postMessage({ type: 'SKIP_WAITING' });
-        registrationWaiting.addEventListener('statechange', e => {
+        registrationWaiting.addEventListener('statechange', (e) => {
           if ((e.target as any)?.state === 'activated') {
             window.location.reload();
           }
         });
       }
     }
-  }
+  },
 };
 
 firebase.initializeApp({
@@ -40,7 +40,7 @@ firebase.initializeApp({
   projectId: 'fier-app',
   storageBucket: 'fier-app.appspot.com',
   messagingSenderId: '136802262330',
-  appId: '1:136802262330:web:178fefc9383280c6'
+  appId: '1:136802262330:web:178fefc9383280c6',
 });
 
 ReactDOM.render(
@@ -60,5 +60,5 @@ serviceWorker.register({
     if (window.swStates.callback) {
       window.swStates.callback();
     }
-  }
+  },
 });
