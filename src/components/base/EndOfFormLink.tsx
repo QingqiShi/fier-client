@@ -8,14 +8,14 @@ const useStyles = makeStyles((theme: Theme) =>
     link: {
       marginTop: theme.spacing(3),
       display: 'block',
-      textAlign: 'center'
-    }
+      textAlign: 'center',
+    },
   })
 );
 
 function EndOfFormLink({
   children,
-  to
+  to,
 }: React.PropsWithChildren<{
   to: string;
 }>) {

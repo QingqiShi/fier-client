@@ -19,7 +19,7 @@ const Component = () => {
 test('load english', async () => {
   const { getByText } = render(<Component />, {
     stores: [i18n],
-    translations: false
+    translations: false,
   });
   await waitFor(() => {
     expect(getByText('Dashboard')).toBeInTheDocument();

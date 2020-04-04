@@ -15,7 +15,7 @@ function SlideModal({
   onClose = () => {},
   preventClose = false,
   height,
-  children
+  children,
 }: React.PropsWithChildren<{
   open: boolean;
   onClose?: () => void;
@@ -37,7 +37,7 @@ function SlideModal({
     isOpen: open,
     onClose: useCallback(() => {
       setModalOpen(false);
-    }, [])
+    }, []),
   });
 
   const handleDragStart = useCallback(() => {
@@ -77,26 +77,26 @@ function SlideModal({
     isOpen: modalOpen,
     onDrag: handleDrag,
     onDragStart: handleDragStart,
-    onDragEnd: handleDragEnd
+    onDragEnd: handleDragEnd,
   });
 
   const headerBind = useModalDrag({
     isOpen: modalOpen,
     onDrag: handleDrag,
     onDragStart: handleDragStart,
-    onDragEnd: handleDragEnd
+    onDragEnd: handleDragEnd,
   });
 
   return (
     <Modal
       BackdropComponent={Backdrop}
       BackdropProps={{
-        open: open
+        open: open,
       }}
       open={modalOpen}
       onClose={!preventClose ? onClose : undefined}
-      onMouseDown={e => e.stopPropagation()}
-      onTouchStart={e => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
+      onTouchStart={(e) => e.stopPropagation()}
     >
       <AnimatedModalCard height={height} style={props}>
         <ModalCardHeader

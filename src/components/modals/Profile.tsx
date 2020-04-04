@@ -11,22 +11,22 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     logOutContainer: {
       textAlign: 'center',
-      paddingBottom: 'env(safe-area-inset-bottom)'
+      paddingBottom: 'env(safe-area-inset-bottom)',
     },
     avatar: {
       backgroundColor: theme.palette.grey[600],
       margin: '0 auto 10px',
       width: 150,
-      height: 150
+      height: 150,
     },
     avatarIcon: {
       width: '70%',
       height: 'auto',
-      padding: '15% 0'
+      padding: '15% 0',
     },
     list: {
-      marginBottom: 20
-    }
+      marginBottom: 20,
+    },
   })
 );
 

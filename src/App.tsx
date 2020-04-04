@@ -32,7 +32,9 @@ function App() {
     if (window.matchMedia) {
       window
         .matchMedia('(prefers-color-scheme: dark)')
-        .addListener(e => (e.matches ? setDarkMode(true) : setDarkMode(false)));
+        .addListener((e) =>
+          e.matches ? setDarkMode(true) : setDarkMode(false)
+        );
     }
   }, []);
 
@@ -43,20 +45,20 @@ function App() {
       secondary: { main: darkMode ? '#FF85D4' : '#EE42B2' },
       background: {
         default: darkMode ? '#121212' : '#F7F7F7',
-        paper: darkMode ? '#212121' : '#FFF'
-      }
+        paper: darkMode ? '#212121' : '#FFF',
+      },
     },
     shape: {
-      borderRadius: 20
+      borderRadius: 20,
     },
     overrides: {
       MuiButton: {
         root: {
           overflow: 'hidden',
-          borderRadius: 21
-        }
-      }
-    }
+          borderRadius: 21,
+        },
+      },
+    },
   });
   theme.palette.background.level1 = darkMode ? '#2e2e2e' : '#FFF';
 

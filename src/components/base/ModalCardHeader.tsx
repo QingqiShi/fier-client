@@ -6,7 +6,7 @@ interface StyleProps {
   dragging?: boolean;
   hideHandle?: boolean;
 }
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     headerRoot: {
       height: theme.spacing(6),
@@ -17,15 +17,15 @@ const useStyles = makeStyles(theme =>
       zIndex: theme.zIndex.snackbar,
       cursor: ({ dragging }: StyleProps) => (dragging ? 'grabbing' : 'grab'),
       pointerEvents: ({ hideHandle }: StyleProps) =>
-        hideHandle ? 'none' : undefined
+        hideHandle ? 'none' : undefined,
     },
     handle: {
       height: 3,
       borderRadius: 2,
       width: theme.spacing(4),
       backgroundColor: theme.palette.text.secondary,
-      margin: `6px auto 0`
-    }
+      margin: `6px auto 0`,
+    },
   })
 );
 

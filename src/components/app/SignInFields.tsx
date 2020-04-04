@@ -9,15 +9,15 @@ import useFormInput from 'hooks/useFormInput';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     loginButton: {
-      marginTop: theme.spacing(5)
-    }
+      marginTop: theme.spacing(5),
+    },
   })
 );
 
 function SignUpFields({
   emailControl,
   passwordControl,
-  loading
+  loading,
 }: {
   emailControl: ReturnType<typeof useFormInput>;
   passwordControl: ReturnType<typeof useFormInput>;

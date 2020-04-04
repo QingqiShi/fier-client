@@ -23,7 +23,7 @@ function Login() {
     setLoading(true);
     const email = emailControl[0];
     const password = passwordControl[0];
-    signIn({ email, password }).then(user => {
+    signIn({ email, password }).then((user) => {
       if (!user) {
         setLoading(false);
       }

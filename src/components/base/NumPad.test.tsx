@@ -7,7 +7,7 @@ test('renders', () => {
   const { getByText, getByTestId } = render(<NumPad />);
 
   // Numbers
-  [1, 2, 3, 4, 5, 6, 7, 8, 9, 0].forEach(n => {
+  [1, 2, 3, 4, 5, 6, 7, 8, 9, 0].forEach((n) => {
     expect(getByText(n.toString())).toBeInTheDocument();
   });
 

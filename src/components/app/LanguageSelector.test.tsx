@@ -7,8 +7,8 @@ const mockSettings = [{ locale: 'zh' }, { setLocale: jest.fn() }];
 jest.mock('stores/settings', () => ({
   __esModule: true,
   default: {
-    useStore: () => mockSettings
-  }
+    useStore: () => mockSettings,
+  },
 }));
 
 test('select language using flags', async () => {

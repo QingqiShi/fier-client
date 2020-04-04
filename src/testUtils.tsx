@@ -4,11 +4,11 @@ import {
   RenderOptions,
   act,
   fireEvent,
-  render as rtlRender
+  render as rtlRender,
 } from '@testing-library/react';
 import {
   RenderHookOptions,
-  renderHook as rhtlRenderHook
+  renderHook as rhtlRenderHook,
 } from '@testing-library/react-hooks';
 import { Store, useStoreProvider } from 'react-lit-store';
 import { animated } from '@react-spring/web';
@@ -19,7 +19,7 @@ import {
   auth as mockAuth,
   mockAuthState,
   mockDocSnapshot,
-  mockError
+  mockError,
 } from 'firebase/app';
 import i18n from 'stores/i18n';
 import settings from 'stores/settings';
@@ -29,7 +29,7 @@ import en from 'translations/en.json';
 import zh from 'translations/zh.json';
 
 window.swStates = {
-  updateAndReload: jest.fn()
+  updateAndReload: jest.fn(),
 };
 
 type Options = {
@@ -42,7 +42,7 @@ type Options = {
 
 function App({
   children,
-  options
+  options,
 }: React.PropsWithChildren<{ options?: Options }>) {
   const [, actions] = i18n.useStore();
   useEffect(() => {
@@ -102,7 +102,7 @@ export function renderHook<P, R>(
 ) {
   return rhtlRenderHook(callback, {
     wrapper: createWrapper(options),
-    ...options
+    ...options,
   });
 }
 
@@ -115,7 +115,7 @@ export function renderSpringHook(useSpringHook: () => any) {
   return {
     ...result,
     getEl: () => result.getByText('el'),
-    rerender: () => result.rerender(<AnimatedDiv />)
+    rerender: () => result.rerender(<AnimatedDiv />),
   };
 }
 
@@ -130,7 +130,7 @@ export function renderGestureHook(
   return {
     ...result,
     getEl: () => result.getByText('test'),
-    rerender: () => result.rerender(<GestureDiv />)
+    rerender: () => result.rerender(<GestureDiv />),
   };
 }
 
@@ -147,7 +147,7 @@ export class DragUtil {
 
   dragStart() {
     fireEvent.touchStart(this.getEl(), {
-      touches: [{ clientX: this.x, clientY: this.y }]
+      touches: [{ clientX: this.x, clientY: this.y }],
     });
     return this;
   }
@@ -155,7 +155,7 @@ export class DragUtil {
   dragDown(distance: number) {
     this.y += distance;
     fireEvent.touchMove(this.getEl(), {
-      touches: [{ clientX: this.x, clientY: this.y }]
+      touches: [{ clientX: this.x, clientY: this.y }],
     });
     return this;
   }
@@ -163,14 +163,14 @@ export class DragUtil {
   dragUp(distance: number) {
     this.y -= distance;
     fireEvent.touchMove(this.getEl(), {
-      touches: [{ clientX: this.x, clientY: this.y }]
+      touches: [{ clientX: this.x, clientY: this.y }],
     });
     return this;
   }
 
   dragEnd() {
     fireEvent.touchEnd(this.getEl(), {
-      touches: [{ clientX: this.x, clientY: this.y }]
+      touches: [{ clientX: this.x, clientY: this.y }],
     });
     return this;
   }
@@ -186,7 +186,7 @@ export class DragUtil {
   }
 
   later(delay: number) {
-    return new Promise(resolve => setTimeout(resolve, delay));
+    return new Promise((resolve) => setTimeout(resolve, delay));
   }
 }
 
@@ -211,7 +211,7 @@ export function mockAuthUser(
           updateEmail: jest.fn(() => Promise.resolve()),
           updatePassword: jest.fn(() => Promise.resolve()),
           reauthenticateWithCredential: jest.fn(() => Promise.resolve()),
-          ...user
+          ...user,
         };
   if (error) {
     mockError(error);

@@ -12,7 +12,7 @@ beforeEach(() => {
     now: mockRaf.now,
     requestAnimationFrame: mockRaf.raf,
     cancelAnimationFrame: mockRaf.cancel,
-    frameLoop: new FrameLoop()
+    frameLoop: new FrameLoop(),
   });
 });
 
@@ -85,10 +85,7 @@ test('drag close', async () => {
   const drag = new DragUtil(() => getByText('content'), mockRaf);
   await drag.dragStart().later(50);
   await drag.dragDown(200).later(50);
-  drag
-    .dragDown(10)
-    .dragEnd()
-    .wait();
+  drag.dragDown(10).dragEnd().wait();
 
   expect(handleClose).toHaveBeenCalled();
 });
@@ -104,10 +101,7 @@ test('drag close with handle', async () => {
   handleClose.mockClear();
   const drag = new DragUtil(() => getByTestId('modal-card-handle'), mockRaf);
   await drag.dragStart().later(50);
-  drag
-    .dragDown(50)
-    .dragEnd()
-    .wait();
+  drag.dragDown(50).dragEnd().wait();
 
   expect(handleClose).toHaveBeenCalled();
 });
@@ -117,10 +111,7 @@ test('overflow hidden while dragging', async () => {
 
   const drag = new DragUtil(() => getByText('content'), mockRaf);
   await drag.dragStart().later(50);
-  await drag
-    .dragDown(50)
-    .wait()
-    .later(50);
+  await drag.dragDown(50).wait().later(50);
 
   expect(getByText('content')).toHaveStyle('overflow:hidden');
 
@@ -142,10 +133,7 @@ test('flick up to open', async () => {
   await drag.dragStart().later(50);
   await drag.dragDown(300).later(50);
   await drag.dragUp(50).later(50);
-  drag
-    .dragUp(50)
-    .dragEnd()
-    .wait();
+  drag.dragUp(50).dragEnd().wait();
 
   expect(handleClose).not.toHaveBeenCalled();
 });
@@ -161,10 +149,7 @@ test('drag distance too short', async () => {
   const drag = new DragUtil(() => getByText('content'), mockRaf);
   await drag.dragStart().later(50);
   await drag.dragDown(50).later(50);
-  drag
-    .dragDown(0.5)
-    .dragEnd()
-    .wait();
+  drag.dragDown(0.5).dragEnd().wait();
 
   expect(handleClose).not.toHaveBeenCalled();
 });
@@ -179,10 +164,7 @@ test('prevent close modal', async () => {
 
   const drag = new DragUtil(() => getByText('content'), mockRaf);
   await drag.dragStart().later(50);
-  drag
-    .dragDown(50)
-    .dragEnd()
-    .wait();
+  drag.dragDown(50).dragEnd().wait();
 
   expect(handleClose).not.toHaveBeenCalled();
 });

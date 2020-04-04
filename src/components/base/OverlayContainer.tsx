@@ -13,8 +13,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     overflow: 'auto',
     display: 'flex',
     alignItems: 'center',
-    zIndex: theme.zIndex.modal
-  }
+    zIndex: theme.zIndex.modal,
+  },
 }));
 
 function OverlayContainer({

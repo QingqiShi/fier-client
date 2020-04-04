@@ -5,7 +5,7 @@ import {
   ListItemIcon,
   ListItemSecondaryAction,
   ListItemText,
-  ListSubheader
+  ListSubheader,
 } from '@material-ui/core';
 import { Category, ChevronRight, Language } from '@material-ui/icons';
 import LanguageSelector from './LanguageSelector';

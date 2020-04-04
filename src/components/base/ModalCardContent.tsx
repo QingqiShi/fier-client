@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { ReactEventHandlers } from 'react-use-gesture/dist/types';
 
-const useStyles = makeStyles(theme =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     contentRoot: {
       padding: `${theme.spacing(8)}px calc(${theme.spacing(
@@ -11,8 +11,8 @@ const useStyles = makeStyles(theme =>
         3
       )}px) calc(${theme.spacing(3)}px + env(safe-area-inset-left))`,
       height: '100%',
-      overflowY: 'scroll'
-    }
+      overflowY: 'scroll',
+    },
   })
 );
 

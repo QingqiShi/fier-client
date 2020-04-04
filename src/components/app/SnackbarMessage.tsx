@@ -11,7 +11,7 @@ function SlideTransition(props: TransitionProps) {
 function SnackbarMessage() {
   const [
     { type, message, actionLabel, action, isShowing, hideAfter },
-    { clearMessage }
+    { clearMessage },
   ] = snackbar.useStore();
 
   const handleSnackbarClose = useCallback(
@@ -26,7 +26,7 @@ function SnackbarMessage() {
     <Snackbar
       anchorOrigin={{
         vertical: 'top',
-        horizontal: 'center'
+        horizontal: 'center',
       }}
       autoHideDuration={hideAfter || undefined}
       open={isShowing}

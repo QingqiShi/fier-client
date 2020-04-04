@@ -8,8 +8,8 @@ const useStyles = makeStyles(() =>
   createStyles({
     numWrapper: {
       width: '100%',
-      textAlign: 'right'
-    }
+      textAlign: 'right',
+    },
   })
 );
 
@@ -39,7 +39,7 @@ function Create({ onClose }: { onClose: () => void }) {
           {num}
         </Typography>
       </div>
-      <NumPad onChange={n => setNum(n)} onDone={() => onClose()} />
+      <NumPad onChange={(n) => setNum(n)} onDone={() => onClose()} />
     </>
   );
 }
