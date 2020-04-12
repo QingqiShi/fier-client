@@ -36,8 +36,8 @@ function CategoryAddForm({
   onSave,
   onDelete,
 }: {
-  value: Category;
-  onChange: React.Dispatch<React.SetStateAction<Category>>;
+  value: Settings.Category;
+  onChange: React.Dispatch<React.SetStateAction<Settings.Category>>;
   onSave: () => void;
   onDelete: () => void;
 }) {
@@ -83,7 +83,7 @@ function CategoryAddForm({
             variant="contained"
             onClick={onDelete}
           >
-            {t['REMOVE_CATEGORY']}
+            {t.REMOVE}
           </Button>
         )}
         <Button
@@ -93,7 +93,7 @@ function CategoryAddForm({
           variant="contained"
           onClick={onSave}
         >
-          {id ? t['EDIT_CATEGORY'] : t['ADD_CATEGORY']}
+          {id ? t.EDIT : t.ADD}
         </Button>
       </div>
     </form>

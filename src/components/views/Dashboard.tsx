@@ -21,6 +21,8 @@ import { Add } from '@material-ui/icons';
 import Currency from 'components/base/Currency';
 import TopNav from 'components/app/TopNav';
 import useTexts from 'hooks/useTexts';
+import useModalHash, { Modal } from 'hooks/useModalHash';
+import settings from 'stores/settings';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -67,6 +69,8 @@ const useStyles = makeStyles((theme: Theme) =>
 function Dashboard() {
   const [t] = useTexts();
   const classes = useStyles();
+  const { open: openCreateAcount } = useModalHash(Modal.CREATE_ACCOUNT);
+  const [{ accounts }] = settings.useStore();
 
   return (
     <div className={classes.container}>
@@ -92,9 +96,9 @@ function Dashboard() {
           cols={1.5}
           spacing={16}
         >
-          {[1].map((i) => (
+          {accounts.map(({ id, name, type, currency }) => (
             <GridListTile
-              key={`account-${i}`}
+              key={`dashboard-account-${id}`}
               classes={{
                 tile: classes.gridListTile,
               }}
@@ -103,13 +107,15 @@ function Dashboard() {
                 <CardActionArea>
                   <CardContent>
                     <Typography color="textSecondary" variant="subtitle1">
-                      Xxxx xxxxxxx
+                      {type === 'debt'
+                        ? t.ACCOUNT_TYPE_DEBT
+                        : t.ACCOUNT_TYPE_NORMAL}
                     </Typography>
-                    <Typography>Xxxxx</Typography>
+                    <Typography>{name}</Typography>
 
                     <Currency
                       align="right"
-                      currency="GBP"
+                      currency={currency.toUpperCase()}
                       value={1234.56}
                       variant={['h6', 'subtitle1']}
                     />
@@ -124,7 +130,11 @@ function Dashboard() {
             }}
             style={{ paddingRight: 16 }}
           >
-            <Card className={classes.gridAddButton} elevation={4}>
+            <Card
+              className={classes.gridAddButton}
+              elevation={4}
+              onClick={openCreateAcount}
+            >
               <CardActionArea>
                 <CardContent>
                   <Typography align="center" color="textSecondary" variant="h3">

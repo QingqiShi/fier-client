@@ -50,9 +50,10 @@
   "SETUP_CATEGORIES_INCOME": "收入",
   "SETUP_CATEGORIES_EXPENSES": "支出",
 
-  "EDIT_CATEGORY": "编辑",
-  "REMOVE_CATEGORY": "移除",
-  "ADD_CATEGORY": "添加",
+  "ADD": "添加",
+  "REMOVE": "移除",
+  "EDIT": "编辑",
+
   "ADD_INCOME_CATEGORY": "添加收入分类",
   "ADD_EXPENSES_CATEGORY": "添加支出分类",
   "CATEGORY_NAME_LABEL": "分类名",
@@ -61,5 +62,16 @@
   "NET_WORTH": "净资产",
   "ACCOUNTS": "账户",
   "TRANSACTIONS": "流水",
-  "CREATE_ACCOUNT": "创建账户"
+  "CREATE_ACCOUNT": "创建账户",
+
+  "ACCOUNT_TYPE": "账户类型",
+  "ACCOUNT_NAME": "账户名",
+  "ACCOUNT_CURRENCY": "币种",
+  "ACCOUNT_TYPE_NORMAL": "普通账户",
+  "ACCOUNT_TYPE_DEBT": "负债账户",
+  "ADD_ACCOUNT": "添加账户",
+
+  "CURRENCY_GBP": "英镑 (£)",
+  "CURRENCY_USD": "美元 ($)",
+  "CURRENCY_CNY": "人民币 (¥)"
 }

@@ -22,20 +22,6 @@ const useStyles = makeStyles((theme) =>
       color: theme.palette.grey[500],
       marginBottom: theme.spacing(3),
     },
-    addSheet: {
-      position: 'fixed',
-      bottom: 0,
-      left: 0,
-      right: 0,
-      padding: `${theme.spacing(4)}px ${theme.spacing(
-        2
-      )}px ${`calc(env(safe-area-inset-bottom) + 40px + ${theme.spacing(
-        4
-      )}px)`}`,
-      background: theme.palette.background.level1,
-      transform: 'translate3d(0, 0, 0)',
-      height: ADD_SHEET_HEIGHT,
-    },
     doneFab: {
       position: 'fixed',
       bottom: `calc(env(safe-area-inset-bottom) + 40px + ${theme.spacing(
@@ -52,7 +38,7 @@ function SetupCategories({ onClose }: { onClose: () => void }) {
   const classes = useStyles();
 
   const [showAddSheet, setShowAddSheet] = useState(false);
-  const [newCategory, setNewCategory] = useState<Category>({
+  const [newCategory, setNewCategory] = useState<Settings.Category>({
     id: 0,
     emoji: '',
     name: '',
@@ -71,7 +57,7 @@ function SetupCategories({ onClose }: { onClose: () => void }) {
       </Typography>
 
       <CategoriesList
-        addLabel={t['ADD_CATEGORY']}
+        addLabel={t.ADD}
         categories={categories.filter((cat) => cat.type === 'expenses')}
         header={t['SETUP_CATEGORIES_EXPENSES']}
         onAdd={() => {
@@ -84,7 +70,7 @@ function SetupCategories({ onClose }: { onClose: () => void }) {
         }}
       />
       <CategoriesList
-        addLabel={t['ADD_CATEGORY']}
+        addLabel={t.ADD}
         categories={categories.filter((cat) => cat.type === 'income')}
         header={t['SETUP_CATEGORIES_INCOME']}
         onAdd={() => {
