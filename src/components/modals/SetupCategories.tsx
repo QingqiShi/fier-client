@@ -38,7 +38,7 @@ function SetupCategories({ onClose }: { onClose: () => void }) {
   const classes = useStyles();
 
   const [showAddSheet, setShowAddSheet] = useState(false);
-  const [newCategory, setNewCategory] = useState<Category>({
+  const [newCategory, setNewCategory] = useState<Settings.Category>({
     id: 0,
     emoji: '',
     name: '',
@@ -57,7 +57,7 @@ function SetupCategories({ onClose }: { onClose: () => void }) {
       </Typography>
 
       <CategoriesList
-        addLabel={t['ADD_CATEGORY']}
+        addLabel={t.ADD}
         categories={categories.filter((cat) => cat.type === 'expenses')}
         header={t['SETUP_CATEGORIES_EXPENSES']}
         onAdd={() => {
@@ -70,7 +70,7 @@ function SetupCategories({ onClose }: { onClose: () => void }) {
         }}
       />
       <CategoriesList
-        addLabel={t['ADD_CATEGORY']}
+        addLabel={t.ADD}
         categories={categories.filter((cat) => cat.type === 'income')}
         header={t['SETUP_CATEGORIES_INCOME']}
         onAdd={() => {

@@ -5,6 +5,7 @@ export enum Modal {
   PROFILE = '#profile',
   CREATE = '#create',
   SETUP = '#setup',
+  CREATE_ACCOUNT = '#createAccount',
 }
 
 function useModalHash(modal: Modal) {

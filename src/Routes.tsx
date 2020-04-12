@@ -19,6 +19,7 @@ const LazyRegister = lazy(() => import('components/views/Register'));
 // Modals
 const LazyProfile = lazy(() => import('components/modals/Profile'));
 const LazyCreate = lazy(() => import('components/modals/Create'));
+const LazyCreateAccount = lazy(() => import('components/modals/CreateAccount'));
 const LazySetupCategories = lazy(() =>
   import('components/modals/SetupCategories')
 );
@@ -33,6 +34,7 @@ function Routes() {
   const { isOpen: profileIsOpen, close } = useModalHash(Modal.PROFILE);
   const { isOpen: createIsOpen } = useModalHash(Modal.CREATE);
   const { isOpen: setupIsOpen } = useModalHash(Modal.SETUP);
+  const { isOpen: createAccountIsOpen } = useModalHash(Modal.CREATE_ACCOUNT);
 
   useEffect(() => {
     if (routeLocale !== locale) {
@@ -87,6 +89,9 @@ function Routes() {
       </SlideModal>
       <SlideModal open={createIsOpen} onClose={close}>
         <LazyCreate onClose={close} />
+      </SlideModal>
+      <SlideModal height={450} open={createAccountIsOpen} onClose={close}>
+        <LazyCreateAccount />
       </SlideModal>
       <SlideModal
         open={setupIsOpen}

@@ -52,8 +52,8 @@ function CategoriesList({
   addLabel,
 }: {
   header: string;
-  categories: Category[];
-  onClick?: (category: Category) => void;
+  categories: Settings.Category[];
+  onClick?: (category: Settings.Category) => void;
   onAdd?: () => void;
   addLabel?: string;
 }) {

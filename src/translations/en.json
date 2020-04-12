@@ -50,9 +50,10 @@
   "SETUP_CATEGORIES_INCOME": "Income Categories",
   "SETUP_CATEGORIES_EXPENSES": "Expenses Categories",
 
-  "EDIT_CATEGORY": "Edit",
-  "REMOVE_CATEGORY": "Remove",
-  "ADD_CATEGORY": "Add",
+  "ADD": "Add",
+  "REMOVE": "Remove",
+  "EDIT": "Edit",
+
   "ADD_INCOME_CATEGORY": "Add Income Category",
   "ADD_EXPENSES_CATEGORY": "Add Expenses Category",
   "CATEGORY_NAME_LABEL": "Name",
@@ -61,5 +62,16 @@
   "NET_WORTH": "Net Worth",
   "ACCOUNTS": "Accounts",
   "TRANSACTIONS": "Transactions",
-  "CREATE_ACCOUNT": "Create Account"
+  "CREATE_ACCOUNT": "Create Account",
+
+  "ACCOUNT_TYPE": "Account type",
+  "ACCOUNT_NAME": "Name",
+  "ACCOUNT_CURRENCY": "Currency",
+  "ACCOUNT_TYPE_NORMAL": "Normal Account",
+  "ACCOUNT_TYPE_DEBT": "Debt Account",
+  "ADD_ACCOUNT": "Add Account",
+
+  "CURRENCY_GBP": "GBP (£)",
+  "CURRENCY_USD": "USD ($)",
+  "CURRENCY_CNY": "CNY (¥)"
 }
