@@ -90,7 +90,7 @@ function Routes() {
       <SlideModal open={createIsOpen} onClose={close}>
         <LazyCreate onClose={close} />
       </SlideModal>
-      <SlideModal height={450} open={createAccountIsOpen} onClose={close}>
+      <SlideModal height={470} open={createAccountIsOpen} onClose={close}>
         <LazyCreateAccount />
       </SlideModal>
       <SlideModal
