@@ -17,7 +17,7 @@
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.48",
     "@react-spring/web": "^9.0.0-beta.34",
-    "emoji-regex": "^8.0.0",
+    "emoji-regex": "^9.0.0",
     "firebase": "^7.14.0",
     "fitty": "^2.3.0",
     "react": "^16.13.1",
