@@ -15,7 +15,7 @@
   "dependencies": {
     "@material-ui/core": "^4.9.10",
     "@material-ui/icons": "^4.5.1",
-    "@material-ui/lab": "^4.0.0-alpha.48",
+    "@material-ui/lab": "^4.0.0-alpha.49",
     "@react-spring/web": "^9.0.0-beta.34",
     "emoji-regex": "^9.0.0",
     "firebase": "^7.14.0",
