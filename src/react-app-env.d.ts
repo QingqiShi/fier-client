@@ -22,3 +22,8 @@ declare module 'raf-stub' {
   const createStub: () => RafStub;
   export default createStub;
 }
+
+declare module '@material-ui/pickers/adapter/dayjs.cjs' {
+  export * from '@material-ui/pickers/adapter/dayjs';
+  export { default } from '@material-ui/pickers/adapter/dayjs';
+}

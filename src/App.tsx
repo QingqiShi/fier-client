@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { LocalizationProvider } from '@material-ui/pickers';
+import DayJsUtils from '@material-ui/pickers/adapter/dayjs.cjs';
 import { useStoreProvider } from 'react-lit-store';
 import i18n from 'stores/i18n';
 import user from 'stores/user';
@@ -64,18 +66,20 @@ function App() {
 
   return (
     <HelmetProvider>
-      <StoreProvider>
-        <FirebaseSetup>
-          <TranslationLoader>
-            <Meta />
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <SnackbarMessage />
-              <Routes />
-            </ThemeProvider>
-          </TranslationLoader>
-        </FirebaseSetup>
-      </StoreProvider>
+      <LocalizationProvider dateAdapter={DayJsUtils}>
+        <StoreProvider>
+          <FirebaseSetup>
+            <TranslationLoader>
+              <Meta />
+              <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <SnackbarMessage />
+                <Routes />
+              </ThemeProvider>
+            </TranslationLoader>
+          </FirebaseSetup>
+        </StoreProvider>
+      </LocalizationProvider>
     </HelmetProvider>
   );
 }

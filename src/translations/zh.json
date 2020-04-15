@@ -14,6 +14,8 @@
   "ERROR_EMAIL_IN_USE": "你好像已经注册过了，试试登陆吧",
   "ERROR_WEEK_PASSWORD": "密码太简单了，换个复杂点的吧！",
   "ERROR_UNKNOWN": "遇到未知错误了",
+  "ERROR_AMOUNT_REQUIRED": "请填写金额",
+  "ERROR_AMOUNT_INVALID": "这看着不像数字啊，检查一下吧",
 
   "EMAIL_LABEL": "电子邮件",
   "PASSWORD_LABEL": "密码",
@@ -73,5 +75,10 @@
 
   "CURRENCY_GBP": "英镑 (£)",
   "CURRENCY_USD": "美元 ($)",
-  "CURRENCY_CNY": "人民币 (¥)"
+  "CURRENCY_CNY": "人民币 (¥)",
+
+  "TRANSACTION_AMOUNT": "金额",
+  "TRANSACTION_ACCOUNT": "账户",
+  "TRANSACTION_DATE": "日期",
+  "TRANSACTION_NOTES": "备注"
 }

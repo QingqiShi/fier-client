@@ -3,9 +3,9 @@ import useRoute from 'hooks/useRoute';
 
 export enum Modal {
   PROFILE = '#profile',
-  CREATE = '#create',
   SETUP = '#setup',
   CREATE_ACCOUNT = '#createAccount',
+  CREATE_TRANSACTION = '#new',
 }
 
 function useModalHash(modal: Modal) {
