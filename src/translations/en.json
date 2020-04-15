@@ -14,6 +14,8 @@
   "ERROR_EMAIL_IN_USE": "Looks like you're registered already, try login instead?",
   "ERROR_WEEK_PASSWORD": "That password is too simple, try a more complex one!",
   "ERROR_UNKNOWN": "Encountered unknown error",
+  "ERROR_AMOUNT_REQUIRED": "You must enter an amount",
+  "ERROR_AMOUNT_INVALID": "This doesn't look like a number",
 
   "EMAIL_LABEL": "Email",
   "PASSWORD_LABEL": "Password",
@@ -73,5 +75,10 @@
 
   "CURRENCY_GBP": "GBP (£)",
   "CURRENCY_USD": "USD ($)",
-  "CURRENCY_CNY": "CNY (¥)"
+  "CURRENCY_CNY": "CNY (¥)",
+
+  "TRANSACTION_AMOUNT": "Amount",
+  "TRANSACTION_ACCOUNT": "Account",
+  "TRANSACTION_DATE": "Date",
+  "TRANSACTION_NOTES": "Notes"
 }

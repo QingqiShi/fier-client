@@ -14,6 +14,8 @@ import { Store, useStoreProvider } from 'react-lit-store';
 import { animated } from '@react-spring/web';
 import { MockRaf } from '@react-spring/mock-raf';
 import { ReactEventHandlers } from 'react-use-gesture/dist/types';
+import { LocalizationProvider } from '@material-ui/pickers';
+import DayJsUtils from '@material-ui/pickers/adapter/dayjs.cjs';
 import {
   clearFirestoreStates,
   auth as mockAuth,
@@ -64,21 +66,25 @@ function createWrapper(options?: Options) {
     );
     if (options?.userAndSettings) {
       return (
-        <MemoryRouter initialEntries={[options?.url ?? '/']}>
-          <Provider>
-            <FirebaseSetup>
-              <App options={options}>{children}</App>
-            </FirebaseSetup>
-          </Provider>
-        </MemoryRouter>
+        <LocalizationProvider dateAdapter={DayJsUtils}>
+          <MemoryRouter initialEntries={[options?.url ?? '/']}>
+            <Provider>
+              <FirebaseSetup>
+                <App options={options}>{children}</App>
+              </FirebaseSetup>
+            </Provider>
+          </MemoryRouter>
+        </LocalizationProvider>
       );
     }
     return (
-      <MemoryRouter initialEntries={[options?.url ?? '/']}>
-        <Provider>
-          <App options={options}>{children}</App>
-        </Provider>
-      </MemoryRouter>
+      <LocalizationProvider dateAdapter={DayJsUtils}>
+        <MemoryRouter initialEntries={[options?.url ?? '/']}>
+          <Provider>
+            <App options={options}>{children}</App>
+          </Provider>
+        </MemoryRouter>
+      </LocalizationProvider>
     );
   };
 }

@@ -70,6 +70,7 @@ function Dashboard() {
   const [t] = useTexts();
   const classes = useStyles();
   const { open: openCreateAcount } = useModalHash(Modal.CREATE_ACCOUNT);
+  const { open: openNew } = useModalHash(Modal.CREATE_TRANSACTION);
   const [{ accounts }] = settings.useStore();
 
   return (
@@ -210,7 +211,7 @@ function Dashboard() {
         ))}
       </List>
 
-      <Fab className={classes.fab} color="primary">
+      <Fab className={classes.fab} color="primary" onClick={openNew}>
         <Add />
       </Fab>
     </div>
