@@ -24,7 +24,7 @@ function SelectableCard({
   onClick,
   selected,
 }: React.PropsWithChildren<{ onClick?: () => void; selected?: boolean }>) {
-  const classes = useStyles({ selected: true });
+  const classes = useStyles({ selected });
   return (
     <Card className={classes.root} data-testid="selectable-card" elevation={4}>
       <CardActionArea onClick={onClick}>
