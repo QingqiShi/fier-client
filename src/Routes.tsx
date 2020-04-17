@@ -20,8 +20,8 @@ const LazyRegister = lazy(() => import('components/views/Register'));
 const LazyProfile = lazy(() => import('components/modals/Profile'));
 const LazyCreate = lazy(() => import('components/modals/CreateTransaction'));
 const LazyCreateAccount = lazy(() => import('components/modals/CreateAccount'));
-const LazySetupCategories = lazy(() =>
-  import('components/modals/SetupCategories')
+const LazyManageCategories = lazy(() =>
+  import('components/modals/ManageCategories')
 );
 
 function Routes() {
@@ -95,7 +95,7 @@ function Routes() {
         preventClose={!categories.length}
         onClose={close}
       >
-        <LazySetupCategories onClose={close} />
+        <LazyManageCategories onClose={close} />
       </SlideModal>
       <SlideModal open={newIsOpen} onClose={close}>
         <LazyCreate onClose={close} />
