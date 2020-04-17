@@ -26,7 +26,7 @@ const LazyManageCategories = lazy(() =>
 
 function Routes() {
   const [{ isLoggedIn }] = user.useStore();
-  const [{ locale, categories }] = settings.useStore();
+  const [{ locale }] = settings.useStore();
   const [, { setMessage }] = snackbar.useStore();
   const [t] = useText();
 
@@ -90,11 +90,7 @@ function Routes() {
       <SlideModal height={470} open={createAccountIsOpen} onClose={close}>
         <LazyCreateAccount />
       </SlideModal>
-      <SlideModal
-        open={setupIsOpen}
-        preventClose={!categories.length}
-        onClose={close}
-      >
+      <SlideModal open={setupIsOpen} onClose={close}>
         <LazyManageCategories onClose={close} />
       </SlideModal>
       <SlideModal open={newIsOpen} onClose={close}>

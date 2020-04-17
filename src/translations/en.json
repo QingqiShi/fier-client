@@ -78,6 +78,7 @@
   "CURRENCY_CNY": "CNY (¥)",
 
   "TRANSACTION_AMOUNT": "Amount",
+  "TRANSACTION_CATEGORY": "Category",
   "TRANSACTION_ACCOUNT": "Account",
   "TRANSACTION_DATE": "Date",
   "TRANSACTION_NOTES": "Notes"

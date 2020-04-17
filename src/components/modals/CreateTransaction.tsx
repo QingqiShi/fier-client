@@ -1,21 +1,51 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { InputAdornment, MenuItem, TextField } from '@material-ui/core';
+import {
+  FormControl,
+  InputAdornment,
+  MenuItem,
+  TextField,
+  Theme,
+  Typography,
+  createStyles,
+  makeStyles,
+} from '@material-ui/core';
 import { DateTimePicker } from '@material-ui/pickers';
 import dayjs, { Dayjs } from 'dayjs';
-
+import HorizontalList from 'components/base/HorizontalList';
+import HorizontalListItem from 'components/base/HorizontalListItem';
+import SelectableCard from 'components/base/SelectableCard';
+import SlideModal from 'components/base/SlideModal';
+import ManageCategories from 'components/modals/ManageCategories';
 import useFormInput from 'hooks/useFormInput';
 import useTexts from 'hooks/useTexts';
 import settings from 'stores/settings';
 
 const NUMBER_REGEX = /^-?[1-9][0-9]*\.?[0-9]{0,2}$/;
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    category: {
+      width: '1.25em',
+      display: 'block',
+      textAlign: 'center',
+    },
+    categoriesContainer: {
+      display: 'flex',
+      margin: '0 calc((24px + env(safe-area-inset-right)) * -1)',
+    },
+  })
+);
+
 function CreateTransaction({ onClose }: { onClose: () => void }) {
   const [t] = useTexts();
+  const classes = useStyles();
   const [num, handleNumChange] = useFormInput('');
+  const [category, setCategory] = useState(0);
   const [account, handleAccountChange, setAccount] = useFormInput('');
   const [time, setTime] = useState<Dayjs | null>(dayjs());
   const [notes, handleNotesChange] = useFormInput('');
-  const [{ accounts }] = settings.useStore();
+  const [{ accounts, categories }] = settings.useStore();
+  const [showCategoriesModal, setShowCategoriesModal] = useState(false);
 
   const numIsValid = useMemo(() => NUMBER_REGEX.test(num), [num]);
   const amountHelperText = useMemo(() => {
@@ -31,7 +61,7 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
     if (!account && accounts.length) {
       setAccount(accounts[0].id.toString());
     }
-  });
+  }, [account, accounts, setAccount]);
 
   return (
     <>
@@ -44,11 +74,43 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
         }}
         label={t.TRANSACTION_AMOUNT}
         margin="normal"
+        placeholder="0.00"
         value={num}
         fullWidth
         required
         onChange={handleNumChange}
       />
+      <FormControl className={classes.categoriesContainer}>
+        <input id="add-category" hidden />
+        <HorizontalList height={110}>
+          <HorizontalListItem>
+            <SelectableCard onClick={() => setShowCategoriesModal(true)}>
+              <Typography
+                align="center"
+                className={classes.category}
+                color="textSecondary"
+                data-testid="add-create-category"
+                variant="h4"
+              >
+                +
+              </Typography>
+            </SelectableCard>
+          </HorizontalListItem>
+          {categories.map((c) => (
+            <HorizontalListItem key={`add-category-${c.id}`}>
+              <SelectableCard
+                selected={category === c.id}
+                onClick={() => setCategory(c.id)}
+              >
+                <Typography className={classes.category} variant="h4">
+                  {c.emoji}
+                </Typography>
+              </SelectableCard>
+            </HorizontalListItem>
+          ))}
+        </HorizontalList>
+      </FormControl>
+
       <TextField
         id="add-account"
         label={t.TRANSACTION_ACCOUNT}
@@ -93,6 +155,13 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
         multiline
         onChange={handleNotesChange}
       />
+
+      <SlideModal
+        open={showCategoriesModal}
+        onClose={() => setShowCategoriesModal(false)}
+      >
+        <ManageCategories onClose={() => setShowCategoriesModal(false)} />
+      </SlideModal>
     </>
   );
 }

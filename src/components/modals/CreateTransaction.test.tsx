@@ -1,7 +1,20 @@
 import React from 'react';
-import { act, fireEvent } from '@testing-library/react';
-import { mockAuthUser, mockFirestore, render } from 'testUtils';
+import { act, fireEvent, waitFor } from '@testing-library/react';
+import createMockRaf, { MockRaf } from '@react-spring/mock-raf';
+import { FrameLoop, Globals } from '@react-spring/web';
+import { DragUtil, mockAuthUser, mockFirestore, render } from 'testUtils';
 import CreateTransaction from './CreateTransaction';
+
+let mockRaf: MockRaf;
+beforeEach(() => {
+  mockRaf = createMockRaf();
+  Globals.assign({
+    now: mockRaf.now,
+    requestAnimationFrame: mockRaf.raf,
+    cancelAnimationFrame: mockRaf.cancel,
+    frameLoop: new FrameLoop(),
+  });
+});
 
 test('render form', () => {
   const { getByLabelText, getByText } = render(
@@ -20,6 +33,7 @@ test('render form', () => {
         { id: 1, name: 'Test Account' },
         { id: 2, name: 'Another Account' },
       ],
+      categories: [{ id: 1, emoji: '💰' }],
     })
   );
 
@@ -34,6 +48,9 @@ test('render form', () => {
   // Account
   fireEvent.mouseDown(getByLabelText('Account'));
   fireEvent.click(getByText('Another Account'));
+
+  // Category
+  fireEvent.click(getByText('💰'));
 
   // Date
   fireEvent.click(getByLabelText('Date'));
@@ -61,4 +78,47 @@ test('show error for invalid amount', () => {
 
   fireEvent.change(getByLabelText(/Amount/), { target: { value: 'invalid' } });
   expect(getByText("This doesn't look like a number")).toBeInTheDocument();
+});
+
+test('add manage category modal', async () => {
+  const { getByTestId, getByText, queryByText } = render(
+    <CreateTransaction onClose={() => {}} />,
+    {
+      userAndSettings: true,
+    }
+  );
+
+  const userId = 'testid';
+  act(() => void mockAuthUser({ uid: userId }));
+  act(() =>
+    mockFirestore(`settings/${userId}`, {
+      locale: 'en',
+      categories: [{ id: 1, emoji: '💰' }],
+    })
+  );
+
+  const drag = new DragUtil(() => getByText('Categories'), mockRaf);
+
+  // Open
+  fireEvent.click(getByTestId('add-create-category'));
+  drag.wait();
+  expect(getByText('Categories')).toBeInTheDocument();
+
+  // Click 'Done' to close
+  fireEvent.click(getByText('Done'));
+  drag.wait();
+  await waitFor(() =>
+    expect(queryByText('Categories')).not.toBeInTheDocument()
+  );
+
+  // Open again
+  fireEvent.click(getByTestId('add-create-category'));
+  drag.wait();
+
+  // Drag to close
+  await drag.dragStart().later(50);
+  drag.dragDown(50).dragEnd().wait();
+  await waitFor(() =>
+    expect(queryByText('Categories')).not.toBeInTheDocument()
+  );
 });
