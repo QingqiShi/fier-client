@@ -20,13 +20,13 @@ const LazyRegister = lazy(() => import('components/views/Register'));
 const LazyProfile = lazy(() => import('components/modals/Profile'));
 const LazyCreate = lazy(() => import('components/modals/CreateTransaction'));
 const LazyCreateAccount = lazy(() => import('components/modals/CreateAccount'));
-const LazySetupCategories = lazy(() =>
-  import('components/modals/SetupCategories')
+const LazyManageCategories = lazy(() =>
+  import('components/modals/ManageCategories')
 );
 
 function Routes() {
   const [{ isLoggedIn }] = user.useStore();
-  const [{ locale, categories }] = settings.useStore();
+  const [{ locale }] = settings.useStore();
   const [, { setMessage }] = snackbar.useStore();
   const [t] = useText();
 
@@ -90,12 +90,8 @@ function Routes() {
       <SlideModal height={470} open={createAccountIsOpen} onClose={close}>
         <LazyCreateAccount />
       </SlideModal>
-      <SlideModal
-        open={setupIsOpen}
-        preventClose={!categories.length}
-        onClose={close}
-      >
-        <LazySetupCategories onClose={close} />
+      <SlideModal open={setupIsOpen} onClose={close}>
+        <LazyManageCategories onClose={close} />
       </SlideModal>
       <SlideModal open={newIsOpen} onClose={close}>
         <LazyCreate onClose={close} />

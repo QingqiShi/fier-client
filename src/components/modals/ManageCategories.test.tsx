@@ -3,7 +3,7 @@ import { act, fireEvent } from '@testing-library/react';
 import createMockRaf, { MockRaf } from '@react-spring/mock-raf';
 import { FrameLoop, Globals } from '@react-spring/web';
 import { mockAuthUser, mockFirestore, render } from 'testUtils';
-import SetupCategories from './SetupCategories';
+import ManageCategories from './ManageCategories';
 
 let mockRaf: MockRaf;
 beforeEach(() => {
@@ -18,7 +18,7 @@ beforeEach(() => {
 
 test('render title and add buttons', () => {
   const { getByText, getAllByText } = render(
-    <SetupCategories onClose={() => {}} />,
+    <ManageCategories onClose={() => {}} />,
     {
       userAndSettings: true,
     }
@@ -30,7 +30,7 @@ test('render title and add buttons', () => {
 
 test('show done button when categories exist', () => {
   const handleClose = jest.fn();
-  const { getByText } = render(<SetupCategories onClose={handleClose} />, {
+  const { getByText } = render(<ManageCategories onClose={handleClose} />, {
     userAndSettings: true,
   });
   act(() => void mockAuthUser({ uid: 'testid' }));
@@ -55,7 +55,7 @@ test('show done button when categories exist', () => {
 
 test('click add to show new form', () => {
   const { getByText, getAllByText } = render(
-    <SetupCategories onClose={() => {}} />,
+    <ManageCategories onClose={() => {}} />,
     {
       userAndSettings: true,
     }
@@ -71,7 +71,7 @@ test('click add to show new form', () => {
 test('add categories and save then delete', () => {
   const handleClose = jest.fn();
   const { getByLabelText, getAllByText, getByText, queryByText } = render(
-    <SetupCategories onClose={handleClose} />,
+    <ManageCategories onClose={handleClose} />,
     {
       userAndSettings: true,
     }
@@ -121,7 +121,7 @@ test('add categories and save then delete', () => {
 
 test('add category form can be closed', () => {
   const { queryByText, getAllByText } = render(
-    <SetupCategories onClose={() => {}} />,
+    <ManageCategories onClose={() => {}} />,
     {
       userAndSettings: true,
     }
