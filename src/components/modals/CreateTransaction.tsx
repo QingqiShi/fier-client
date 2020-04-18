@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import {
   FormControl,
   InputAdornment,
+  InputLabel,
   MenuItem,
   TextField,
   Theme,
@@ -31,7 +32,14 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     categoriesContainer: {
       display: 'flex',
-      margin: '0 calc((24px + env(safe-area-inset-right)) * -1)',
+      margin: `${theme.spacing(
+        2
+      )}px calc((24px + env(safe-area-inset-right)) * -1) ${theme.spacing(
+        1
+      )}px`,
+    },
+    categoriesLabel: {
+      margin: `0 calc(24px + env(safe-area-inset-right))`,
     },
   })
 );
@@ -80,7 +88,14 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
         required
         onChange={handleNumChange}
       />
-      <FormControl className={classes.categoriesContainer}>
+      <FormControl
+        className={classes.categoriesContainer}
+        margin="normal"
+        required
+      >
+        <InputLabel className={classes.categoriesLabel} shrink>
+          {t.TRANSACTION_CATEGORY}
+        </InputLabel>
         <input id="add-category" hidden />
         <HorizontalList height={110}>
           <HorizontalListItem>
@@ -117,6 +132,7 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
         margin="normal"
         value={account}
         fullWidth
+        required
         select
         onChange={handleAccountChange}
       >
@@ -143,6 +159,7 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
           margin="normal"
           value={time}
           fullWidth
+          required
           onChange={(date) => setTime(date)}
         />
       </div>

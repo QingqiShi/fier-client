@@ -38,8 +38,8 @@ test('render form', () => {
   );
 
   expect(getByLabelText(/Amount/)).toBeInTheDocument();
-  expect(getByLabelText('Account')).toBeInTheDocument();
-  expect(getByLabelText('Date')).toBeInTheDocument();
+  expect(getByLabelText(/Account/)).toBeInTheDocument();
+  expect(getByLabelText(/Date/)).toBeInTheDocument();
   expect(getByLabelText('Notes')).toBeInTheDocument();
 
   // Amount
@@ -53,7 +53,7 @@ test('render form', () => {
   fireEvent.click(getByText('💰'));
 
   // Date
-  fireEvent.click(getByLabelText('Date'));
+  fireEvent.click(getByLabelText(/Date/));
   fireEvent.mouseDown(getByText('28'));
   fireEvent.mouseMove(getByText('28'));
   fireEvent.mouseUp(getByText('28'));
