@@ -15,7 +15,7 @@ const initialState = {
 
 function setListSetting<T extends { id: number }>(
   state: typeof initialState,
-  name: 'categories' | 'accounts',
+  name: keyof typeof initialState['ids'],
   newItem: T
 ) {
   const list: T[] = state[name] as any;
