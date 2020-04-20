@@ -58,7 +58,7 @@ const store = createStore(
   },
   () => {
     const [{ isLoggedIn, uid }] = user.useStore();
-    return isLoggedIn && `settings/${uid}`;
+    return isLoggedIn && `users/${uid}/settings/app`;
   }
 );
 

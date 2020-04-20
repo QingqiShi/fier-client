@@ -8,7 +8,7 @@ test('render accounts', () => {
 
   act(() => void mockAuthUser({ uid: 'testid' }));
   act(() =>
-    mockFirestore('settings/testid', {
+    mockFirestore('users/testid/settings/app', {
       locale: 'en',
       accounts: [
         {

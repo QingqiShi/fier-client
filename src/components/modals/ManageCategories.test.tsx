@@ -38,7 +38,7 @@ test('show done button when categories exist', () => {
   expect(getByText('Done').closest('button')).toBeDisabled();
 
   act(() =>
-    mockFirestore('settings/testid', {
+    mockFirestore('users/testid/settings/app', {
       locale: 'en',
       categories: [
         { id: 1, emoji: 'A', name: 'Test', type: 'expenses' },
