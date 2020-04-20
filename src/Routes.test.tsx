@@ -46,7 +46,10 @@ test('redirects to user locale', async () => {
 
   act(() => void mockAuthUser({ uid: 'testid' }));
   act(() =>
-    mockFirestore('settings/testid', { locale: 'zh', categories: [1] })
+    mockFirestore('users/testid/settings/app', {
+      locale: 'zh',
+      categories: [1],
+    })
   );
 
   fireEvent.click(await findByTestId('topnav-profile'));
@@ -58,7 +61,10 @@ test('renders logged in user', async () => {
 
   act(() => void mockAuthUser({ uid: 'testid' }));
   act(() =>
-    mockFirestore('settings/testid', { locale: 'en', categories: [1] })
+    mockFirestore('users/testid/settings/app', {
+      locale: 'en',
+      categories: [1],
+    })
   );
 
   await waitFor(() => {
@@ -100,7 +106,9 @@ test('show snackbar message when update event was missed', async () => {
   );
 
   act(() => void mockAuthUser({ uid: 'testid' }));
-  act(() => mockFirestore('settings/testid', { locale: 'en', categories: [] }));
+  act(() =>
+    mockFirestore('users/testid/settings/app', { locale: 'en', categories: [] })
+  );
   act(() => mockRaf.flush());
 
   expect(await findByText(/New update available/)).toBeInTheDocument();

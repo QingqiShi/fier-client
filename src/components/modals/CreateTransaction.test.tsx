@@ -27,7 +27,7 @@ test('render form', () => {
   const userId = 'testid';
   act(() => void mockAuthUser({ uid: userId }));
   act(() =>
-    mockFirestore(`settings/${userId}`, {
+    mockFirestore(`users/${userId}/settings/app`, {
       locale: 'en',
       accounts: [
         { id: 1, name: 'Test Account' },
@@ -91,7 +91,7 @@ test('add manage category modal', async () => {
   const userId = 'testid';
   act(() => void mockAuthUser({ uid: userId }));
   act(() =>
-    mockFirestore(`settings/${userId}`, {
+    mockFirestore(`users/${userId}/settings/app`, {
       locale: 'en',
       categories: [{ id: 1, emoji: '💰' }],
     })

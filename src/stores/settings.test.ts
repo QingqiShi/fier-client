@@ -41,14 +41,14 @@ test('use default state without logged in user', () => {
 
 test('use correct document based on user id', () => {
   renderHookWithUser(() => settings.useStore(), UID);
-  expect(firestore().doc).toHaveBeenCalledWith('settings/testUserId');
+  expect(firestore().doc).toHaveBeenCalledWith(`users/${UID}/settings/app`);
 });
 
 test('get and set locale', () => {
   const { result } = renderHookWithUser(() => settings.useStore(), UID);
 
   act(() =>
-    mockFirestore(`settings/${UID}`, {
+    mockFirestore(`users/${UID}/settings/app`, {
       locale: 'zh',
       categories: [],
       ids: { categories: 0 },
@@ -67,7 +67,7 @@ test('get, add, edit and remove categories', () => {
   const { result } = renderHookWithUser(() => settings.useStore(), UID);
 
   act(() =>
-    mockFirestore(`settings/${UID}`, {
+    mockFirestore(`users/${UID}/settings/app`, {
       locale: 'zh',
       categories: [],
       ids: { categories: 0 },
@@ -114,7 +114,11 @@ test('get, add, edit and remove accounts', () => {
   const { result } = renderHookWithUser(() => settings.useStore(), UID);
 
   act(() =>
-    mockFirestore(`settings/${UID}`, { locale: 'zh', accounts: [], ids: {} })
+    mockFirestore(`users/${UID}/settings/app`, {
+      locale: 'zh',
+      accounts: [],
+      ids: {},
+    })
   );
 
   // Get accounts
