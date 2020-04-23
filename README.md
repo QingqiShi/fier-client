@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/QingqiShi/fier-client.svg?style=svg&circle-token=d333bb55e5cd9e7be1a921049b50111596623ce4)](https://circleci.com/gh/QingqiShi/fier-client)
+![Master Build](https://github.com/QingqiShi/fier-client/workflows/Master%20Build/badge.svg?branch=master)
 [![codecov](https://codecov.io/gh/QingqiShi/fier-client/branch/master/graph/badge.svg?token=25DtHPUGRe)](https://codecov.io/gh/QingqiShi/fier-client)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=QingqiShi/fier-client)](https://dependabot.com)
 
