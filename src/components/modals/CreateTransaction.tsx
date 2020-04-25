@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
+  Button,
   FormControl,
   InputAdornment,
   InputLabel,
@@ -17,6 +18,7 @@ import HorizontalListItem from 'components/base/HorizontalListItem';
 import SelectableCard from 'components/base/SelectableCard';
 import SlideModal from 'components/base/SlideModal';
 import ManageCategories from 'components/modals/ManageCategories';
+import CreateAccount from 'components/modals/CreateAccount';
 import useFormInput from 'hooks/useFormInput';
 import useTexts from 'hooks/useTexts';
 import settings from 'stores/settings';
@@ -41,6 +43,10 @@ const useStyles = makeStyles((theme: Theme) =>
     categoriesLabel: {
       margin: `0 calc(24px + env(safe-area-inset-right))`,
     },
+    addAccountMenuItem: {
+      margin: theme.spacing(1),
+      textAlign: 'center',
+    },
   })
 );
 
@@ -54,6 +60,7 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
   const [notes, handleNotesChange] = useFormInput('');
   const [{ accounts, categories }] = settings.useStore();
   const [showCategoriesModal, setShowCategoriesModal] = useState(false);
+  const [showAccountsModal, setShowAccountsModal] = useState(false);
 
   const numIsValid = useMemo(() => NUMBER_REGEX.test(num), [num]);
   const amountHelperText = useMemo(() => {
@@ -64,6 +71,12 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
     }
     return undefined;
   }, [num, numIsValid, t.ERROR_AMOUNT_INVALID, t.ERROR_AMOUNT_REQUIRED]);
+
+  useEffect(() => {
+    if (!category && categories.length) {
+      setCategory(categories[0].id);
+    }
+  }, [categories, category]);
 
   useEffect(() => {
     if (!account && accounts.length) {
@@ -143,16 +156,23 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
             {a.name}
           </MenuItem>
         ))}
+        <div className={classes.addAccountMenuItem}>
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowAccountsModal(true);
+            }}
+          >
+            {t.ADD_ACCOUNT}
+          </Button>
+        </div>
       </TextField>
 
       <div
-        onClick={(e) => e.stopPropagation()}
-        onMouseDown={(e) => e.stopPropagation()}
         onMouseMove={(e) => e.stopPropagation()}
-        onMouseUp={(e) => e.stopPropagation()}
-        onTouchEnd={(e) => e.stopPropagation()}
         onTouchMove={(e) => e.stopPropagation()}
-        onTouchStart={(e) => e.stopPropagation()}
       >
         <DateTimePicker
           ampm={false}
@@ -180,6 +200,13 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
         onClose={() => setShowCategoriesModal(false)}
       >
         <ManageCategories onClose={() => setShowCategoriesModal(false)} />
+      </SlideModal>
+      <SlideModal
+        height={470}
+        open={showAccountsModal}
+        onClose={() => setShowAccountsModal(false)}
+      >
+        <CreateAccount onClose={() => setShowAccountsModal(false)} />
       </SlideModal>
     </>
   );

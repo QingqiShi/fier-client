@@ -19,9 +19,7 @@ beforeEach(() => {
 test('render form', () => {
   const { getByLabelText, getByText } = render(
     <CreateTransaction onClose={() => {}} />,
-    {
-      userAndSettings: true,
-    }
+    { userAndSettings: true }
   );
 
   const userId = 'testid';
@@ -83,9 +81,7 @@ test('show error for invalid amount', () => {
 test('add manage category modal', async () => {
   const { getByTestId, getByText, queryByText } = render(
     <CreateTransaction onClose={() => {}} />,
-    {
-      userAndSettings: true,
-    }
+    { userAndSettings: true }
   );
 
   const userId = 'testid';
@@ -120,5 +116,57 @@ test('add manage category modal', async () => {
   drag.dragDown(50).dragEnd().wait();
   await waitFor(() =>
     expect(queryByText('Categories')).not.toBeInTheDocument()
+  );
+});
+
+test('show add account button when user has no accounts', async () => {
+  const { getByLabelText, getByText, queryByText } = render(
+    <CreateTransaction onClose={() => {}} />,
+    {
+      userAndSettings: true,
+    }
+  );
+
+  const userId = 'testid';
+  act(
+    () =>
+      void mockAuthUser({
+        uid: userId,
+      })
+  );
+  act(() =>
+    mockFirestore(`users/${userId}/settings/app`, {
+      locale: 'en',
+      accounts: [],
+    })
+  );
+
+  // Open accounts dropdown
+  fireEvent.mouseDown(getByLabelText('Account'));
+
+  const drag = new DragUtil(() => getByText(/Account type/), mockRaf);
+
+  // Open
+  fireEvent.click(getByText('Add Account'));
+  drag.wait();
+  expect(getByText(/Account type/)).toBeInTheDocument();
+
+  // Fill form and close
+  fireEvent.change(getByLabelText(/Name/), { target: { value: 'Test' } });
+  fireEvent.click(getByText('Add'));
+  drag.wait();
+  await waitFor(() =>
+    expect(queryByText(/Account type/)).not.toBeInTheDocument()
+  );
+
+  // Open again
+  fireEvent.click(getByText('Add Account'));
+  drag.wait();
+
+  // Drag to close
+  await drag.dragStart().later(50);
+  drag.dragDown(50).dragEnd().wait();
+  await waitFor(() =>
+    expect(queryByText(/Account type/)).not.toBeInTheDocument()
   );
 });
