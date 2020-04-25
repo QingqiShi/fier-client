@@ -73,6 +73,8 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
 
   return (
     <>
+      <Typography variant="h6">{t.NEW_TRANSACTION}</Typography>
+
       <TextField
         error={!numIsValid}
         helperText={amountHelperText}

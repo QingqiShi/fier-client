@@ -77,6 +77,7 @@
   "CURRENCY_USD": "美元 ($)",
   "CURRENCY_CNY": "人民币 (¥)",
 
+  "NEW_TRANSACTION": "记一笔",
   "TRANSACTION_AMOUNT": "金额",
   "TRANSACTION_CATEGORY": "类别",
   "TRANSACTION_ACCOUNT": "账户",
