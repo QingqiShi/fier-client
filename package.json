@@ -63,12 +63,10 @@
   "lint-staged": {
     "src/**/*.{js,ts,tsx}": [
       "eslint --ext js,ts,tsx src --fix",
-      "prettier --single-quote --write",
-      "git add"
+      "prettier --single-quote --write"
     ],
     "src/**/*.{json,css,scss,md}": [
-      "prettier --single-quote --write",
-      "git add"
+      "prettier --single-quote --write"
     ]
   },
   "jest": {
