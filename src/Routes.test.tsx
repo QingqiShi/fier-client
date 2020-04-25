@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { act, fireEvent, waitFor } from '@testing-library/react';
 import createMockRaf, { MockRaf } from '@react-spring/mock-raf';
 import { FrameLoop, Globals } from '@react-spring/web';
@@ -115,4 +116,42 @@ test('show snackbar message when update event was missed', async () => {
 
   fireEvent.click(getByText('Update Now'));
   expect(window.swStates.updateAndReload).toHaveBeenCalled();
+});
+
+test('show modals based on url hash', async () => {
+  const historyRef: {
+    history: any;
+  } = { history: null };
+  const { getByText } = render(<Routes />, {
+    userAndSettings: true,
+    useHook: () => {
+      historyRef.history = useHistory();
+    },
+  });
+
+  // Login user
+  act(
+    () =>
+      void mockAuthUser({
+        uid: 'testid',
+      })
+  );
+
+  // Manage categories
+  act(() => historyRef.history.push('#manageCategories'));
+  await waitFor(() => {
+    expect(getByText('Categories')).toBeInTheDocument();
+  });
+
+  // Create account
+  act(() => historyRef.history.push('#createAccount'));
+  await waitFor(() => {
+    expect(getByText('Add Account')).toBeInTheDocument();
+  });
+
+  // Create transaction
+  act(() => historyRef.history.push('#new'));
+  await waitFor(() => {
+    expect(getByText('New Transaction')).toBeInTheDocument();
+  });
 });

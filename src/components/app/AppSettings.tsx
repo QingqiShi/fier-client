@@ -14,7 +14,7 @@ import useModalHash, { Modal } from 'hooks/useModalHash';
 
 function AppSettings({ className }: { className: string }) {
   const [t] = useTexts();
-  const { open: openCategories } = useModalHash(Modal.SETUP);
+  const { open: openCategories } = useModalHash(Modal.MANAGE_CATEGORIES);
   return (
     <List
       className={className}

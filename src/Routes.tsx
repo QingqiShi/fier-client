@@ -32,7 +32,9 @@ function Routes() {
 
   const { routeLocale, routePath, redirect, getPath } = useRoute();
   const { isOpen: profileIsOpen, close } = useModalHash(Modal.PROFILE);
-  const { isOpen: setupIsOpen } = useModalHash(Modal.SETUP);
+  const { isOpen: manageCategoriesIsOpen } = useModalHash(
+    Modal.MANAGE_CATEGORIES
+  );
   const { isOpen: createAccountIsOpen } = useModalHash(Modal.CREATE_ACCOUNT);
   const { isOpen: newIsOpen } = useModalHash(Modal.CREATE_TRANSACTION);
 
@@ -90,7 +92,7 @@ function Routes() {
       <SlideModal height={470} open={createAccountIsOpen} onClose={close}>
         <LazyCreateAccount />
       </SlideModal>
-      <SlideModal open={setupIsOpen} onClose={close}>
+      <SlideModal open={manageCategoriesIsOpen} onClose={close}>
         <LazyManageCategories onClose={close} />
       </SlideModal>
       <SlideModal open={newIsOpen} onClose={close}>
