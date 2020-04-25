@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
       transition: 'background-color 0.2s ease',
       color: 'black !important',
       backgroundColor: ({ selected }: { selected?: boolean }) =>
-        selected ? theme.palette.primary.main : theme.palette.background.paper,
+        selected ? theme.palette.primary.main : theme.palette.background.level1,
     },
   })
 );
