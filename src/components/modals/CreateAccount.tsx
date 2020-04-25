@@ -9,7 +9,6 @@ import {
 } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 import useTexts from 'hooks/useTexts';
-import useModalHash, { Modal } from 'hooks/useModalHash';
 import settings from 'stores/settings';
 
 const useStyles = makeStyles((theme) =>
@@ -21,10 +20,9 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-function CreateAccount() {
+function CreateAccount({ onClose }: { onClose: () => void }) {
   const [t] = useTexts();
   const classes = useStyles();
-  const { close } = useModalHash(Modal.CREATE_ACCOUNT);
 
   const [newAccount, setNewAccount] = useState<Settings.Account>({
     id: 0,
@@ -90,7 +88,7 @@ function CreateAccount() {
             variant="contained"
             onClick={() => {
               setAccount(newAccount);
-              close();
+              onClose();
             }}
           >
             {t.ADD}

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useHistory } from 'react-router';
 import { fireEvent } from '@testing-library/react';
 import { render } from 'testUtils';
 import CreateAccount from './CreateAccount';
@@ -13,18 +12,15 @@ jest.mock('stores/settings', () => ({
 }));
 
 test('renders title', () => {
-  const { getByText } = render(<CreateAccount />);
+  const { getByText } = render(<CreateAccount onClose={() => {}} />);
   expect(getByText('Add Account')).toBeInTheDocument();
 });
 
 test('enter values and submit', () => {
-  const historyRef: { history?: ReturnType<typeof useHistory> } = {};
-  const { getByText, getByLabelText } = render(<CreateAccount />, {
-    url: '/dashboard#createAccount',
-    useHook: () => {
-      historyRef.history = useHistory();
-    },
-  });
+  const handleClose = jest.fn();
+  const { getByText, getByLabelText } = render(
+    <CreateAccount onClose={handleClose} />
+  );
 
   expect(getByText('Add')).toBeDisabled();
 
@@ -38,8 +34,6 @@ test('enter values and submit', () => {
 
   expect(getByText('Add')).not.toBeDisabled();
 
-  expect(historyRef.history?.location.hash).toEqual('#createAccount');
-
   fireEvent.click(getByText('Add'));
   expect(mockSetAccount).toHaveBeenCalledWith({
     id: 0,
@@ -47,6 +41,5 @@ test('enter values and submit', () => {
     currency: 'cny',
     name: 'My Test Account',
   });
-
-  expect(historyRef.history?.location.hash).toEqual('');
+  expect(handleClose).toHaveBeenCalled();
 });

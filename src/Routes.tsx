@@ -90,7 +90,7 @@ function Routes() {
         <LazyProfile />
       </SlideModal>
       <SlideModal height={470} open={createAccountIsOpen} onClose={close}>
-        <LazyCreateAccount />
+        <LazyCreateAccount onClose={close} />
       </SlideModal>
       <SlideModal open={manageCategoriesIsOpen} onClose={close}>
         <LazyManageCategories onClose={close} />
