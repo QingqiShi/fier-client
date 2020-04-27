@@ -14,7 +14,7 @@
   "dependencies": {
     "@material-ui/core": "^4.9.12",
     "@material-ui/icons": "^4.5.1",
-    "@material-ui/lab": "^4.0.0-alpha.50",
+    "@material-ui/lab": "^4.0.0-alpha.51",
     "@material-ui/pickers": "^4.0.0-alpha.5",
     "@react-spring/web": "^9.0.0-beta.34",
     "dayjs": "^1.8.25",
