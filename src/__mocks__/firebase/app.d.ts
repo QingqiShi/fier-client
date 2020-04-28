@@ -5,4 +5,5 @@ declare module 'firebase/app' {
   export const mockError: (e: any) => void;
   export const mockDocSnapshot: (path: string, data: any) => void;
   export const clearFirestoreStates: () => void;
+  export const getMockFirestore: (path: string) => any;
 }

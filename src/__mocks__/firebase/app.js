@@ -46,6 +46,7 @@ auth.EmailAuthProvider = {
 
 let states = {};
 let docSnapshotChangeCallbacks = {};
+
 export const mockDocSnapshot = (path, data) => {
   states[path] = data;
   if (path in docSnapshotChangeCallbacks) {
@@ -56,19 +57,60 @@ export const mockDocSnapshot = (path, data) => {
   }
 };
 
+let newDocId = 0;
 const mockFirestoreDB = {
   doc: jest.fn((path) => ({
-    onSnapshot: jest.fn((handler) => {
+    onSnapshot: (handler) => {
       docSnapshotChangeCallbacks[path] = handler;
-    }),
-    set: jest.fn((data, opts = {}) => {
+    },
+    set: (data, opts = {}) => {
       states[path] = opts.merge ? { ...states[path], ...data } : data;
       docSnapshotChangeCallbacks[path]({
         exists: true,
         data: () => states[path],
       });
+    },
+    get: () => ({
+      exists: true,
+      data: () => states[path],
     }),
+    _getPath: () => path,
   })),
+  collection: jest.fn((path) => ({
+    doc: (name) => {
+      if (name) {
+        return {
+          exists: !!states[`${path}/${name}`],
+          data: () => states[`${path}/${name}`],
+          _getPath: () => `${path}/${name}`,
+        };
+      }
+      return {
+        exists: false,
+        data: () => undefined,
+        _getPath: () => `${path}/${++newDocId}`,
+      };
+    },
+  })),
+  runTransaction: jest.fn((callback) => {
+    return callback({
+      get: (docRef) =>
+        Promise.resolve({
+          exists: !!states[docRef._getPath()],
+          data: () => states[docRef._getPath()],
+        }),
+      set: (docRef, data, opts = {}) =>
+        mockDocSnapshot(
+          docRef._getPath(),
+          opts.merge ? { ...states[docRef._getPath()], ...data } : data
+        ),
+      update: (docRef, data) =>
+        mockDocSnapshot(docRef._getPath(), {
+          ...states[docRef._getPath()],
+          ...data,
+        }),
+    });
+  }),
 };
 
 export const firestore = jest.fn(() => mockFirestoreDB);
@@ -76,4 +118,8 @@ export const firestore = jest.fn(() => mockFirestoreDB);
 export function clearFirestoreStates() {
   states = {};
   docSnapshotChangeCallbacks = {};
+}
+
+export function getMockFirestore(path) {
+  return states[path];
 }
