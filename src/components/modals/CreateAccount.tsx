@@ -83,6 +83,7 @@ function CreateAccount({ onClose }: { onClose: () => void }) {
         <div className={classes.actions}>
           <Button
             color="primary"
+            data-testid="add-account-btn"
             disabled={!newAccount.type || !newAccount.name}
             startIcon={<Add />}
             variant="contained"

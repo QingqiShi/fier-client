@@ -2,7 +2,13 @@ import React from 'react';
 import { act, fireEvent, waitFor } from '@testing-library/react';
 import createMockRaf, { MockRaf } from '@react-spring/mock-raf';
 import { FrameLoop, Globals } from '@react-spring/web';
-import { DragUtil, mockAuthUser, mockFirestore, render } from 'testUtils';
+import {
+  DragUtil,
+  getFirestore,
+  mockAuthUser,
+  mockFirestore,
+  render,
+} from 'testUtils';
 import CreateTransaction from './CreateTransaction';
 
 let mockRaf: MockRaf;
@@ -120,7 +126,7 @@ test('add manage category modal', async () => {
 });
 
 test('show add account button when user has no accounts', async () => {
-  const { getByLabelText, getByText, queryByText } = render(
+  const { getByLabelText, getByText, queryByText, getByTestId } = render(
     <CreateTransaction onClose={() => {}} />,
     {
       userAndSettings: true,
@@ -128,12 +134,7 @@ test('show add account button when user has no accounts', async () => {
   );
 
   const userId = 'testid';
-  act(
-    () =>
-      void mockAuthUser({
-        uid: userId,
-      })
-  );
+  act(() => void mockAuthUser({ uid: userId }));
   act(() =>
     mockFirestore(`users/${userId}/settings/app`, {
       locale: 'en',
@@ -153,7 +154,7 @@ test('show add account button when user has no accounts', async () => {
 
   // Fill form and close
   fireEvent.change(getByLabelText(/Name/), { target: { value: 'Test' } });
-  fireEvent.click(getByText('Add'));
+  fireEvent.click(getByTestId('add-account-btn'));
   drag.wait();
   await waitFor(() =>
     expect(queryByText(/Account type/)).not.toBeInTheDocument()
@@ -169,4 +170,59 @@ test('show add account button when user has no accounts', async () => {
   await waitFor(() =>
     expect(queryByText(/Account type/)).not.toBeInTheDocument()
   );
+});
+
+test('submits form and store data to db', async () => {
+  const handleClose = jest.fn();
+  const { getByLabelText, getByTestId } = render(
+    <CreateTransaction onClose={handleClose} />,
+    {
+      userAndSettings: true,
+    }
+  );
+
+  const userId = 'testid';
+  act(() => void mockAuthUser({ uid: userId }));
+  act(() =>
+    mockFirestore(`users/${userId}/settings/app`, {
+      locale: 'en',
+      accounts: [{ id: 1 }],
+      categories: [{ id: 1, name: 'Test', emoji: 'T', type: 'expenses' }],
+    })
+  );
+
+  // Fill in amount and submit!
+  fireEvent.change(getByLabelText(/Amount/), { target: { value: '12.5' } });
+  fireEvent.click(getByTestId('add-transaction-btn'));
+
+  await waitFor(() => {
+    expect(handleClose).toHaveBeenCalled();
+    expect(getFirestore(`users/${userId}/accounts/1`)).toEqual({
+      balance: -12.5,
+    });
+    expect(getFirestore(`users/${userId}/accounts/1/transactions/1`)).toEqual({
+      account: 1,
+      category: 1,
+      notes: '',
+      num: -12.5,
+      time: expect.any(Number),
+    });
+  });
+
+  // Update amount
+  fireEvent.change(getByLabelText(/Amount/), { target: { value: '-10.00' } });
+  fireEvent.click(getByTestId('add-transaction-btn'));
+
+  await waitFor(() => {
+    expect(getFirestore(`users/${userId}/accounts/1`)).toEqual({
+      balance: -2.5,
+    });
+    expect(getFirestore(`users/${userId}/accounts/1/transactions/2`)).toEqual({
+      account: 1,
+      category: 1,
+      notes: '',
+      num: 10,
+      time: expect.any(Number),
+    });
+  });
 });
