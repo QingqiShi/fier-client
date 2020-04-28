@@ -3,7 +3,7 @@ import useRoute from 'hooks/useRoute';
 
 export enum Modal {
   PROFILE = '#profile',
-  SETUP = '#setup',
+  MANAGE_CATEGORIES = '#manageCategories',
   CREATE_ACCOUNT = '#createAccount',
   CREATE_TRANSACTION = '#new',
 }

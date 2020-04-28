@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
+  Button,
   FormControl,
   InputAdornment,
   InputLabel,
@@ -10,16 +11,20 @@ import {
   createStyles,
   makeStyles,
 } from '@material-ui/core';
+import { Add } from '@material-ui/icons';
 import { DateTimePicker } from '@material-ui/pickers';
 import dayjs, { Dayjs } from 'dayjs';
+import { firestore } from 'firebase/app';
 import HorizontalList from 'components/base/HorizontalList';
 import HorizontalListItem from 'components/base/HorizontalListItem';
 import SelectableCard from 'components/base/SelectableCard';
 import SlideModal from 'components/base/SlideModal';
 import ManageCategories from 'components/modals/ManageCategories';
+import CreateAccount from 'components/modals/CreateAccount';
 import useFormInput from 'hooks/useFormInput';
 import useTexts from 'hooks/useTexts';
 import settings from 'stores/settings';
+import user from 'stores/user';
 
 const NUMBER_REGEX = /^-?[1-9][0-9]*\.?[0-9]{0,2}$/;
 
@@ -41,22 +46,37 @@ const useStyles = makeStyles((theme: Theme) =>
     categoriesLabel: {
       margin: `0 calc(24px + env(safe-area-inset-right))`,
     },
+    addAccountMenuItem: {
+      margin: theme.spacing(1),
+      textAlign: 'center',
+    },
+    actions: {
+      paddingTop: theme.spacing(3),
+      textAlign: 'right',
+    },
   })
 );
 
 function CreateTransaction({ onClose }: { onClose: () => void }) {
   const [t] = useTexts();
   const classes = useStyles();
+  const [{ accounts, categories }] = settings.useStore();
+  const [{ uid }] = user.useStore();
+
+  // Form data
   const [num, handleNumChange] = useFormInput('');
   const [category, setCategory] = useState(0);
   const [account, handleAccountChange, setAccount] = useFormInput('');
   const [time, setTime] = useState<Dayjs | null>(dayjs());
   const [notes, handleNotesChange] = useFormInput('');
-  const [{ accounts, categories }] = settings.useStore();
-  const [showCategoriesModal, setShowCategoriesModal] = useState(false);
 
+  // Modal states
+  const [showCategoriesModal, setShowCategoriesModal] = useState(false);
+  const [showAccountsModal, setShowAccountsModal] = useState(false);
+
+  // Validation
   const numIsValid = useMemo(() => NUMBER_REGEX.test(num), [num]);
-  const amountHelperText = useMemo(() => {
+  const numErrorMsg = useMemo(() => {
     if (!num) {
       return t.ERROR_AMOUNT_REQUIRED;
     } else if (!numIsValid) {
@@ -66,16 +86,57 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
   }, [num, numIsValid, t.ERROR_AMOUNT_INVALID, t.ERROR_AMOUNT_REQUIRED]);
 
   useEffect(() => {
+    if (!category && categories.length) {
+      setCategory(categories[0].id);
+    }
+  }, [categories, category]);
+
+  useEffect(() => {
     if (!account && accounts.length) {
       setAccount(accounts[0].id.toString());
     }
   }, [account, accounts, setAccount]);
 
+  const handleSave = useCallback(
+    async (formData: {
+      num: string;
+      category: number;
+      account: number;
+      time: Dayjs | null;
+      notes?: string;
+    }) => {
+      const accountDocRef = firestore().doc(
+        `users/${uid}/accounts/${formData.account}`
+      );
+      const transactionsCollectionRef = firestore().collection(
+        `users/${uid}/accounts/${formData.account}/transactions`
+      );
+
+      const newAmount = parseFloat(formData.num);
+      await firestore().runTransaction(async (transaction) => {
+        const accountDoc = await transaction.get(accountDocRef);
+        transaction.set(
+          accountDocRef,
+          { balance: (accountDoc.data()?.balance ?? 0) - newAmount },
+          { merge: true }
+        );
+        transaction.set(transactionsCollectionRef.doc(), {
+          ...formData,
+          num: -newAmount,
+          time: formData.time?.unix(),
+        });
+      });
+    },
+    [uid]
+  );
+
   return (
     <>
+      <Typography variant="h6">{t.NEW_TRANSACTION}</Typography>
+
       <TextField
         error={!numIsValid}
-        helperText={amountHelperText}
+        helperText={numErrorMsg}
         id="add-amount"
         InputProps={{
           startAdornment: <InputAdornment position="start">$</InputAdornment>,
@@ -88,6 +149,7 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
         required
         onChange={handleNumChange}
       />
+
       <FormControl
         className={classes.categoriesContainer}
         margin="normal"
@@ -141,16 +203,23 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
             {a.name}
           </MenuItem>
         ))}
+        <div className={classes.addAccountMenuItem}>
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowAccountsModal(true);
+            }}
+          >
+            {t.ADD_ACCOUNT}
+          </Button>
+        </div>
       </TextField>
 
       <div
-        onClick={(e) => e.stopPropagation()}
-        onMouseDown={(e) => e.stopPropagation()}
         onMouseMove={(e) => e.stopPropagation()}
-        onMouseUp={(e) => e.stopPropagation()}
-        onTouchEnd={(e) => e.stopPropagation()}
         onTouchMove={(e) => e.stopPropagation()}
-        onTouchStart={(e) => e.stopPropagation()}
       >
         <DateTimePicker
           ampm={false}
@@ -163,6 +232,7 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
           onChange={(date) => setTime(date)}
         />
       </div>
+
       <TextField
         id="add-notes"
         label={t.TRANSACTION_NOTES}
@@ -179,6 +249,35 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
       >
         <ManageCategories onClose={() => setShowCategoriesModal(false)} />
       </SlideModal>
+      <SlideModal
+        height={470}
+        open={showAccountsModal}
+        onClose={() => setShowAccountsModal(false)}
+      >
+        <CreateAccount onClose={() => setShowAccountsModal(false)} />
+      </SlideModal>
+
+      <div className={classes.actions}>
+        <Button
+          color="primary"
+          data-testid="add-transaction-btn"
+          disabled={!numIsValid || !category || !account || !time}
+          startIcon={<Add />}
+          variant="contained"
+          onClick={async () => {
+            await handleSave({
+              num,
+              category,
+              account: parseInt(account),
+              time,
+              notes,
+            });
+            onClose();
+          }}
+        >
+          {t.ADD}
+        </Button>
+      </div>
     </>
   );
 }

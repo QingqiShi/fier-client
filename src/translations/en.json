@@ -77,6 +77,7 @@
   "CURRENCY_USD": "USD ($)",
   "CURRENCY_CNY": "CNY (¥)",
 
+  "NEW_TRANSACTION": "New Transaction",
   "TRANSACTION_AMOUNT": "Amount",
   "TRANSACTION_CATEGORY": "Category",
   "TRANSACTION_ACCOUNT": "Account",

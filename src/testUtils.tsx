@@ -18,6 +18,7 @@ import { LocalizationProvider } from '@material-ui/pickers';
 import DayJsUtils from '@material-ui/pickers/adapter/dayjs.cjs';
 import {
   clearFirestoreStates,
+  getMockFirestore,
   auth as mockAuth,
   mockAuthState,
   mockDocSnapshot,
@@ -237,3 +238,5 @@ export function mockFirestore(path: string, data: any) {
 export function clearFirestore() {
   clearFirestoreStates();
 }
+
+export const getFirestore = getMockFirestore;
