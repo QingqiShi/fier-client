@@ -24,7 +24,7 @@ function AccountCard({
 
   useEffect(() => {
     const db = firestore();
-    db.doc(`users/${uid}/accounts/${id}`).onSnapshot((doc) => {
+    return db.doc(`users/${uid}/accounts/${id}`).onSnapshot((doc) => {
       const data = doc.data();
       if (data && 'balance' in data) {
         setBalance(data.balance);
