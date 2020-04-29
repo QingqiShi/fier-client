@@ -20,6 +20,7 @@ import {
 import { Add } from '@material-ui/icons';
 import Currency from 'components/base/Currency';
 import TopNav from 'components/app/TopNav';
+import AccountCard from 'components/app/AccountCard';
 import useTexts from 'hooks/useTexts';
 import useModalHash, { Modal } from 'hooks/useModalHash';
 import settings from 'stores/settings';
@@ -97,32 +98,17 @@ function Dashboard() {
           cols={1.5}
           spacing={16}
         >
-          {accounts.map(({ id, name, type, currency }) => (
+          {accounts.map((account) => (
             <GridListTile
-              key={`dashboard-account-${id}`}
+              key={`dashboard-account-${account.id}`}
               classes={{
                 tile: classes.gridListTile,
               }}
             >
-              <Card className={classes.gridAddButton} elevation={4}>
-                <CardActionArea>
-                  <CardContent>
-                    <Typography color="textSecondary" variant="subtitle1">
-                      {type === 'debt'
-                        ? t.ACCOUNT_TYPE_DEBT
-                        : t.ACCOUNT_TYPE_NORMAL}
-                    </Typography>
-                    <Typography>{name}</Typography>
-
-                    <Currency
-                      align="right"
-                      currency={currency.toUpperCase()}
-                      value={1234.56}
-                      variant={['h6', 'subtitle1']}
-                    />
-                  </CardContent>
-                </CardActionArea>
-              </Card>
+              <AccountCard
+                account={account}
+                className={classes.gridAddButton}
+              />
             </GridListTile>
           ))}
           <GridListTile
