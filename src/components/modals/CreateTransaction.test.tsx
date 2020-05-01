@@ -23,7 +23,7 @@ beforeEach(() => {
 });
 
 test('render form', () => {
-  const { getByLabelText, getByText } = render(
+  const { getByLabelText, getByText, getAllByText } = render(
     <CreateTransaction onClose={() => {}} />,
     { userAndSettings: true }
   );
@@ -58,13 +58,16 @@ test('render form', () => {
 
   // Date
   fireEvent.click(getByLabelText(/Date/));
-  fireEvent.mouseDown(getByText('28'));
-  fireEvent.mouseMove(getByText('28'));
-  fireEvent.mouseUp(getByText('28'));
-  fireEvent.touchStart(getByText('28'));
-  fireEvent.touchMove(getByText('28'));
-  fireEvent.touchEnd(getByText('28'));
-  fireEvent.click(getByText('28'));
+
+  // Test date prevents event propagation
+  const pickerText = getAllByText('28')[0];
+  fireEvent.mouseDown(pickerText);
+  fireEvent.mouseMove(pickerText);
+  fireEvent.mouseUp(pickerText);
+  fireEvent.touchStart(pickerText);
+  fireEvent.touchMove(pickerText);
+  fireEvent.touchEnd(pickerText);
+  fireEvent.click(pickerText);
   fireEvent.click(getByText('OK'));
 
   // Notes
@@ -200,12 +203,13 @@ test('submits form and store data to db', async () => {
     expect(getFirestore(`users/${userId}/accounts/1`)).toEqual({
       balance: -12.5,
     });
-    expect(getFirestore(`users/${userId}/accounts/1/transactions/1`)).toEqual({
-      account: 1,
-      category: 1,
+    expect(getFirestore(`users/${userId}/transactions/1`)).toEqual({
+      fromAccountId: 1,
+      toAccountId: null,
+      categoryId: 1,
       notes: '',
-      num: -12.5,
-      time: expect.any(Number),
+      value: -12.5,
+      dateTime: expect.any(Number),
     });
   });
 
@@ -217,12 +221,13 @@ test('submits form and store data to db', async () => {
     expect(getFirestore(`users/${userId}/accounts/1`)).toEqual({
       balance: -2.5,
     });
-    expect(getFirestore(`users/${userId}/accounts/1/transactions/2`)).toEqual({
-      account: 1,
-      category: 1,
+    expect(getFirestore(`users/${userId}/transactions/2`)).toEqual({
+      fromAccountId: 1,
+      toAccountId: null,
+      categoryId: 1,
       notes: '',
-      num: 10,
-      time: expect.any(Number),
+      value: 10,
+      dateTime: expect.any(Number),
     });
   });
 });
