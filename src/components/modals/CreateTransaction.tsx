@@ -99,31 +99,36 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
 
   const handleSave = useCallback(
     async (formData: {
-      num: string;
-      category: number;
-      account: number;
+      num: number;
+      categoryId: number;
+      accountId: number;
       time: Dayjs | null;
       notes?: string;
     }) => {
       const accountDocRef = firestore().doc(
-        `users/${uid}/accounts/${formData.account}`
+        `users/${uid}/accounts/${formData.accountId}`
       );
       const transactionsCollectionRef = firestore().collection(
-        `users/${uid}/accounts/${formData.account}/transactions`
+        `users/${uid}/transactions`
       );
 
-      const newAmount = parseFloat(formData.num);
       await firestore().runTransaction(async (transaction) => {
+        // Update account balance
         const accountDoc = await transaction.get(accountDocRef);
         transaction.set(
           accountDocRef,
-          { balance: (accountDoc.data()?.balance ?? 0) - newAmount },
+          { balance: (accountDoc.data()?.balance ?? 0) + formData.num },
           { merge: true }
         );
+
+        // Save transaction
         transaction.set(transactionsCollectionRef.doc(), {
-          ...formData,
-          num: -newAmount,
-          time: formData.time?.unix(),
+          value: formData.num,
+          dateTime: formData.time?.unix(),
+          fromAccountId: formData.accountId,
+          toAccountId: null,
+          categoryId: formData.categoryId,
+          notes: formData.notes,
         });
       });
     },
@@ -266,9 +271,9 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
           variant="contained"
           onClick={async () => {
             await handleSave({
-              num,
-              category,
-              account: parseInt(account),
+              num: parseFloat(num) * -1,
+              categoryId: category,
+              accountId: parseInt(account),
               time,
               notes,
             });
