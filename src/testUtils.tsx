@@ -23,6 +23,7 @@ import {
   mockAuthState,
   mockDocSnapshot,
   mockError,
+  mockQuerySnapshot,
 } from 'firebase/app';
 import i18n from 'stores/i18n';
 import settings from 'stores/settings';
@@ -232,7 +233,11 @@ export function clearAuthListeners() {
 }
 
 export function mockFirestore(path: string, data: any) {
-  mockDocSnapshot(path, data);
+  if (Array.isArray(data)) {
+    mockQuerySnapshot(path, data);
+  } else {
+    mockDocSnapshot(path, data);
+  }
 }
 
 export function clearFirestore() {

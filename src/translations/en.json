@@ -82,5 +82,7 @@
   "TRANSACTION_CATEGORY": "Category",
   "TRANSACTION_ACCOUNT": "Account",
   "TRANSACTION_DATE": "Date",
-  "TRANSACTION_NOTES": "Notes"
+  "TRANSACTION_NOTES": "Notes",
+  "TRANSACTION_EMPTY": "No records",
+  "TRANSACTION_EMPTY_DESC": "Create a transaction and it will show up here."
 }

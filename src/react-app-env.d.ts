@@ -18,6 +18,18 @@ declare namespace Settings {
   }
 }
 
+declare namespace Data {
+  interface Transaction {
+    id: string;
+    dateTime: import('dayjs').Dayjs;
+    toAccountId: number | null;
+    fromAccountId: number | null;
+    categoryId: number;
+    value: number;
+    notes?: string;
+  }
+}
+
 declare module 'raf-stub' {
   const createStub: () => RafStub;
   export default createStub;

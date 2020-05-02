@@ -1,5 +1,7 @@
 import React, { Suspense, lazy, useEffect } from 'react';
 import { Redirect, Route, Switch } from 'react-router';
+import { LocalizationProvider } from '@material-ui/pickers';
+import DayJsUtils from '@material-ui/pickers/adapter/dayjs.cjs';
 import PageLoadIndicator from 'components/base/PageLoadIndicator';
 import SlideModal from 'components/base/SlideModal';
 import settings from 'stores/settings';
@@ -8,6 +10,8 @@ import snackbar from 'stores/snackbar';
 import useRoute from 'hooks/useRoute';
 import useModalHash, { Modal } from 'hooks/useModalHash';
 import useText from 'hooks/useTexts';
+import 'dayjs/locale/en';
+import 'dayjs/locale/zh';
 
 // Registered user
 const LazyDashboard = lazy(() => import('components/views/Dashboard'));
@@ -69,36 +73,42 @@ function Routes() {
   }, [setMessage, updateAvailableMessage, updateNowText]);
 
   return (
-    <Suspense fallback={<PageLoadIndicator />}>
-      {isLoggedIn ? (
-        <>
+    <LocalizationProvider
+      dateAdapter={DayJsUtils}
+      dateFormats={locale === 'zh' ? { shortDate: 'MM/DD' } : undefined}
+      locale={locale}
+    >
+      <Suspense fallback={<PageLoadIndicator />}>
+        {isLoggedIn ? (
+          <>
+            <Switch>
+              <Route component={LazyDashboard} path={getPath('/dashboard')} />
+              <Route render={() => <Redirect to={getPath('/dashboard')} />} />
+            </Switch>
+            {/* <LazyBottomNav /> */}
+          </>
+        ) : (
           <Switch>
-            <Route component={LazyDashboard} path={getPath('/dashboard')} />
-            <Route render={() => <Redirect to={getPath('/dashboard')} />} />
+            <Route component={LazyLogin} path={getPath('/login')} />
+            <Route component={LazyRegister} path={getPath('/register')} />
+            <Route render={() => <Redirect to={getPath('/login')} />} />
           </Switch>
-          {/* <LazyBottomNav /> */}
-        </>
-      ) : (
-        <Switch>
-          <Route component={LazyLogin} path={getPath('/login')} />
-          <Route component={LazyRegister} path={getPath('/register')} />
-          <Route render={() => <Redirect to={getPath('/login')} />} />
-        </Switch>
-      )}
+        )}
 
-      <SlideModal open={profileIsOpen} onClose={close}>
-        <LazyProfile />
-      </SlideModal>
-      <SlideModal height={470} open={createAccountIsOpen} onClose={close}>
-        <LazyCreateAccount onClose={close} />
-      </SlideModal>
-      <SlideModal open={manageCategoriesIsOpen} onClose={close}>
-        <LazyManageCategories onClose={close} />
-      </SlideModal>
-      <SlideModal open={newIsOpen} onClose={close}>
-        <LazyCreate onClose={close} />
-      </SlideModal>
-    </Suspense>
+        <SlideModal open={profileIsOpen} onClose={close}>
+          <LazyProfile />
+        </SlideModal>
+        <SlideModal height={470} open={createAccountIsOpen} onClose={close}>
+          <LazyCreateAccount onClose={close} />
+        </SlideModal>
+        <SlideModal open={manageCategoriesIsOpen} onClose={close}>
+          <LazyManageCategories onClose={close} />
+        </SlideModal>
+        <SlideModal open={newIsOpen} onClose={close}>
+          <LazyCreate onClose={close} />
+        </SlideModal>
+      </Suspense>
+    </LocalizationProvider>
   );
 }
 
