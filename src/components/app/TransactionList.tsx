@@ -37,7 +37,7 @@ function TransactionList({
 }) {
   const [t] = useText();
   const classes = useStyles();
-  const [{ accounts, categories }] = settings.useStore();
+  const [{ accounts, categories, locale }] = settings.useStore();
 
   const groupedByDay = transactions.reduce((grouped, account) => {
     if (!grouped.length) return [...grouped, [account]];
@@ -56,7 +56,9 @@ function TransactionList({
       {transactions.length ? (
         groupedByDay.map((group) => (
           <List
-            key={`transactions-group-${group[0].dateTime.format('ll')}`}
+            key={`transactions-group-${group[0].dateTime
+              .locale(locale)
+              .format('ll')}`}
             component="div"
             subheader={
               <ListSubheader
@@ -64,7 +66,7 @@ function TransactionList({
                 component="div"
                 disableGutters
               >
-                {group[0].dateTime.format('ll')}
+                {group[0].dateTime.locale(locale).format('ll')}
               </ListSubheader>
             }
           >

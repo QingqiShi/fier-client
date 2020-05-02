@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardActionArea,
@@ -6,24 +6,22 @@ import {
   Fab,
   GridList,
   GridListTile,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemSecondaryAction,
-  ListItemText,
-  ListSubheader,
   Theme,
   Typography,
   createStyles,
   makeStyles,
 } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
+import dayjs from 'dayjs';
+import { firestore } from 'firebase/app';
 import Currency from 'components/base/Currency';
 import TopNav from 'components/app/TopNav';
 import AccountCard from 'components/app/AccountCard';
+import TransactionList from 'components/app/TransactionList';
 import useTexts from 'hooks/useTexts';
 import useModalHash, { Modal } from 'hooks/useModalHash';
 import settings from 'stores/settings';
+import user from 'stores/user';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -73,6 +71,28 @@ function Dashboard() {
   const { open: openCreateAcount } = useModalHash(Modal.CREATE_ACCOUNT);
   const { open: openNew } = useModalHash(Modal.CREATE_TRANSACTION);
   const [{ accounts }] = settings.useStore();
+  const [{ uid }] = user.useStore();
+  const [transactions, setTransactions] = useState<Data.Transaction[]>([]);
+
+  useEffect(() => {
+    const db = firestore();
+    return db
+      .collection(`users/${uid}/transactions`)
+      .orderBy('dateTime', 'desc')
+      .limit(20)
+      .onSnapshot((query) => {
+        const dataHolder: Data.Transaction[] = [];
+        query.forEach((doc) => {
+          const data = doc.data() as any;
+          dataHolder.push({
+            ...data,
+            id: doc.id,
+            dateTime: dayjs.unix(data.dateTime),
+          });
+        });
+        setTransactions(dataHolder);
+      });
+  }, [uid]);
 
   return (
     <div className={classes.container}>
@@ -140,62 +160,7 @@ function Dashboard() {
       <Typography className={classes.sectionTitle} variant="h6">
         {t['TRANSACTIONS']}
       </Typography>
-      <List
-        component="div"
-        subheader={
-          <ListSubheader
-            className={classes.listHeader}
-            component="div"
-            disableGutters
-          >
-            xx/xx/xxxx
-          </ListSubheader>
-        }
-      >
-        {['🛍', '🛒', '🚇'].map((emoji, i) => (
-          <ListItem key={`first-list-item-${i}`} ContainerComponent="div">
-            <ListItemIcon className={classes.emoji}>
-              <span>{emoji}</span>
-            </ListItemIcon>
-            <ListItemText primary="Xxxxx xxx xxxx" secondary="Xxxx x xxxxx" />
-            <ListItemSecondaryAction>
-              <Currency
-                currency="GBP"
-                value={-12.34}
-                variant={['body1', 'body2']}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-        ))}
-      </List>
-      <List
-        component="div"
-        subheader={
-          <ListSubheader
-            className={classes.listHeader}
-            component="div"
-            disableGutters
-          >
-            xx/xx/xxxx
-          </ListSubheader>
-        }
-      >
-        {['🛍', '🛒', '🧾', '🚇', '💸'].map((emoji, i) => (
-          <ListItem key={`second-list-item-${i}`} ContainerComponent="div">
-            <ListItemIcon className={classes.emoji}>
-              <span>{emoji}</span>
-            </ListItemIcon>
-            <ListItemText primary="Xxxxx xxx xxxx" secondary="Xxxx x xxxxx" />
-            <ListItemSecondaryAction>
-              <Currency
-                currency="GBP"
-                value={-12.34}
-                variant={['body1', 'body2']}
-              />
-            </ListItemSecondaryAction>
-          </ListItem>
-        ))}
-      </List>
+      <TransactionList transactions={transactions} />
 
       <Fab className={classes.fab} color="primary" onClick={openNew}>
         <Add />

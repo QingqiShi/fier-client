@@ -45,14 +45,30 @@ auth.EmailAuthProvider = {
 ====== */
 
 let states = {};
-let docSnapshotChangeCallbacks = {};
+let snapshotChangeCallbacks = {};
 
 export const mockDocSnapshot = (path, data) => {
   states[path] = data;
-  if (path in docSnapshotChangeCallbacks) {
-    docSnapshotChangeCallbacks[path]({
+  if (path in snapshotChangeCallbacks) {
+    snapshotChangeCallbacks[path]({
       exists: !!data,
       data: () => data,
+    });
+  }
+};
+
+export const mockQuerySnapshot = (path, data) => {
+  states[path] = data;
+  if (path in snapshotChangeCallbacks) {
+    snapshotChangeCallbacks[path]({
+      forEach: (cb) => {
+        data.forEach((x, i) =>
+          cb({
+            data: () => x,
+            id: i,
+          })
+        );
+      },
     });
   }
 };
@@ -61,11 +77,11 @@ let newDocId = 0;
 const mockFirestoreDB = {
   doc: jest.fn((path) => ({
     onSnapshot: (handler) => {
-      docSnapshotChangeCallbacks[path] = handler;
+      snapshotChangeCallbacks[path] = handler;
     },
     set: (data, opts = {}) => {
       states[path] = opts.merge ? { ...states[path], ...data } : data;
-      docSnapshotChangeCallbacks[path]({
+      snapshotChangeCallbacks[path]({
         exists: true,
         data: () => states[path],
       });
@@ -76,22 +92,38 @@ const mockFirestoreDB = {
     }),
     _getPath: () => path,
   })),
-  collection: jest.fn((path) => ({
-    doc: (name) => {
-      if (name) {
+  collection: jest.fn((path) => {
+    const context = { orderBy: '', order: '', limit: 0 };
+    const collectionObj = {
+      doc: (name) => {
+        if (name) {
+          return {
+            exists: !!states[`${path}/${name}`],
+            data: () => states[`${path}/${name}`],
+            _getPath: () => `${path}/${name}`,
+          };
+        }
         return {
-          exists: !!states[`${path}/${name}`],
-          data: () => states[`${path}/${name}`],
-          _getPath: () => `${path}/${name}`,
+          exists: false,
+          data: () => undefined,
+          _getPath: () => `${path}/${++newDocId}`,
         };
-      }
-      return {
-        exists: false,
-        data: () => undefined,
-        _getPath: () => `${path}/${++newDocId}`,
-      };
-    },
-  })),
+      },
+      orderBy: (field, order) => {
+        context.orderBy = field;
+        context.order = order;
+        return collectionObj;
+      },
+      limit: (limit) => {
+        context.limit = limit;
+        return collectionObj;
+      },
+      onSnapshot: (handler) => {
+        snapshotChangeCallbacks[path] = handler;
+      },
+    };
+    return collectionObj;
+  }),
   runTransaction: jest.fn((callback) => {
     return callback({
       get: (docRef) =>
@@ -117,7 +149,7 @@ export const firestore = jest.fn(() => mockFirestoreDB);
 
 export function clearFirestoreStates() {
   states = {};
-  docSnapshotChangeCallbacks = {};
+  snapshotChangeCallbacks = {};
 }
 
 export function getMockFirestore(path) {
