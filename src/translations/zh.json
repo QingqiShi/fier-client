@@ -82,5 +82,7 @@
   "TRANSACTION_CATEGORY": "类别",
   "TRANSACTION_ACCOUNT": "账户",
   "TRANSACTION_DATE": "日期",
-  "TRANSACTION_NOTES": "备注"
+  "TRANSACTION_NOTES": "备注",
+  "TRANSACTION_EMPTY": "无记录",
+  "TRANSACTION_EMPTY_DESC": "记一笔之后，账目流水将在此显示。"
 }
