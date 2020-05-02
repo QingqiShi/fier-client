@@ -70,39 +70,36 @@ function TransactionList({
               </ListSubheader>
             }
           >
-            {group.map((transaction) => (
-              <ListItem
-                key={`transaction-${transaction.id}`}
-                ContainerComponent="div"
-              >
-                <ListItemIcon className={classes.emoji}>
-                  <span>
-                    {
-                      categories.find(
-                        (category) => category.id === transaction.categoryId
-                      )?.emoji
-                    }
-                  </span>
-                </ListItemIcon>
-                <ListItemText
-                  primary={
-                    categories.find(({ id }) => id === transaction.categoryId)
-                      ?.name
-                  }
-                  secondary={
-                    accounts.find(({ id }) => id === transaction.fromAccountId)
-                      ?.name
-                  }
-                />
-                <ListItemSecondaryAction>
-                  <Currency
-                    currency="GBP"
-                    value={transaction.value}
-                    variant={['body1', 'body2']}
+            {group.map((transaction) => {
+              const category = categories.find(
+                ({ id }) => id === transaction.categoryId
+              );
+              const fromAccount = accounts.find(
+                ({ id }) => id === transaction.fromAccountId
+              );
+              if (!category || !fromAccount) return null;
+              return (
+                <ListItem
+                  key={`transaction-${transaction.id}`}
+                  ContainerComponent="div"
+                >
+                  <ListItemIcon className={classes.emoji}>
+                    <span>{category.emoji}</span>
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={category.name}
+                    secondary={fromAccount?.name}
                   />
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
+                  <ListItemSecondaryAction>
+                    <Currency
+                      currency={fromAccount.currency}
+                      value={transaction.value}
+                      variant={['body1', 'body2']}
+                    />
+                  </ListItemSecondaryAction>
+                </ListItem>
+              );
+            })}
           </List>
         ))
       ) : (
