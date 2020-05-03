@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Button,
   FormControl,
@@ -14,7 +14,6 @@ import {
 import { Add } from '@material-ui/icons';
 import { DateTimePicker } from '@material-ui/pickers';
 import dayjs, { Dayjs } from 'dayjs';
-import { firestore } from 'firebase/app';
 import HorizontalList from 'components/base/HorizontalList';
 import HorizontalListItem from 'components/base/HorizontalListItem';
 import SelectableCard from 'components/base/SelectableCard';
@@ -23,8 +22,8 @@ import ManageCategories from 'components/modals/ManageCategories';
 import CreateAccount from 'components/modals/CreateAccount';
 import useFormInput from 'hooks/useFormInput';
 import useTexts from 'hooks/useTexts';
+import useTransaction from 'hooks/useTransaction';
 import settings from 'stores/settings';
-import user from 'stores/user';
 
 const NUMBER_REGEX = /^-?[1-9][0-9]*\.?[0-9]{0,2}$/;
 
@@ -61,7 +60,6 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
   const [t] = useTexts();
   const classes = useStyles();
   const [{ accounts, categories }] = settings.useStore();
-  const [{ uid }] = user.useStore();
 
   // Form data
   const [num, handleNumChange] = useFormInput('');
@@ -97,43 +95,7 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
     }
   }, [account, accounts, setAccount]);
 
-  const handleSave = useCallback(
-    async (formData: {
-      num: number;
-      categoryId: number;
-      accountId: number;
-      time: Dayjs | null;
-      notes?: string;
-    }) => {
-      const accountDocRef = firestore().doc(
-        `users/${uid}/accounts/${formData.accountId}`
-      );
-      const transactionsCollectionRef = firestore().collection(
-        `users/${uid}/transactions`
-      );
-
-      await firestore().runTransaction(async (transaction) => {
-        // Update account balance
-        const accountDoc = await transaction.get(accountDocRef);
-        transaction.set(
-          accountDocRef,
-          { balance: (accountDoc.data()?.balance ?? 0) + formData.num },
-          { merge: true }
-        );
-
-        // Save transaction
-        transaction.set(transactionsCollectionRef.doc(), {
-          value: formData.num,
-          dateTime: formData.time?.unix(),
-          fromAccountId: formData.accountId,
-          toAccountId: null,
-          categoryId: formData.categoryId,
-          notes: formData.notes,
-        });
-      });
-    },
-    [uid]
-  );
+  const handleSave = useTransaction();
 
   return (
     <>
@@ -270,14 +232,18 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
           startIcon={<Add />}
           variant="contained"
           onClick={async () => {
-            await handleSave({
-              num: parseFloat(num) * -1,
-              categoryId: category,
-              accountId: parseInt(account),
-              time,
-              notes,
-            });
-            onClose();
+            /* istanbul ignore else */
+            if (numIsValid && category && account && time) {
+              await handleSave({
+                value: parseFloat(num),
+                categoryId: category,
+                fromAccountId: parseInt(account),
+                toAccountId: null,
+                dateTime: time,
+                notes,
+              });
+              onClose();
+            }
           }}
         >
           {t.ADD}
