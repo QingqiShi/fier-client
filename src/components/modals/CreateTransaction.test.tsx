@@ -87,6 +87,16 @@ test('show error for invalid amount', () => {
   expect(getByText("This doesn't look like a number")).toBeInTheDocument();
 });
 
+test('disable button without all required data', () => {
+  const handleClose = jest.fn();
+  const { getByTestId } = render(<CreateTransaction onClose={handleClose} />);
+
+  expect(getByTestId('add-transaction-btn')).toBeDisabled();
+
+  fireEvent.click(getByTestId('add-transaction-btn'));
+  expect(handleClose).not.toHaveBeenCalled();
+});
+
 test('add manage category modal', async () => {
   const { getByTestId, getByText, queryByText } = render(
     <CreateTransaction onClose={() => {}} />,
@@ -208,7 +218,7 @@ test('submits form and store data to db', async () => {
       toAccountId: null,
       categoryId: 1,
       notes: '',
-      value: -12.5,
+      value: 12.5,
       dateTime: expect.any(Number),
     });
   });
@@ -226,7 +236,7 @@ test('submits form and store data to db', async () => {
       toAccountId: null,
       categoryId: 1,
       notes: '',
-      value: 10,
+      value: -10,
       dateTime: expect.any(Number),
     });
   });

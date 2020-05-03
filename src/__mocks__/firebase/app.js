@@ -150,6 +150,7 @@ export const firestore = jest.fn(() => mockFirestoreDB);
 export function clearFirestoreStates() {
   states = {};
   snapshotChangeCallbacks = {};
+  newDocId = 0;
 }
 
 export function getMockFirestore(path) {
