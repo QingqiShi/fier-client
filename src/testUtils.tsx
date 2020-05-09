@@ -15,7 +15,7 @@ import { animated } from '@react-spring/web';
 import { MockRaf } from '@react-spring/mock-raf';
 import { ReactEventHandlers } from 'react-use-gesture/dist/types';
 import { LocalizationProvider } from '@material-ui/pickers';
-import DayJsUtils from '@material-ui/pickers/adapter/dayjs.cjs';
+import DayJsUtils from '@material-ui/pickers/adapter/dayjs';
 import {
   clearFirestoreStates,
   getMockFirestore,

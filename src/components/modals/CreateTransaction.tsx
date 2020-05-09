@@ -190,12 +190,17 @@ function CreateTransaction({ onClose }: { onClose: () => void }) {
       >
         <DateTimePicker
           ampm={false}
-          id="add-date"
           label={t.TRANSACTION_DATE}
-          margin="normal"
+          renderInput={(props) => (
+            <TextField
+              id="add-date"
+              margin="normal"
+              fullWidth
+              required
+              {...props}
+            />
+          )}
           value={time}
-          fullWidth
-          required
           onChange={(date) => setTime(date)}
         />
       </div>

@@ -7,7 +7,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom-sixteen",
     "analyze": "npm run build && source-map-explorer 'build/static/js/*.js'",
-    "commit": "npx git-cz",
+    "commit": "git-cz",
     "format": "prettier --single-quote --write \"src/**/*.{js,ts,tsx}\"",
     "eject": "react-scripts eject"
   },
@@ -43,6 +43,7 @@
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.7",
     "@types/react-router-dom": "^5.1.5",
+    "commitizen": "^4.1.2",
     "cz-conventional-changelog": "^3.2.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "husky": "^4.2.5",
