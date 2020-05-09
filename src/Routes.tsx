@@ -1,7 +1,7 @@
 import React, { Suspense, lazy, useEffect } from 'react';
 import { Redirect, Route, Switch } from 'react-router';
 import { LocalizationProvider } from '@material-ui/pickers';
-import DayJsUtils from '@material-ui/pickers/adapter/dayjs.cjs';
+import DayJsUtils from '@material-ui/pickers/adapter/dayjs';
 import PageLoadIndicator from 'components/base/PageLoadIndicator';
 import SlideModal from 'components/base/SlideModal';
 import settings from 'stores/settings';
