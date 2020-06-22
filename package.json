@@ -45,7 +45,7 @@
     "@types/react-router-dom": "^5.1.5",
     "commitizen": "^4.1.2",
     "cz-conventional-changelog": "^3.2.0",
-    "eslint-plugin-jsx-a11y": "^6.3.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
     "husky": "^4.2.5",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "jest-junit": "^11.0.0",
