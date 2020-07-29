@@ -17,7 +17,7 @@
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@material-ui/pickers": "^4.0.0-alpha.7",
     "@react-spring/web": "^9.0.0-beta.34",
-    "dayjs": "^1.8.30",
+    "dayjs": "^1.8.31",
     "emoji-regex": "^9.0.0",
     "firebase": "^7.17.1",
     "fitty": "^2.3.1",
